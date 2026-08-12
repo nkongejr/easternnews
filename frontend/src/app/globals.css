@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue: #1a4d8f;
+  --color-brand-blue-dark: #123563;
+  --color-brand-gold: #f2c94c;
+  --color-brand-gold-dark: #d4a92e;
+
+  --font-headline: Georgia, Cambria, "Times New Roman", serif;
+  --font-body: Arial, Helvetica, sans-serif;
+}
+
+body {
+  @apply bg-white text-gray-900;
+  font-family: var(--font-body);
+}
+
+.pull-quote {
+  @apply border-l-4 border-brand-gold pl-4 italic text-xl md:text-2xl text-gray-700 my-6;
+  font-family: var(--font-headline);
+}
+
+.prose-article p {
+  @apply mb-4 leading-relaxed;
+  font-size: 17px;
+}
+
+.font-headline {
+  font-family: var(--font-headline);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
