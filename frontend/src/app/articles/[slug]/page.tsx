@@ -21,11 +21,11 @@ export async function generateMetadata({ params }: Props) {
     const article = await api.getArticleBySlug(slug);
     return {
       title: article.title,
-      description: article.deck || article.body.slice(0, 150),
+      description: article.deck || (article.body ? article.body.slice(0, 150) : ''),
       openGraph: {
         title: article.title,
         description: article.deck,
-        images: [article.featuredImage?.url],
+        images: article.featuredImage?.url ? [article.featuredImage.url] : [],
       },
     };
   } catch {
@@ -57,7 +57,7 @@ export default async function ArticlePage({ params }: Props) {
 
         <p className="text-sm text-gray-500 mb-6">
           By {article.author?.name || article.bylineCredit} · {article.bylineCredit} ·{' '}
-          {format(new Date(article.publishDate), 'MMMM d, yyyy')}
+          {article.publishDate ? format(new Date(article.publishDate), 'MMMM d, yyyy') : ''}
         </p>
 
         <div className="relative w-full h-72 md:h-[420px] rounded-lg overflow-hidden mb-3">
@@ -75,11 +75,14 @@ export default async function ArticlePage({ params }: Props) {
           </p>
         )}
 
-        <ArticleBody body={article.body} />
+        {article.body && <ArticleBody body={article.body} />}
+
         <ShareButtons title={article.title} url={url} />
+
         <RelatedArticles articles={article.relatedArticles || []} />
       </article>
 
+     
       <Sidebar />
     </div>
   );
