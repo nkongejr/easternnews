@@ -5,7 +5,8 @@ import { Article } from '@/types';
 import CategoryBadge from './CategoryBadge';
 
 export default function ArticleCard({ article }: { article: Article }) {
-  const excerpt = article.deck || article.body.slice(0, 140) + '...';
+  const excerpt =
+    article.deck || (article.body ? article.body.slice(0, 140) + '...' : '');
 
   return (
     <article className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
@@ -26,15 +27,22 @@ export default function ArticleCard({ article }: { article: Article }) {
             {article.title}
           </h3>
         </Link>
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3">{excerpt}</p>
+        {excerpt && (
+          <p className="text-sm text-gray-600 line-clamp-2 mb-3">{excerpt}</p>
+        )}
         <div className="flex items-center justify-between text-xs text-gray-500">
           <span>
-            By {article.author?.name || article.bylineCredit} · {article.bylineCredit}
+            By {article.author?.name || article.bylineCredit || 'Eastern Newspaper Team'}
+            {article.bylineCredit ? ` · ${article.bylineCredit}` : ''}
           </span>
         </div>
         <div className="flex items-center justify-between text-xs text-gray-400 mt-1">
-          <span>{format(new Date(article.publishDate), 'MMM d, yyyy')}</span>
-          <span>{article.commentCount} comments</span>
+          <span>
+            {article.publishDate
+              ? format(new Date(article.publishDate), 'MMM d, yyyy')
+              : ''}
+          </span>
+          <span>{article.commentCount ?? 0} comments</span>
         </div>
         <Link
           href={`/articles/${article.slug}`}

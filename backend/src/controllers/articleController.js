@@ -49,12 +49,11 @@ else if (!status) filter.status = 'published'; // public default hides drafts
 const getArticleBySlug = asyncHandler(async (req, res) => {
   const article = await Article.findOne({ slug: req.params.slug })
     .populate('author', 'name title bio photo slug')
-    .populate('relatedArticles', 'title slug featuredImage category publishDate')
+    .populate('relatedArticles', 'title slug deck featuredImage category publishDate bylineCredit commentCount')
     .populate('issue', 'issueNumber title');
 
   if (!article) { res.status(404); throw new Error('Article not found'); }
 
-  // increment view count (non-blocking)
   Article.updateOne({ _id: article._id }, { $inc: { viewCount: 1 } }).exec();
 
   res.json(article);

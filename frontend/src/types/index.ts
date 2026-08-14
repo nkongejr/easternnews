@@ -28,21 +28,21 @@ export interface Article {
   title: string;
   slug: string;
   deck?: string;
-  body: string;
+  body?: string; // optional — related/partial article queries may omit this
   category: string;
   author?: Author;
-  bylineCredit: string;
+  bylineCredit?: string;
   featuredImage: ImageBlock;
   gallery?: ImageBlock[];
-  publishDate: string;
+  publishDate?: string;
   issue?: { _id: string; issueNumber: number; title: string } | string;
-  isFeatured: boolean;
-  isHero: boolean;
-  tags: string[];
+  isFeatured?: boolean;
+  isHero?: boolean;
+  tags?: string[];
   relatedArticles?: Article[];
-  status: 'draft' | 'published';
-  viewCount: number;
-  commentCount: number;
+  status?: 'draft' | 'published';
+  viewCount?: number;
+  commentCount?: number;
   createdAt?: string;
 }
 

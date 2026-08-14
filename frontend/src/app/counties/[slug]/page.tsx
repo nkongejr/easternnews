@@ -2,36 +2,37 @@ import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
 import CategoryArchivePage from '@/components/category/CategoryArchivePage';
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string }>;
+};
+
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
   try {
-    const category = await api.getCategoryBySlug(params.slug);
+    const category = await api.getCategoryBySlug(slug);
     return { title: `${category.name} News` };
   } catch {
     return { title: 'County News' };
   }
 }
 
-export default async function CountyPage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { page?: string };
-}) {
+export default async function CountyPage({ params, searchParams }: Props) {
+  const { slug } = await params;
+  const { page } = await searchParams;
+
   let category;
   try {
-    category = await api.getCategoryBySlug(params.slug);
+    category = await api.getCategoryBySlug(slug);
   } catch {
     notFound();
   }
 
-  const page = Number(searchParams.page || 1);
-
   return (
     <CategoryArchivePage
       categoryName={category!.name}
-      baseHref={`/counties/${params.slug}`}
-      page={page}
+      baseHref={`/counties/${slug}`}
+      page={Number(page || 1)}
     />
   );
 }

@@ -3,8 +3,18 @@ import { Article, Category, PaginatedArticles, Advertiser, Issue } from '@/types
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 async function fetchJSON<T>(path: string, revalidate = 60): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, { next: { revalidate } });
-  if (!res.ok) throw new Error(`API error ${res.status} on ${path}`);
+  const res = await fetch(`${API_URL}${path}`, {
+    next: { revalidate },
+    signal: AbortSignal.timeout(20000), // 20s timeout instead of default
+  });
+  if (res.status === 404) {
+    const err: any = new Error('Not Found');
+    err.status = 404;
+    throw err;
+  }
+  if (!res.ok) {
+    throw new Error(`API error ${res.status} on ${path}`);
+  }
   return res.json();
 }
 

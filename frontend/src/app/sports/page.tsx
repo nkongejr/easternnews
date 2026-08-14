@@ -1,13 +1,16 @@
 import CategoryArchivePage from '@/components/category/CategoryArchivePage';
 
-export const metadata = { title: 'Sports' };
+export const metadata = { title: 'Sports News' };
 
-export default async function SportsPage({ searchParams }: { searchParams: { page?: string } }) {
+type Props = { searchParams: Promise<{ page?: string }> };
+
+export default async function SportsPage({ searchParams }: Props) {
+  const { page } = await searchParams;
   return (
     <CategoryArchivePage
       categoryName="Sports"
       baseHref="/sports"
-      page={Number(searchParams.page || 1)}
+      page={Number(page || 1)}
     />
   );
 }
