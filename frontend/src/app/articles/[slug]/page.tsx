@@ -1,13 +1,16 @@
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
-import { format } from 'date-fns';
+import Link from 'next/link';
 import { api } from '@/lib/api';
-import CategoryBadge from '@/components/articles/CategoryBadge';
+import { formatDateLong, readingTime } from '@/lib/format';
+import CategoryBadge, { categoryHref } from '@/components/articles/CategoryBadge';
 import ArticleBody from '@/components/articles/ArticleBody';
 import RelatedArticles from '@/components/articles/RelatedArticles';
 import ShareButtons from '@/components/shared/ShareButtons';
+import Breadcrumbs, { type Crumb } from '@/components/shared/Breadcrumbs';
+import SmartImage from '@/components/shared/SmartImage';
 import Sidebar from '@/components/sidebar/Sidebar';
 
+// Kept dynamic so the API's view counter registers every read.
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
@@ -39,50 +42,118 @@ export default async function ArticlePage({ params }: Props) {
   let article;
   try {
     article = await api.getArticleBySlug(slug);
-  } catch (err: any) {
-    if (err?.status === 404) {
-      notFound();
-    }
+  } catch (err) {
+    const status = (err as { status?: number })?.status;
+    if (status === 404) notFound();
     throw err;
   }
 
   const url = `${SITE_URL}/articles/${slug}`;
+  const categoryLink = categoryHref(article.category);
+
+  const crumbs: Crumb[] = [
+    { label: 'Home', href: '/' },
+    ...(categoryLink ? [{ label: article.category, href: categoryLink }] : []),
+    { label: article.title },
+  ];
+
+  const mins = readingTime(article.body);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 grid lg:grid-cols-3 gap-10">
-      <article className="lg:col-span-2">
-        <CategoryBadge category={article.category} />
-        <h1 className="font-headline text-3xl md:text-4xl font-black mt-3 mb-2">{article.title}</h1>
-        {article.deck && <p className="italic text-lg text-gray-600 mb-4">{article.deck}</p>}
+    <div className="en-container grid gap-10 py-6 md:py-8 lg:grid-cols-3 lg:gap-12">
+      <article className="min-w-0 lg:col-span-2">
+        <Breadcrumbs items={crumbs} />
 
-        <p className="text-sm text-gray-500 mb-6">
-          By {article.author?.name || article.bylineCredit} · {article.bylineCredit} ·{' '}
-          {article.publishDate ? format(new Date(article.publishDate), 'MMMM d, yyyy') : ''}
-        </p>
+        <CategoryBadge category={article.category} size="md" />
 
-        <div className="relative w-full h-72 md:h-[420px] rounded-lg overflow-hidden mb-3">
-          <Image
-            src={article.featuredImage?.url || 'https://placehold.co/900x600'}
-            alt={article.featuredImage?.caption || article.title}
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-        {article.featuredImage?.caption && (
-          <p className="text-xs text-gray-500 mb-6">
-            {article.featuredImage.caption} — <em>{article.featuredImage.credit}</em>
+        <h1 className="mt-3 font-headline text-[28px] font-black leading-[1.12] tracking-tight text-ink sm:text-4xl lg:text-[42px]">
+          {article.title}
+        </h1>
+
+        {article.deck && (
+          <p className="mt-3 font-headline text-lg italic leading-relaxed text-muted md:text-xl">
+            {article.deck}
           </p>
         )}
 
-        {article.body && <ArticleBody body={article.body} />}
+        {/* Byline bar */}
+        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-y border-border py-3">
+          <p className="text-[13px]">
+            <span className="font-bold text-ink">
+              By {article.author?.name || article.bylineCredit || 'Eastern Newspaper Team'}
+            </span>
+            {article.author?.title && (
+              <span className="block text-[11px] text-muted">{article.author.title}</span>
+            )}
+          </p>
+          <p className="text-[12px] text-muted">
+            {article.publishDate && (
+              <time dateTime={article.publishDate}>{formatDateLong(article.publishDate)}</time>
+            )}
+            {article.bylineCredit && article.bylineCredit !== (article.author?.name || '') && (
+              <>
+                <span className="mx-1.5">·</span>
+                {article.bylineCredit}
+              </>
+            )}
+            <span className="mx-1.5">·</span>
+            {mins} min read
+          </p>
+        </div>
+
+        {/* Lead image */}
+        <figure className="mt-6">
+          <div className="en-imgframe aspect-[16/9] w-full">
+            <SmartImage
+              src={article.featuredImage?.url}
+              alt={article.featuredImage?.caption || article.title}
+              sizes="(max-width: 1024px) 100vw, 800px"
+              priority
+            />
+          </div>
+          {(article.featuredImage?.caption || article.featuredImage?.credit) && (
+            <figcaption className="mt-2 border-b border-border pb-2 text-[11px] leading-relaxed text-muted">
+              {article.featuredImage?.caption}
+              {article.featuredImage?.credit && (
+                <>
+                  {' '}
+                  <span className="italic">— {article.featuredImage.credit}</span>
+                </>
+              )}
+            </figcaption>
+          )}
+        </figure>
+
+        {/* Body */}
+        <div className="mt-6">
+          {article.body ? (
+            <ArticleBody body={article.body} />
+          ) : (
+            <p className="text-muted">This story is still being written.</p>
+          )}
+        </div>
+
+        {/* Tags */}
+        {article.tags && article.tags.length > 0 && (
+          <ul className="mt-8 flex flex-wrap gap-2">
+            {article.tags.map((t) => (
+              <li key={t}>
+                <Link
+                  href={`/search?q=${encodeURIComponent(t)}`}
+                  className="inline-block rounded-sm bg-surface-alt px-2.5 py-1 text-[11px] font-semibold text-muted transition-colors hover:bg-brand-blue hover:text-white"
+                >
+                  {t}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
 
         <ShareButtons title={article.title} url={url} />
 
         <RelatedArticles articles={article.relatedArticles || []} />
       </article>
 
-     
       <Sidebar />
     </div>
   );

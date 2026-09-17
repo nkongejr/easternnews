@@ -8,7 +8,7 @@ async function fetchJSON<T>(path: string, revalidate = 60): Promise<T> {
     signal: AbortSignal.timeout(20000), // 20s timeout instead of default
   });
   if (res.status === 404) {
-    const err: any = new Error('Not Found');
+    const err = new Error('Not Found') as Error & { status: number };
     err.status = 404;
     throw err;
   }
@@ -41,6 +41,26 @@ export const api = {
     const qs = new URLSearchParams(params).toString();
     return fetchJSON<Advertiser[]>(`/advertisers${qs ? `?${qs}` : ''}`);
   },
+};
+
+/**
+ * Resolve a request to a fallback instead of throwing. Used for non-critical
+ * homepage modules (issue strip, ad slots, sidebar widgets) so one slow or
+ * failing endpoint can never take the whole page down.
+ */
+export async function safe<T>(promise: Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await promise;
+  } catch {
+    return fallback;
+  }
+}
+
+export const EMPTY_PAGE: PaginatedArticles = {
+  data: [],
+  page: 1,
+  totalPages: 0,
+  totalResults: 0,
 };
 
 export async function sendContactMessage(payload: {

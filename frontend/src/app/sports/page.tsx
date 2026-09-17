@@ -11,6 +11,8 @@ export default async function SportsPage({ searchParams }: Props) {
       categoryName="Sports"
       baseHref="/sports"
       page={Number(page || 1)}
+      description="Sport from across the Eastern region."
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Sports News' }]}
     />
   );
 }

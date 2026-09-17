@@ -1,56 +1,126 @@
-import { api } from '@/lib/api';
-import Hero from '@/components/home/Hero';
+import { api, safe, EMPTY_PAGE } from '@/lib/api';
+import { COUNTIES, FEATURED_COUNTIES } from '@/lib/constants';
+import HeroNews from '@/components/home/HeroNews';
+import BreakingNews from '@/components/home/BreakingNews';
 import InsideIssueStrip from '@/components/home/InsideIssueStrip';
-import CategorySection from '@/components/home/CategorySection';
+import CountySection from '@/components/home/CountySection';
+import CountyRoundup, { type CountyEntry } from '@/components/home/CountyRoundup';
+import CountyDirectory from '@/components/home/CountyDirectory';
+import OpinionSection from '@/components/home/OpinionSection';
+import NewsGrid from '@/components/articles/NewsGrid';
+import SectionHeader from '@/components/shared/SectionHeader';
+import AdBanner from '@/components/shared/AdBanner';
 import Sidebar from '@/components/sidebar/Sidebar';
-import Link from 'next/link';
-import { COUNTIES } from '@/lib/constants';
 
 export default async function HomePage() {
-  const [heroData, issue, meru, embu, business, sports, opinion] = await Promise.all([
-    api.getArticles({ hero: 'true', limit: '1' }),
-    api.getCurrentIssue().catch(() => null),
-    api.getArticles({ category: 'Meru', limit: '3' }),
-    api.getArticles({ category: 'Embu', limit: '3' }),
-    api.getArticles({ category: 'Business', limit: '3' }),
-    api.getArticles({ category: 'Sports', limit: '3' }),
-    api.getArticles({ category: 'Opinion', limit: '3' }),
+  const [heroRes, poolRes, meru, embu, tharakaNithi, kitui, issue] = await Promise.all([
+    safe(api.getArticles({ hero: 'true', limit: '1' }), EMPTY_PAGE),
+    // One wide request feeds the latest list, the county roundup and the
+    // section blocks — far cheaper than a request per block.
+    safe(api.getArticles({ limit: '50' }), EMPTY_PAGE),
+    safe(api.getArticles({ category: 'Meru', limit: '4' }), EMPTY_PAGE),
+    safe(api.getArticles({ category: 'Embu', limit: '4' }), EMPTY_PAGE),
+    safe(api.getArticles({ category: 'Tharaka Nithi', limit: '4' }), EMPTY_PAGE),
+    safe(api.getArticles({ category: 'Kitui', limit: '4' }), EMPTY_PAGE),
+    safe(api.getCurrentIssue(), null),
   ]);
 
-  const heroArticle = heroData.data[0];
-  const issueArticles = issue?.articles || [];
+  const pool = poolRes.data;
+  const heroArticle = heroRes.data[0] || pool.find((a) => a.isHero) || pool[0];
+
+  // Everything except the lead story, newest first.
+  const rest = heroArticle ? pool.filter((a) => a._id !== heroArticle._id) : pool;
+
+  const byCategory = (name: string) => pool.filter((a) => a.category === name);
+  const business = byCategory('Business').slice(0, 3);
+  const sports = byCategory('Sports').slice(0, 3);
+  const opinion = [...byCategory('Opinion'), ...byCategory('Editorial')].slice(0, 3);
+
+  // Freshest story from every county desk, for the "Around the Counties" index.
+  const roundup: CountyEntry[] = COUNTIES.map((county) => {
+    const article = pool.find((a) => a.category === county.name);
+    return article ? { county, article } : null;
+  }).filter((e): e is CountyEntry => e !== null);
+
+  const countySections = [
+    { county: FEATURED_COUNTIES[0], articles: meru.data },
+    { county: FEATURED_COUNTIES[1], articles: embu.data },
+    { county: FEATURED_COUNTIES[2], articles: tharakaNithi.data },
+    { county: FEATURED_COUNTIES[3], articles: kitui.data },
+  ].filter((s) => s.articles.length > 0);
+
+  if (!heroArticle) {
+    return (
+      <div className="en-container py-24 text-center">
+        <h1 className="font-headline text-3xl font-black text-ink">Welcome to The Eastern Newspaper</h1>
+        <p className="mx-auto mt-3 max-w-md text-sm text-muted">
+          Stories from across the Eastern region will appear here as soon as they are published.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
-      {heroArticle && <Hero article={heroArticle} />}
-      <InsideIssueStrip articles={issueArticles} />
+      <BreakingNews articles={pool.slice(0, 8)} />
 
-      <div className="max-w-7xl mx-auto px-4 py-10 grid lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2">
-          <CategorySection title="Meru" href="/counties/meru" articles={meru.data} />
-          <CategorySection title="Embu" href="/counties/embu" articles={embu.data} />
-          <CategorySection title="Business" href="/business" articles={business.data} />
-          <CategorySection title="Sports" href="/sports" articles={sports.data} />
-          <CategorySection title="Opinion" href="/opinion" articles={opinion.data} />
+      <HeroNews lead={heroArticle} supporting={rest.slice(0, 4)} />
+
+      <AdBanner />
+
+      {/* Main column + sticky rail */}
+      <div className="en-container grid gap-10 py-10 lg:grid-cols-3 lg:gap-12">
+        <div className="flex min-w-0 flex-col gap-12 lg:col-span-2">
+          <section aria-labelledby="latest-news">
+            <div id="latest-news">
+              <SectionHeader title="Latest News" href="/archive" linkLabel="All stories" />
+            </div>
+            {rest.length > 0 ? (
+              <NewsGrid articles={rest.slice(0, 6)} columns={2} showComments />
+            ) : (
+              <p className="text-sm text-muted">No further stories published yet.</p>
+            )}
+          </section>
+
+          {countySections.map((s) => (
+            <CountySection key={s.county.slug} county={s.county} articles={s.articles} />
+          ))}
         </div>
+
         <Sidebar />
       </div>
 
-      <section className="bg-gray-50 py-10">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="font-headline text-2xl font-bold text-brand-blue mb-6">Explore All Counties</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {COUNTIES.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/counties/${c.slug}`}
-                className="bg-white border rounded-lg p-4 text-center font-semibold hover:bg-brand-blue hover:text-white transition"
-              >
-                {c.name}
-              </Link>
-            ))}
+      <InsideIssueStrip articles={issue?.articles || []} issue={issue} />
+
+      {roundup.length > 0 && <CountyRoundup entries={roundup} />}
+
+      {business.length > 0 && (
+        <section aria-labelledby="home-business" className="en-container py-10 md:py-12">
+          <div id="home-business">
+            <SectionHeader title="Business" href="/business" />
           </div>
-        </div>
+          <NewsGrid articles={business} columns={3} showComments />
+        </section>
+      )}
+
+      {sports.length > 0 && (
+        <section
+          aria-labelledby="home-sports"
+          className="border-y border-border bg-surface-alt py-10 md:py-12"
+        >
+          <div className="en-container">
+            <div id="home-sports">
+              <SectionHeader title="Sports" href="/sports" />
+            </div>
+            <NewsGrid articles={sports} columns={3} showComments />
+          </div>
+        </section>
+      )}
+
+      <OpinionSection articles={opinion} />
+
+      <section className="en-container py-10 md:py-12">
+        <CountyDirectory description="Every county desk, from Meru to Marsabit." />
       </section>
     </div>
   );

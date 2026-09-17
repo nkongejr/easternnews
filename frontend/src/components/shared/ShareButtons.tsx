@@ -1,23 +1,65 @@
 'use client';
 
-import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
+import { FaFacebookF, FaXTwitter, FaWhatsapp, FaLink } from 'react-icons/fa6';
 
 export default function ShareButtons({ title, url }: { title: string; url: string }) {
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      /* clipboard unavailable — nothing to recover from */
+    }
+  };
+
+  const links = [
+    {
+      label: 'Share on Facebook',
+      href: `https://facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+      icon: <FaFacebookF size={13} />,
+      className: 'bg-brand-blue text-white hover:bg-brand-blue-dark',
+    },
+    {
+      label: 'Share on X',
+      href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+      icon: <FaXTwitter size={13} />,
+      className: 'bg-ink text-white hover:bg-black',
+    },
+    {
+      label: 'Share on WhatsApp',
+      href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
+      icon: <FaWhatsapp size={14} />,
+      className: 'bg-[#25D366] text-white hover:brightness-95',
+    },
+  ];
+
   return (
-    <div className="flex items-center gap-3 my-6">
-      <span className="text-sm font-semibold text-gray-600">Share:</span>
-      <a href={`https://facebook.com/sharer/sharer.php?u=${encodedUrl}`} target="_blank" className="bg-brand-blue text-white p-2 rounded-full hover:opacity-80">
-        <FaFacebookF size={14} />
-      </a>
-      <a href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" className="bg-black text-white p-2 rounded-full hover:opacity-80">
-        <FaXTwitter size={14} />
-      </a>
-      <a href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`} target="_blank" className="bg-green-600 text-white p-2 rounded-full hover:opacity-80">
-        <FaWhatsapp size={14} />
-      </a>
+    <div className="mt-8 border-y border-border py-4">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="en-kicker text-muted">Share</span>
+        {links.map((l) => (
+          <a
+            key={l.label}
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={l.label}
+            className={`inline-flex h-9 w-9 items-center justify-center rounded-sm transition-opacity hover:opacity-90 ${l.className}`}
+          >
+            {l.icon}
+          </a>
+        ))}
+        <button
+          type="button"
+          onClick={copy}
+          aria-label="Copy link"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-border text-muted transition-colors hover:border-brand-blue hover:text-brand-blue"
+        >
+          <FaLink size={13} />
+        </button>
+      </div>
     </div>
   );
 }

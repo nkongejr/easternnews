@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import TopBar from '@/components/layout/TopBar';
+import Header from '@/components/layout/Header';
 import MainNav from '@/components/layout/MainNav';
 import Footer from '@/components/layout/Footer';
 
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
     default: 'The Eastern Newspaper — Be in the Know',
     template: '%s | The Eastern Newspaper',
   },
-  description: 'Regional monthly newspaper covering Meru, Embu, Tharaka Nithi, Isiolo, Samburu, Marsabit, Laikipia, Machakos, Kitui, Makueni and Kirinyaga counties.',
+  description:
+    'Regional monthly newspaper covering Meru, Embu, Tharaka Nithi, Isiolo, Samburu, Marsabit, Laikipia, Machakos, Kitui, Makueni and Kirinyaga counties.',
   metadataBase: new URL('https://www.easternnewspaper.co.ke'),
   openGraph: {
     siteName: 'The Eastern Newspaper',
@@ -21,9 +23,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
+
         <TopBar />
+        <Header />
         <MainNav />
-        <main>{children}</main>
+
+        <main id="main">{children}</main>
+
         <Footer />
       </body>
     </html>

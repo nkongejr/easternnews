@@ -48,14 +48,14 @@ export default function AdvertiserForm({ initial }: { initial?: Advertiser }) {
   return (
     <form onSubmit={onSubmit} className="space-y-4 max-w-xl bg-white p-6 rounded shadow">
       <input required placeholder="Business name" value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} className="w-full border rounded px-3 py-2" />
-      <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as any })} className="w-full border rounded px-3 py-2">
+      <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as Advertiser['category'] })} className="w-full border rounded px-3 py-2">
         {['Hotel', 'TVET/College', 'University', 'Security Services', 'Other'].map((c) => <option key={c}>{c}</option>)}
       </select>
       <textarea placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full border rounded px-3 py-2" rows={3} />
       <input placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="w-full border rounded px-3 py-2" />
       <input placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full border rounded px-3 py-2" />
       <input placeholder="Address" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="w-full border rounded px-3 py-2" />
-      <select value={form.adPlacement} onChange={(e) => setForm({ ...form, adPlacement: e.target.value as any })} className="w-full border rounded px-3 py-2">
+      <select value={form.adPlacement} onChange={(e) => setForm({ ...form, adPlacement: e.target.value as Advertiser['adPlacement'] })} className="w-full border rounded px-3 py-2">
         {['sidebar', 'banner', 'sponsored-post'].map((p) => <option key={p}>{p}</option>)}
       </select>
       <input placeholder="Website URL" value={form.linkURL} onChange={(e) => setForm({ ...form, linkURL: e.target.value })} className="w-full border rounded px-3 py-2" />

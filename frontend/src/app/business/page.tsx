@@ -11,6 +11,8 @@ export default async function BusinessPage({ searchParams }: Props) {
       categoryName="Business"
       baseHref="/business"
       page={Number(page || 1)}
+      description="Business and economy across the Eastern region."
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Business News' }]}
     />
   );
 }

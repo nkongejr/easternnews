@@ -1,39 +1,84 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { api } from '@/lib/api';
+import { api, safe } from '@/lib/api';
+import PageHeader from '@/components/shared/PageHeader';
 
 export const metadata = { title: 'Back Issues' };
 
 export default async function ArchivePage() {
-  const issues = await api.getIssues();
+  const issues = await safe(api.getIssues(), []);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="font-headline text-3xl font-bold mb-8">Back Issues</h1>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-        {issues.map((issue) => (
-          <div key={issue._id} className="border rounded-lg overflow-hidden">
-            <div className="relative w-full h-56">
-              <Image
-                src={issue.coverImage || 'https://placehold.co/400x600'}
-                alt={issue.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-4">
-              <p className="font-bold">{issue.title}</p>
-              <p className="text-sm text-gray-600 mb-3">{issue.coverHeadline}</p>
-              {issue.pdfUrl ? (
-                <a href={issue.pdfUrl} target="_blank" className="text-brand-blue font-semibold text-sm hover:underline">
-                  Download PDF →
-                </a>
-              ) : (
-                <span className="text-xs text-gray-400">Digital replica coming soon</span>
-              )}
-            </div>
-          </div>
-        ))}
+    <div>
+      <PageHeader
+        title="Back Issues"
+        description="Browse previous editions of The Eastern Newspaper."
+        crumbs={[{ label: 'Home', href: '/' }, { label: 'Back Issues' }]}
+      />
+
+      <div className="en-container py-8 md:py-10">
+        {issues.length === 0 ? (
+          <p className="rounded-sm border border-border bg-surface-alt p-8 text-center text-sm text-muted">
+            No back issues have been published yet.
+          </p>
+        ) : (
+          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {issues.map((issue) => (
+              <li
+                key={issue._id}
+                className="group flex flex-col border border-border bg-white transition-colors hover:border-brand-blue"
+              >
+                <div className="en-imgframe aspect-[3/4] w-full bg-surface-sunken">
+                  {issue.coverImage && (
+                    <Image
+                      src={issue.coverImage}
+                      alt={issue.coverHeadline || issue.title}
+                      fill
+                      sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 380px"
+                      className="object-cover"
+                    />
+                  )}
+                </div>
+
+                <div className="flex flex-1 flex-col p-4">
+                  <p className="en-kicker text-brand-blue">
+                    Issue {issue.issueNumber} · {issue.month} {issue.year}
+                  </p>
+                  <h2 className="mt-1.5 font-headline text-lg font-bold leading-snug text-ink">
+                    {issue.title}
+                  </h2>
+                  {issue.coverHeadline && (
+                    <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-muted">
+                      {issue.coverHeadline}
+                    </p>
+                  )}
+                  {issue.pdfUrl ? (
+                    <a
+                      href={issue.pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-block text-[11px] font-bold uppercase tracking-wider text-brand-blue hover:underline"
+                    >
+                      Download PDF →
+                    </a>
+                  ) : (
+                    <span className="mt-4 text-[11px] italic text-muted">
+                      Digital replica coming soon
+                    </span>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <p className="mt-10 text-center text-sm text-muted">
+          Looking for a single story?{' '}
+          <Link href="/search" className="font-semibold text-brand-blue hover:underline">
+            Search the archive
+          </Link>
+          .
+        </p>
       </div>
     </div>
   );

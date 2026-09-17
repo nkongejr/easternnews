@@ -33,6 +33,12 @@ export default async function CountyPage({ params, searchParams }: Props) {
       categoryName={category!.name}
       baseHref={`/counties/${slug}`}
       page={Number(page || 1)}
+      description={category!.description}
+      crumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Counties' },
+        { label: `${category!.name} News` },
+      ]}
     />
   );
 }
