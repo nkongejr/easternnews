@@ -7,10 +7,11 @@ import CategoryBadge from './CategoryBadge';
 export default function ArticleCard({ article }: { article: Article }) {
   const excerpt =
     article.deck || (article.body ? article.body.slice(0, 140) + '…' : '');
+  const href = `/articles/${article.slug}`;
 
   return (
     <article className="border-b border-gray-200 pb-5 group">
-      <Link href={`/articles/${article.slug}`} className="block">
+      <Link href={href} className="block">
         <div className="img-frame aspect-[16/10] mb-3">
           <Image
             src={article.featuredImage?.url || 'https://placehold.co/600x400'}
@@ -22,9 +23,7 @@ export default function ArticleCard({ article }: { article: Article }) {
         </div>
         <CategoryBadge category={article.category} />
         <h3 className="h-card mt-2 mb-1 group-hover:text-brand-blue transition-colors line-clamp-3">
-          <Link href={`/articles/${article.slug}`} className="hover:text-brand-blue">
-            {article.title}
-          </Link>
+          {article.title}
         </h3>
         {excerpt && (
           <p className="text-sm text-gray-600 leading-relaxed line-clamp-2 mb-2">
