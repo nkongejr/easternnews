@@ -4,7 +4,7 @@ export default function CategoryBadge({ category }: { category: string }) {
   const color = CATEGORY_COLORS[category] || '#1a4d8f';
   return (
     <span
-      className="inline-block text-white text-xs font-bold uppercase px-2 py-1 rounded"
+      className="inline-block text-white text-[10px] font-bold uppercase tracking-[0.12em] px-2 py-0.5"
       style={{ backgroundColor: color }}
     >
       {category}
