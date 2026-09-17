@@ -6,50 +6,41 @@ import CategoryBadge from './CategoryBadge';
 
 export default function ArticleCard({ article }: { article: Article }) {
   const excerpt =
-    article.deck || (article.body ? article.body.slice(0, 140) + '...' : '');
+    article.deck || (article.body ? article.body.slice(0, 140) + '…' : '');
 
   return (
-    <article className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
-      <Link href={`/articles/${article.slug}`}>
-        <div className="relative w-full h-44">
+    <article className="border-b border-gray-200 pb-5 group">
+      <Link href={`/articles/${article.slug}`} className="block">
+        <div className="img-frame aspect-[16/10] mb-3">
           <Image
             src={article.featuredImage?.url || 'https://placehold.co/600x400'}
             alt={article.featuredImage?.caption || article.title}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover"
           />
         </div>
-      </Link>
-      <div className="p-4">
         <CategoryBadge category={article.category} />
-        <Link href={`/articles/${article.slug}`}>
-          <h3 className="font-headline font-bold text-lg mt-2 mb-1 hover:text-brand-blue line-clamp-2">
+        <h3 className="h-card mt-2 mb-1 group-hover:text-brand-blue transition-colors line-clamp-3">
+          <Link href={`/articles/${article.slug}`} className="hover:text-brand-blue">
             {article.title}
-          </h3>
-        </Link>
+          </Link>
+        </h3>
         {excerpt && (
-          <p className="text-sm text-gray-600 line-clamp-2 mb-3">{excerpt}</p>
+          <p className="text-sm text-gray-600 leading-relaxed line-clamp-2 mb-2">
+            {excerpt}
+          </p>
         )}
-        <div className="flex items-center justify-between text-xs text-gray-500">
-          <span>
-            By {article.author?.name || article.bylineCredit || 'Eastern Newspaper Team'}
-            {article.bylineCredit ? ` · ${article.bylineCredit}` : ''}
-          </span>
-        </div>
-        <div className="flex items-center justify-between text-xs text-gray-400 mt-1">
-          <span>
-            {article.publishDate
-              ? format(new Date(article.publishDate), 'MMM d, yyyy')
-              : ''}
-          </span>
-          <span>{article.commentCount ?? 0} comments</span>
-        </div>
-        <Link
-          href={`/articles/${article.slug}`}
-          className="inline-block mt-3 text-brand-blue font-semibold text-sm hover:underline"
-        >
-          Read More →
-        </Link>
+      </Link>
+      <div className="meta-line">
+        By {article.author?.name || article.bylineCredit || 'Eastern Newspaper Team'}
+        {article.bylineCredit ? ` · ${article.bylineCredit}` : ''}
+      </div>
+      <div className="meta-line mt-0.5">
+        {article.publishDate
+          ? format(new Date(article.publishDate), 'MMM d, yyyy')
+          : ''}
+        {article.commentCount ? ` · ${article.commentCount} comments` : ''}
       </div>
     </article>
   );
