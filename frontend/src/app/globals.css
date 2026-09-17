@@ -5,14 +5,49 @@
   --color-brand-blue-dark: #123563;
   --color-brand-gold: #f2c94c;
   --color-brand-gold-dark: #d4a92e;
+  --color-ink: #111111;
+  --color-paper: #ffffff;
+  --color-paper-muted: #f7f5f0;
 
   --font-headline: Georgia, Cambria, "Times New Roman", serif;
   --font-body: Arial, Helvetica, sans-serif;
 }
 
 body {
-  @apply bg-white text-gray-900;
+  @apply bg-paper text-ink;
   font-family: var(--font-body);
+}
+
+/* ---------- Editorial typography utilities ---------- */
+
+.font-headline {
+  font-family: var(--font-headline);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Section kicker: small caps label above headlines */
+.kicker {
+  @apply inline-block text-[11px] font-bold uppercase tracking-[0.14em] text-brand-blue;
+  font-family: var(--font-body);
+}
+
+/* Newspaper section header with double-rule treatment */
+.section-rule {
+  @apply border-b-2 border-ink;
+}
+
+/* Compact article metadata */
+.meta-line {
+  @apply text-[11px] uppercase tracking-wider text-gray-500;
+  font-family: var(--font-body);
+}
+
+/* Hairline divider between stories */
+.story-divider {
+  @apply border-t border-gray-200;
 }
 
 .pull-quote {
@@ -25,10 +60,25 @@ body {
   font-size: 17px;
 }
 
-.font-headline {
-  font-family: var(--font-headline);
+/* Headline sizes follow a newspaper hierarchy */
+.h-hero {
+  @apply font-headline font-black leading-[1.08] text-3xl md:text-4xl lg:text-5xl;
 }
 
-.font-body {
-  font-family: var(--font-body);
+.h-section {
+  @apply font-headline font-bold text-xl md:text-2xl text-ink;
+}
+
+.h-card {
+  @apply font-headline font-bold text-base md:text-lg leading-snug;
+}
+
+/* Consistent image treatment: square corners, hairline frame */
+.img-frame {
+  @apply relative w-full overflow-hidden bg-gray-100;
+  border: 1px solid #e5e5e5;
+}
+
+.img-frame img {
+  @apply object-cover;
 }
