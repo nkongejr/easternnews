@@ -7,7 +7,8 @@ import Wordmark from './Wordmark';
 /**
  * Portal masthead: brand on the left, live search on the right.
  * Mirrors the Kenyanews header structure while keeping Eastern Newspaper
- * colours, wordmark and tagline.
+ * colours, wordmark and tagline. No date here on mobile — the TopBar
+ * dateline is the single auto-updating date on phones.
  */
 export default function Header() {
   return (
@@ -15,9 +16,6 @@ export default function Header() {
       <div className="en-container flex items-center justify-between gap-6 py-3 md:py-4">
         <Link href="/" className="min-w-0 shrink-0" aria-label={`${SITE.name} — home`}>
           <Wordmark size="lg" />
-          <span className="mt-1.5 block text-[11px] font-semibold tracking-wide text-muted md:hidden">
-            {formatToday()}
-          </span>
         </Link>
 
         <div className="hidden min-w-0 flex-1 items-center justify-end gap-6 md:flex">

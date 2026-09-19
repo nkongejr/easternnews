@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
-import { CONTACT, COUNTIES, MORE_NAV, PRIMARY_NAV, SITE, TILL_NUMBER } from '@/lib/constants';
+import { CONTACT, COUNTIES, MORE_NAV, PRIMARY_NAV, SITE, TILL_NUMBER, SHOW_MPESA_TILL } from '@/lib/constants';
 
 const QUICK_LINKS = [
   { label: 'About Us', href: '/about' },
@@ -40,9 +40,11 @@ export default function Footer() {
               {SITE.tagline}
             </p>
             <p className="mt-4 text-[13px] leading-relaxed text-white/70">{SITE.description}</p>
-            <p className="mt-4 inline-block rounded-sm bg-brand-secondary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-brand-primary-darker">
-              M-PESA Till: {TILL_NUMBER}
-            </p>
+            {SHOW_MPESA_TILL && (
+              <p className="mt-4 inline-block rounded-sm bg-brand-secondary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-brand-primary-darker">
+                M-PESA Till: {TILL_NUMBER}
+              </p>
+            )}
           </div>
 
           {/* Sections */}
