@@ -147,6 +147,13 @@ export const DEFAULT_ACCENT = '#1a4d8f';
 
 export const TILL_NUMBER = '610589';
 
+/**
+ * Master switch for every M-PESA till placement (TopBar, header nav drawer,
+ * footer and the advertise page). Set to `true` to restore all of them at
+ * once — no per-component edits needed.
+ */
+export const SHOW_MPESA_TILL = false;
+
 /* ------------------------------------------------------------
    CONTACT
    ------------------------------------------------------------

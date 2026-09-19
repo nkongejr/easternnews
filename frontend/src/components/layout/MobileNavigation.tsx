@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { FaChevronDown, FaFacebookF, FaWhatsapp, FaXTwitter, FaXmark } from 'react-icons/fa6';
-import { CONTACT, COUNTIES, MORE_NAV, PRIMARY_NAV, SITE, TILL_NUMBER } from '@/lib/constants';
+import { CONTACT, COUNTIES, MORE_NAV, PRIMARY_NAV, SITE, TILL_NUMBER, SHOW_MPESA_TILL } from '@/lib/constants';
 import SearchBar from '@/components/shared/SearchBar';
 
 /**
@@ -150,9 +150,11 @@ export default function MobileNavigation({
         </nav>
 
         <div className="mt-6 space-y-4 border-t border-border px-4 py-6">
-          <p className="rounded-sm bg-brand-secondary px-3 py-2 text-center text-[11px] font-bold text-brand-primary-darker">
-            M-PESA Buy Goods Till: {TILL_NUMBER}
-          </p>
+          {SHOW_MPESA_TILL && (
+            <p className="rounded-sm bg-brand-secondary px-3 py-2 text-center text-[11px] font-bold text-brand-primary-darker">
+              M-PESA Buy Goods Till: {TILL_NUMBER}
+            </p>
+          )}
           <p className="text-center text-[13px] font-semibold text-text">
             {CONTACT.verifiedEmail}
           </p>

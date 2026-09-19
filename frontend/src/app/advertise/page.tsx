@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import PageHeader from '@/components/shared/PageHeader';
-import { SITE, TILL_NUMBER } from '@/lib/constants';
+import { SITE, TILL_NUMBER, SHOW_MPESA_TILL } from '@/lib/constants';
 
 export const metadata = {
   alternates: { canonical: '/advertise' }, title: 'Advertise With Us' };
@@ -43,10 +43,12 @@ export default function AdvertisePage() {
             </a>{' '}
             or call {SITE.phoneLabel} to discuss rates.
           </p>
-          <p>
-            Prefer to pay by M-PESA? Buy Goods Till Number{' '}
-            <span className="font-bold text-ink">{TILL_NUMBER}</span>.
-          </p>
+          {SHOW_MPESA_TILL && (
+            <p>
+              Prefer to pay by M-PESA? Buy Goods Till Number{' '}
+              <span className="font-bold text-ink">{TILL_NUMBER}</span>.
+            </p>
+          )}
           <p>
             You can also browse the businesses already supporting us in the{' '}
             <Link href="/advertisers" className="text-brand-blue underline">
