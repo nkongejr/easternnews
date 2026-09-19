@@ -35,6 +35,8 @@ export interface Article {
   featuredImage: ImageBlock;
   gallery?: ImageBlock[];
   publishDate?: string;
+  /** Set by Mongoose timestamps; shown as "Updated …" when meaningfully later. */
+  updatedAt?: string;
   issue?: { _id: string; issueNumber: number; title: string } | string;
   isFeatured?: boolean;
   isHero?: boolean;

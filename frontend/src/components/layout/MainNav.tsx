@@ -3,10 +3,17 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { FaBars, FaChevronDown, FaMagnifyingGlass, FaXmark } from 'react-icons/fa6';
-import { COUNTIES, NAV_LINKS, SITE } from '@/lib/constants';
+import {
+  FaBars,
+  FaChevronDown,
+  FaMagnifyingGlass,
+  FaXmark,
+} from 'react-icons/fa6';
+import { COUNTIES, MORE_NAV, PRIMARY_NAV, SITE } from '@/lib/constants';
 import SearchBar from '@/components/shared/SearchBar';
 import MobileNavigation from './MobileNavigation';
+
+type MenuId = 'counties' | 'more' | null;
 
 function isActive(pathname: string, href: string) {
   if (href === '/') return pathname === '/';
@@ -14,36 +21,39 @@ function isActive(pathname: string, href: string) {
 }
 
 /**
- * Primary navigation bar. Sticks to the top of the viewport once the masthead
- * scrolls away, so county/section navigation is always one click from anywhere
- * on the page — the same behaviour as the large Kenyan news portals.
+ * Primary navigation. Sticks to the top of the viewport once the masthead
+ * scrolls away, so County/Section navigation is always one click away —
+ * the behaviour readers expect from a national news portal.
  */
 export default function MainNav() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [countiesOpen, setCountiesOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const countiesRef = useRef<HTMLLIElement>(null);
+  const [openMenu, setOpenMenu] = useState<MenuId>(null);
+  const navRef = useRef<HTMLUListElement>(null);
 
-  // Close transient UI when the route changes. Adjusting state during render
-  // (rather than in an effect) avoids a cascade of extra renders.
+  const inCounties = pathname.startsWith('/counties');
+  const inMore = MORE_NAV.some((l) => isActive(pathname, l.href));
+
+  // Close transient UI when the route changes (render-time adjustment —
+  // avoids the extra render pass an effect would cost).
   const [lastPath, setLastPath] = useState(pathname);
   if (pathname !== lastPath) {
     setLastPath(pathname);
     setMobileOpen(false);
-    setCountiesOpen(false);
     setSearchOpen(false);
+    setOpenMenu(null);
   }
 
-  // Dismiss the counties dropdown on outside click / Escape.
+  // Dismiss an open dropdown on outside click / Escape.
   useEffect(() => {
-    if (!countiesOpen) return;
+    if (!openMenu) return;
 
-    const onPointerDown = (e: MouseEvent | TouchEvent) => {
-      if (!countiesRef.current?.contains(e.target as Node)) setCountiesOpen(false);
+    const onPointerDown = (e: MouseEvent) => {
+      if (!navRef.current?.contains(e.target as Node)) setOpenMenu(null);
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setCountiesOpen(false);
+      if (e.key === 'Escape') setOpenMenu(null);
     };
     document.addEventListener('mousedown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
@@ -51,11 +61,14 @@ export default function MainNav() {
       document.removeEventListener('mousedown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [countiesOpen]);
+  }, [openMenu]);
+
+  const menuPanel =
+    'absolute left-0 top-full z-50 border border-border bg-white p-4 shadow-xl';
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b-2 border-brand-gold bg-brand-blue text-white shadow-sm">
+      <header className="sticky top-0 z-50 border-b-2 border-brand-secondary bg-brand-primary text-white shadow-sm">
         <div className="en-container">
           <div className="flex h-12 items-center justify-between gap-4 md:h-14">
             {/* Mobile: hamburger + compact wordmark */}
@@ -65,66 +78,65 @@ export default function MainNav() {
                 onClick={() => setMobileOpen(true)}
                 aria-label="Open menu"
                 aria-expanded={mobileOpen}
-                className="-ml-2 flex h-11 w-11 items-center justify-center text-white hover:text-brand-gold"
+                className="-ml-2 flex h-11 w-11 items-center justify-center text-white hover:text-brand-secondary"
               >
                 <FaBars size={18} />
               </button>
               <span className="font-headline text-sm font-black tracking-tight text-white">
                 {SITE.wordmarkTop}
-                <span className="text-brand-gold">{SITE.wordmarkBottom}</span>
+                <span className="text-brand-secondary">{SITE.wordmarkBottom}</span>
               </span>
             </div>
 
-            {/* Desktop: full menu */}
+            {/* Desktop menu */}
             <nav aria-label="Primary" className="hidden lg:block">
-              <ul className="flex items-center gap-0.5">
-                <li>
-                  <Link
-                    href="/"
-                    aria-current={isActive(pathname, '/') ? 'page' : undefined}
-                    className={`block px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-blue-darker hover:text-brand-gold ${
-                      isActive(pathname, '/') ? 'text-brand-gold' : 'text-white'
-                    }`}
-                  >
-                    Home
-                  </Link>
-                </li>
+              <ul ref={navRef} className="flex items-center gap-0.5">
+                {PRIMARY_NAV.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      aria-current={isActive(pathname, l.href) ? 'page' : undefined}
+                      className={`block px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
+                        isActive(pathname, l.href) ? 'text-brand-secondary' : 'text-white'
+                      }`}
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
 
-                <li
-                  ref={countiesRef}
-                  className="relative"
-                  onMouseLeave={() => setCountiesOpen(false)}
-                >
+                {/* Counties */}
+                <li className="relative" onMouseLeave={() => openMenu === 'counties' && setOpenMenu(null)}>
                   <button
                     type="button"
-                    onClick={() => setCountiesOpen((v) => !v)}
-                    aria-expanded={countiesOpen}
+                    onClick={() => setOpenMenu((m) => (m === 'counties' ? null : 'counties'))}
+                    aria-expanded={openMenu === 'counties'}
                     aria-haspopup="true"
                     aria-controls="counties-menu"
-                    className={`flex items-center gap-1.5 px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-blue-darker hover:text-brand-gold ${
-                      pathname.startsWith('/counties') ? 'text-brand-gold' : 'text-white'
+                    className={`flex items-center gap-1.5 px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
+                      inCounties ? 'text-brand-secondary' : 'text-white'
                     }`}
                   >
                     Counties
                     <FaChevronDown
                       size={10}
-                      className={`transition-transform ${countiesOpen ? 'rotate-180' : ''}`}
+                      className={`transition-transform ${openMenu === 'counties' ? 'rotate-180' : ''}`}
                     />
                   </button>
 
                   <div
                     id="counties-menu"
-                    hidden={!countiesOpen}
-                    className="absolute left-0 top-full z-50 w-[420px] border border-border bg-white p-4 shadow-xl"
+                    hidden={openMenu !== 'counties'}
+                    className={`${menuPanel} w-[420px]`}
                   >
                     <p className="en-kicker mb-3 text-muted">County desks</p>
-                    <ul className="grid grid-cols-2 gap-x-4 gap-y-0.5">
+                    <ul className="grid grid-cols-2 gap-x-4">
                       {COUNTIES.map((c) => (
                         <li key={c.slug}>
                           <Link
                             href={`/counties/${c.slug}`}
-                            className={`block border-b border-border/70 py-2 text-sm font-semibold transition-colors hover:text-brand-blue ${
-                              pathname === `/counties/${c.slug}` ? 'text-brand-blue' : 'text-ink/85'
+                            className={`block border-b border-border py-2 text-sm font-semibold transition-colors hover:text-brand-primary ${
+                              pathname === `/counties/${c.slug}` ? 'text-brand-primary' : 'text-text'
                             }`}
                           >
                             {c.name}
@@ -135,31 +147,59 @@ export default function MainNav() {
                   </div>
                 </li>
 
-                {NAV_LINKS.slice(1).map((l) => (
-                  <li key={l.href}>
-                    <Link
-                      href={l.href}
-                      aria-current={isActive(pathname, l.href) ? 'page' : undefined}
-                      className={`block px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-blue-darker hover:text-brand-gold ${
-                        isActive(pathname, l.href) ? 'text-brand-gold' : 'text-white'
-                      }`}
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
+                {/* More */}
+                <li className="relative" onMouseLeave={() => openMenu === 'more' && setOpenMenu(null)}>
+                  <button
+                    type="button"
+                    onClick={() => setOpenMenu((m) => (m === 'more' ? null : 'more'))}
+                    aria-expanded={openMenu === 'more'}
+                    aria-haspopup="true"
+                    aria-controls="more-menu"
+                    className={`flex items-center gap-1.5 px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
+                      inMore ? 'text-brand-secondary' : 'text-white'
+                    }`}
+                  >
+                    More
+                    <FaChevronDown
+                      size={10}
+                      className={`transition-transform ${openMenu === 'more' ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+
+                  <div
+                    id="more-menu"
+                    hidden={openMenu !== 'more'}
+                    className={`${menuPanel} w-56`}
+                  >
+                    <p className="en-kicker mb-3 text-muted">More from the paper</p>
+                    <ul>
+                      {MORE_NAV.map((l) => (
+                        <li key={l.href}>
+                          <Link
+                            href={l.href}
+                            aria-current={isActive(pathname, l.href) ? 'page' : undefined}
+                            className={`block border-b border-border py-2 text-sm font-semibold transition-colors hover:text-brand-primary ${
+                              isActive(pathname, l.href) ? 'text-brand-primary' : 'text-text'
+                            }`}
+                          >
+                            {l.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
               </ul>
             </nav>
 
-            {/* Search */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center">
               <button
                 type="button"
                 onClick={() => setSearchOpen((v) => !v)}
                 aria-expanded={searchOpen}
                 aria-controls="nav-search"
                 aria-label={searchOpen ? 'Close search' : 'Open search'}
-                className="flex h-11 w-11 items-center justify-center text-white transition-colors hover:text-brand-gold"
+                className="flex h-11 w-11 items-center justify-center text-white transition-colors hover:text-brand-secondary"
               >
                 {searchOpen ? <FaXmark size={16} /> : <FaMagnifyingGlass size={15} />}
               </button>
@@ -168,16 +208,9 @@ export default function MainNav() {
         </div>
 
         {/* Expanding search drawer */}
-        <div
-          id="nav-search"
-          hidden={!searchOpen}
-          className="border-t border-white/15 bg-brand-blue-darker"
-        >
+        <div id="nav-search" hidden={!searchOpen} className="border-t border-white/15 bg-brand-primary-darker">
           <div className="en-container py-3">
-            <SearchBar
-              onNavigate={() => setSearchOpen(false)}
-              className="[&_input]:border-0 [&_input]:bg-white [&_input]:text-ink"
-            />
+            <SearchBar onNavigate={() => setSearchOpen(false)} />
           </div>
         </div>
       </header>

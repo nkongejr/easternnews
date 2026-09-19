@@ -1,7 +1,8 @@
 import PageHeader from '@/components/shared/PageHeader';
 import { COUNTIES, SITE } from '@/lib/constants';
 
-export const metadata = { title: 'About Us' };
+export const metadata = {
+  alternates: { canonical: '/about' }, title: 'About Us' };
 
 export default function AboutPage() {
   return (

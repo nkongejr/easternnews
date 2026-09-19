@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { api, safe } from '@/lib/api';
 import PageHeader from '@/components/shared/PageHeader';
 
-export const metadata = { title: 'Back Issues' };
+export const metadata = {
+  alternates: { canonical: '/archive' }, title: 'Back Issues' };
 
 export default async function ArchivePage() {
   const issues = await safe(api.getIssues(), []);

@@ -1,12 +1,16 @@
 import { api, safe, EMPTY_PAGE } from '@/lib/api';
-import { COUNTIES, FEATURED_COUNTIES } from '@/lib/constants';
+import { COUNTIES, FEATURED_COUNTIES, HOMEPAGE_SECTIONS } from '@/lib/constants';
+import { Article } from '@/types';
 import HeroNews from '@/components/home/HeroNews';
 import BreakingNews from '@/components/home/BreakingNews';
 import InsideIssueStrip from '@/components/home/InsideIssueStrip';
+import CountyRail from '@/components/home/CountyRail';
 import CountySection from '@/components/home/CountySection';
 import CountyRoundup, { type CountyEntry } from '@/components/home/CountyRoundup';
 import CountyDirectory from '@/components/home/CountyDirectory';
 import OpinionSection from '@/components/home/OpinionSection';
+import TopicChips from '@/components/home/TopicChips';
+import NewsletterBand from '@/components/home/NewsletterBand';
 import NewsGrid from '@/components/articles/NewsGrid';
 import SectionHeader from '@/components/shared/SectionHeader';
 import AdBanner from '@/components/shared/AdBanner';
@@ -15,8 +19,8 @@ import Sidebar from '@/components/sidebar/Sidebar';
 export default async function HomePage() {
   const [heroRes, poolRes, meru, embu, tharakaNithi, kitui, issue] = await Promise.all([
     safe(api.getArticles({ hero: 'true', limit: '1' }), EMPTY_PAGE),
-    // One wide request feeds the latest list, the county roundup and the
-    // section blocks — far cheaper than a request per block.
+    // One wide request feeds the latest stream, the county roundup and the
+    // category blocks — far cheaper than a request per block.
     safe(api.getArticles({ limit: '50' }), EMPTY_PAGE),
     safe(api.getArticles({ category: 'Meru', limit: '4' }), EMPTY_PAGE),
     safe(api.getArticles({ category: 'Embu', limit: '4' }), EMPTY_PAGE),
@@ -27,16 +31,22 @@ export default async function HomePage() {
 
   const pool = poolRes.data;
   const heroArticle = heroRes.data[0] || pool.find((a) => a.isHero) || pool[0];
-
-  // Everything except the lead story, newest first.
   const rest = heroArticle ? pool.filter((a) => a._id !== heroArticle._id) : pool;
 
-  const byCategory = (name: string) => pool.filter((a) => a.category === name);
-  const business = byCategory('Business').slice(0, 3);
-  const sports = byCategory('Sports').slice(0, 3);
-  const opinion = [...byCategory('Opinion'), ...byCategory('Editorial')].slice(0, 3);
+  // Group the pool once, then every block reads from it.
+  const byCategory: Record<string, Article[]> = {};
+  for (const a of pool) (byCategory[a.category] ||= []).push(a);
 
-  // Freshest story from every county desk, for the "Around the Counties" index.
+  // Category blocks render only if their desk has published stories, so the
+  // front page is never hard-coded around today's example content.
+  const sectionBlocks = HOMEPAGE_SECTIONS.map((s) => ({
+    ...s,
+    articles: (byCategory[s.category] || []).slice(0, 3),
+  })).filter((s) => s.articles.length > 0);
+
+  const opinion = [...(byCategory.Opinion || []), ...(byCategory.Editorial || [])].slice(0, 3);
+
+  // Freshest story from every county desk.
   const roundup: CountyEntry[] = COUNTIES.map((county) => {
     const article = pool.find((a) => a.category === county.name);
     return article ? { county, article } : null;
@@ -52,7 +62,9 @@ export default async function HomePage() {
   if (!heroArticle) {
     return (
       <div className="en-container py-24 text-center">
-        <h1 className="font-headline text-3xl font-black text-ink">Welcome to The Eastern Newspaper</h1>
+        <h1 className="font-headline text-3xl font-black text-text">
+          Welcome to The Eastern Newspaper
+        </h1>
         <p className="mx-auto mt-3 max-w-md text-sm text-muted">
           Stories from across the Eastern region will appear here as soon as they are published.
         </p>
@@ -66,6 +78,9 @@ export default async function HomePage() {
 
       <HeroNews lead={heroArticle} supporting={rest.slice(0, 4)} />
 
+      {/* County navigation — the paper's signature beats */}
+      <CountyRail />
+
       <AdBanner />
 
       {/* Main column + sticky rail */}
@@ -73,7 +88,7 @@ export default async function HomePage() {
         <div className="flex min-w-0 flex-col gap-12 lg:col-span-2">
           <section aria-labelledby="latest-news">
             <div id="latest-news">
-              <SectionHeader title="Latest News" href="/archive" linkLabel="All stories" />
+              <SectionHeader title="Latest News" href="/latest" linkLabel="All stories" />
             </div>
             {rest.length > 0 ? (
               <NewsGrid articles={rest.slice(0, 6)} columns={2} showComments />
@@ -94,30 +109,26 @@ export default async function HomePage() {
 
       {roundup.length > 0 && <CountyRoundup entries={roundup} />}
 
-      {business.length > 0 && (
-        <section aria-labelledby="home-business" className="en-container py-10 md:py-12">
-          <div id="home-business">
-            <SectionHeader title="Business" href="/business" />
-          </div>
-          <NewsGrid articles={business} columns={3} showComments />
-        </section>
-      )}
-
-      {sports.length > 0 && (
+      {/* Category blocks */}
+      {sectionBlocks.map((s, i) => (
         <section
-          aria-labelledby="home-sports"
-          className="border-y border-border bg-surface-alt py-10 md:py-12"
+          key={s.name}
+          aria-labelledby={`home-${s.href.replace(/\//g, '')}`}
+          className={`py-10 md:py-12 ${i % 2 === 1 ? 'border-y border-border bg-surface-alt' : ''}`}
         >
           <div className="en-container">
-            <div id="home-sports">
-              <SectionHeader title="Sports" href="/sports" />
+            <div id={`home-${s.href.replace(/\//g, '')}`}>
+              <SectionHeader title={s.name} href={s.href} kicker={s.kicker} />
             </div>
-            <NewsGrid articles={sports} columns={3} showComments />
+            <TopicChips topics={s.topics} />
+            <NewsGrid articles={s.articles} columns={3} showComments />
           </div>
         </section>
-      )}
+      ))}
 
       <OpinionSection articles={opinion} />
+
+      <NewsletterBand />
 
       <section className="en-container py-10 md:py-12">
         <CountyDirectory description="Every county desk, from Meru to Marsabit." />

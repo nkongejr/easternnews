@@ -108,7 +108,7 @@ export default function ContactForm() {
         </p>
       </form>
 
-      <div className="mt-10 border-t-2 border-brand-gold pt-6">
+      <div id="newsletter" className="mt-10 scroll-mt-24 border-t-2 border-brand-secondary pt-6">
         <h2 className="font-headline text-lg font-bold text-ink">Subscribe to our Newsletter</h2>
         <p className="mt-1 mb-3 text-sm text-muted">
           The month’s best reporting from the Eastern region, in your inbox.
@@ -129,7 +129,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={subStatus === 'sending'}
-            className="rounded-sm bg-brand-gold px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-brand-blue-darker transition-colors hover:bg-brand-gold-dark disabled:opacity-60"
+            className="rounded-sm bg-brand-secondary px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-brand-blue-darker transition-colors hover:bg-brand-gold-dark disabled:opacity-60"
           >
             {subStatus === 'sending' ? 'Subscribing…' : 'Subscribe'}
           </button>

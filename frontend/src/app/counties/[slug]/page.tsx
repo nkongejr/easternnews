@@ -11,7 +11,11 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   try {
     const category = await api.getCategoryBySlug(slug);
-    return { title: `${category.name} News` };
+    return {
+      title: `${category.name} News`,
+      description: category.description || `${category.name} County news from The Eastern Newspaper.`,
+      alternates: { canonical: `/counties/${slug}` },
+    };
   } catch {
     return { title: 'County News' };
   }

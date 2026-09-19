@@ -1,6 +1,6 @@
 import { format, isValid, parseISO } from 'date-fns';
 import { Article } from '@/types';
-import { CATEGORY_COLORS, DEFAULT_ACCENT, COUNTIES } from './constants';
+import { CATEGORY_COLORS, DEFAULT_ACCENT, COUNTIES, SITE } from './constants';
 
 /** Safely turn a Mongo/ISO date string into a Date (or null). */
 export function toDate(value?: string | Date | null): Date | null {
@@ -60,4 +60,22 @@ export function articleHref(article: Pick<Article, 'slug'>): string {
  */
 export function formatToday(): string {
   return format(new Date(), 'EEEE, d MMMM yyyy');
+}
+
+/** Make a CMS/relative URL absolute — required for OG images and structured data. */
+export function absoluteUrl(path?: string | null): string | undefined {
+  if (!path) return undefined;
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${SITE.url}${path.startsWith('/') ? '' : '/'}${path}`;
+}
+
+/**
+ * True when `updatedAt` is at least a day after publication — the threshold
+ * below which a save is just an edit, not a material update readers need to see.
+ */
+export function hasMaterialUpdate(publishDate?: string, updatedAt?: string): boolean {
+  const p = toDate(publishDate);
+  const u = toDate(updatedAt);
+  if (!p || !u) return false;
+  return u.getTime() - p.getTime() > 86_400_000;
 }

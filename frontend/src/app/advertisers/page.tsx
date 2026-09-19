@@ -2,7 +2,8 @@ import { api, safe } from '@/lib/api';
 import SponsoredCard from '@/components/sidebar/SponsoredCard';
 import PageHeader from '@/components/shared/PageHeader';
 
-export const metadata = { title: 'Our Advertisers & Sponsors' };
+export const metadata = {
+  alternates: { canonical: '/advertisers' }, title: 'Our Advertisers & Sponsors' };
 
 const CATEGORIES = ['Hotel', 'TVET/College', 'University', 'Security Services', 'Other'];
 

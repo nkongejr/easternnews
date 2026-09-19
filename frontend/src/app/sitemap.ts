@@ -15,16 +15,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${base}/counties/${c.slug}`,
   }));
 
+  const sectionUrls = [
+    '/latest',
+    '/business',
+    '/sports',
+    '/opinion',
+    '/editorial',
+    '/politics',
+    '/technology',
+    '/entertainment',
+    '/lifestyle',
+    '/about',
+    '/advertise',
+    '/advertisers',
+    '/contact',
+    '/archive',
+    '/privacy',
+    '/terms',
+  ].map((path) => ({ url: `${base}${path}` }));
+
   return [
     { url: base },
-    { url: `${base}/business` },
-    { url: `${base}/sports` },
-    { url: `${base}/opinion` },
-    { url: `${base}/editorial` },
-    { url: `${base}/about` },
-    { url: `${base}/contact` },
-    { url: `${base}/advertisers` },
-    { url: `${base}/archive` },
+    ...sectionUrls,
     ...countyUrls,
     ...articleUrls,
   ];

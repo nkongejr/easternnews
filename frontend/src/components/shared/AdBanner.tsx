@@ -50,7 +50,7 @@ export default async function AdBanner() {
       data-ad-placement="banner"
     >
       <p className="en-container pt-2 text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
-        Advertisement
+        Advertisement · Sponsored Content
       </p>
       {ad.linkURL ? (
         <Link

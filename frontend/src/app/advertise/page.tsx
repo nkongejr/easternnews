@@ -2,7 +2,8 @@ import Link from 'next/link';
 import PageHeader from '@/components/shared/PageHeader';
 import { SITE, TILL_NUMBER } from '@/lib/constants';
 
-export const metadata = { title: 'Advertise With Us' };
+export const metadata = {
+  alternates: { canonical: '/advertise' }, title: 'Advertise With Us' };
 
 export default function AdvertisePage() {
   return (

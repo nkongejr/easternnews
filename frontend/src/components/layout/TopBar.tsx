@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
+import { FaFacebookF, FaXTwitter, FaWhatsapp, FaMagnifyingGlass } from 'react-icons/fa6';
 import { SITE, TILL_NUMBER } from '@/lib/constants';
 import { formatToday } from '@/lib/format';
 
@@ -22,6 +22,9 @@ export default function TopBar() {
           </span>
 
           <nav aria-label="Secondary" className="flex items-center gap-4">
+            <Link href="/search" className="text-white/75 transition-colors hover:text-brand-secondary">
+              Search
+            </Link>
             <Link href="/archive" className="text-white/75 transition-colors hover:text-brand-gold">
               Back Issues
             </Link>
@@ -60,6 +63,13 @@ export default function TopBar() {
               className="text-white/70 transition-colors hover:text-brand-gold"
             >
               <FaWhatsapp size={12} />
+            </Link>
+            <Link
+              href="/search"
+              aria-label="Search"
+              className="text-white/70 transition-colors hover:text-brand-secondary"
+            >
+              <FaMagnifyingGlass size={12} />
             </Link>
           </div>
         </div>

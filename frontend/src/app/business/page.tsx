@@ -1,6 +1,7 @@
 import CategoryArchivePage from '@/components/category/CategoryArchivePage';
 
-export const metadata = { title: 'Business News' };
+export const metadata = {
+  alternates: { canonical: '/business' }, title: 'Business News' };
 
 type Props = { searchParams: Promise<{ page?: string }> };
 

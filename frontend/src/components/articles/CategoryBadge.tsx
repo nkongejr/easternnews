@@ -1,23 +1,9 @@
 import Link from 'next/link';
-import { CATEGORY_COLORS, DEFAULT_ACCENT, COUNTIES } from '@/lib/constants';
-
-/** Categories that own a real section page. */
-const SECTION_ROUTES: Record<string, string> = {
-  Business: '/business',
-  Sports: '/sports',
-  Opinion: '/opinion',
-  Editorial: '/editorial',
-};
-
-/** Resolve the destination for a category, or null when it has no page. */
-export function categoryHref(category: string): string | null {
-  const county = COUNTIES.find((c) => c.name === category);
-  if (county) return `/counties/${county.slug}`;
-  return SECTION_ROUTES[category] ?? null;
-}
+import { CATEGORY_COLORS, DEFAULT_ACCENT } from '@/lib/constants';
+import { categoryRoute } from '@/lib/routes';
 
 /**
- * Small solid category slug. Counties and sections link to their own page so
+ * Small solid category slug. Counties and sections link to their own page, so
  * every card doubles as a navigation surface.
  */
 export default function CategoryBadge({
@@ -40,7 +26,7 @@ export default function CategoryBadge({
     ? { backgroundColor: color, color: '#123563' }
     : { backgroundColor: color };
 
-  const href = linked ? categoryHref(category) : null;
+  const href = linked ? categoryRoute(category) : null;
   if (!href) {
     return (
       <span className={cls} style={style}>

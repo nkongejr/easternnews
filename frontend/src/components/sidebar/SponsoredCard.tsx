@@ -17,8 +17,8 @@ export default function SponsoredCard({
   return (
     <aside className="border border-dashed border-border-strong bg-surface-alt p-4">
       {showLabel && (
-        <p className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
-          Advertisement
+        <p className="mb-2.5 inline-block rounded-sm bg-brand-secondary px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-brand-primary-darker">
+          Sponsored Content
         </p>
       )}
 
