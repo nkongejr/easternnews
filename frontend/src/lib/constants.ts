@@ -28,21 +28,22 @@ export const COUNTY_NAMES = COUNTIES.map((c) => c.name);
 
 export const PRIMARY_NAV = [
   { label: 'Home', href: '/' },
-  { label: 'Latest News', href: '/latest' },
+  { label: 'Latest', href: '/latest' },
+  { label: 'Politics', href: '/politics' },
   { label: 'Business', href: '/business' },
   { label: 'Sports', href: '/sports' },
   { label: 'Opinion', href: '/opinion' },
-  { label: 'Politics', href: '/politics' },
+  { label: 'Features', href: '/editorial' },
 ];
 
 export const MORE_NAV = [
-  { label: 'Editorial', href: '/editorial' },
   { label: 'Technology', href: '/technology' },
   { label: 'Entertainment', href: '/entertainment' },
   { label: 'Lifestyle', href: '/lifestyle' },
   { label: 'About', href: '/about' },
   { label: 'Advertise', href: '/advertise' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Back Issues', href: '/archive' },
 ];
 
 export const NAV_LINKS = [...PRIMARY_NAV, ...MORE_NAV];

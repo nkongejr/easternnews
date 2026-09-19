@@ -5,10 +5,9 @@ const connectDB = require('./src/config/db');
 const PORT = process.env.PORT || 10000;
 
 const start = async () => {
-    console.log(process.env.MONGO_URI);
   await connectDB();
-  app.listen(PORT, () => {
-    console.log(`🚀 Eastern Newspaper API running on port ${PORT} [${process.env.NODE_ENV}]`);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Eastern Newspaper API running on port ${PORT} [${process.env.NODE_ENV}]`);
   });
 };
 

@@ -1,6 +1,9 @@
-import { Article, Category, PaginatedArticles, Advertiser, Issue } from '@/types';
+import { Article, Author, Category, PaginatedArticles, Advertiser, Issue } from '@/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL =
+  (typeof window === 'undefined' && process.env.API_INTERNAL_URL) ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'http://127.0.0.1:5000/api';
 
 async function fetchJSON<T>(path: string, revalidate = 60): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
@@ -32,6 +35,8 @@ export const api = {
   getArticleBySlug: (slug: string) => fetchJSON<Article>(`/articles/${slug}`, 0),
 
   getMostRead: (limit = 5) => fetchJSON<Article[]>(`/articles/most-read?limit=${limit}`),
+
+  getAuthorBySlug: (slug: string) => fetchJSON<Author>(`/authors/${slug}`),
 
   getCurrentIssue: () => fetchJSON<Issue>('/issues/current'),
 

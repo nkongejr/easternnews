@@ -132,7 +132,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
             {results.data.length > 0 ? (
               <>
-                <NewsGrid articles={results.data} columns={3} showComments />
+                <NewsGrid articles={results.data} columns={1} variant="list" showComments gap="gap-0" />
 
                 {topics.length > 0 && (
                   <section className="mt-10" aria-labelledby="search-topics">

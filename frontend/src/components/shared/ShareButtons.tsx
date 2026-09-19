@@ -2,7 +2,15 @@
 
 import { FaFacebookF, FaXTwitter, FaWhatsapp, FaLink } from 'react-icons/fa6';
 
-export default function ShareButtons({ title, url }: { title: string; url: string }) {
+export default function ShareButtons({
+  title,
+  url,
+  compact = false,
+}: {
+  title: string;
+  url: string;
+  compact?: boolean;
+}) {
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
@@ -10,7 +18,7 @@ export default function ShareButtons({ title, url }: { title: string; url: strin
     try {
       await navigator.clipboard.writeText(url);
     } catch {
-      /* clipboard unavailable — nothing to recover from */
+      /* clipboard unavailable */
     }
   };
 
@@ -36,7 +44,7 @@ export default function ShareButtons({ title, url }: { title: string; url: strin
   ];
 
   return (
-    <div className="mt-8 border-y border-border py-4">
+    <div className={compact ? '' : 'mt-8 border-y border-border py-4'}>
       <div className="flex flex-wrap items-center gap-3">
         <span className="en-kicker text-muted">Share</span>
         {links.map((l) => (
@@ -46,7 +54,7 @@ export default function ShareButtons({ title, url }: { title: string; url: strin
             target="_blank"
             rel="noopener noreferrer"
             aria-label={l.label}
-            className={`inline-flex h-9 w-9 items-center justify-center rounded-sm transition-opacity hover:opacity-90 ${l.className}`}
+            className={`inline-flex h-9 w-9 items-center justify-center transition-opacity hover:opacity-90 ${l.className}`}
           >
             {l.icon}
           </a>
@@ -55,7 +63,7 @@ export default function ShareButtons({ title, url }: { title: string; url: strin
           type="button"
           onClick={copy}
           aria-label="Copy link"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-border text-muted transition-colors hover:border-brand-blue hover:text-brand-blue"
+          className="inline-flex h-9 w-9 items-center justify-center border border-border text-muted transition-colors hover:border-brand-blue hover:text-brand-blue"
         >
           <FaLink size={13} />
         </button>

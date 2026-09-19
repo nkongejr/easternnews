@@ -40,6 +40,10 @@ export interface Article {
   issue?: { _id: string; issueNumber: number; title: string } | string;
   isFeatured?: boolean;
   isHero?: boolean;
+  isBreaking?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string;
   tags?: string[];
   relatedArticles?: Article[];
   status?: 'draft' | 'published';

@@ -9,12 +9,14 @@ export default function SearchBar({
   className = '',
   placeholder = 'Search Eastern News…',
   autoFocus = false,
+  inputId = 'site-search',
 }: {
   /** Called after navigation so callers can close their own panel/drawer. */
   onNavigate?: () => void;
   className?: string;
   placeholder?: string;
   autoFocus?: boolean;
+  inputId?: string;
 }) {
   const [q, setQ] = useState('');
   const router = useRouter();
@@ -29,7 +31,7 @@ export default function SearchBar({
 
   return (
     <form onSubmit={onSubmit} role="search" className={`flex gap-2 ${className}`}>
-      <label htmlFor="site-search" className="sr-only">
+      <label htmlFor={inputId} className="sr-only">
         Search articles
       </label>
       <div className="relative flex-1">
@@ -39,7 +41,7 @@ export default function SearchBar({
           className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
         />
         <input
-          id="site-search"
+          id={inputId}
           type="search"
           value={q}
           autoFocus={autoFocus}

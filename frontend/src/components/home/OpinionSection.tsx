@@ -34,10 +34,16 @@ export default function OpinionSection({
     <section aria-labelledby="opinion-section" className="bg-surface-alt py-10 md:py-12">
       <div className="en-container">
         <div id="opinion-section">
-          <SectionHeader title={title} href={href} kicker={kicker} accent="var(--color-ink)" />
+          <SectionHeader
+            title={title}
+            href={href}
+            kicker={kicker}
+            accent="var(--color-ink)"
+            variant="bar"
+          />
         </div>
 
-        <ul className="grid gap-x-8 gap-y-7 md:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-5 grid gap-x-8 gap-y-7 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((a) => {
             const author = byline(a);
             return (

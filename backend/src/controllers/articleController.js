@@ -4,7 +4,7 @@ const Article = require('../models/Article');
 // @route GET /api/articles?category=Meru&search=debts&page=1&limit=10&featured=true&status=published
 const getArticles = asyncHandler(async (req, res) => {
   const {
-    category, search, page = 1, limit = 10, featured, hero, status, tag, issue,
+    category, search, page = 1, limit = 10, featured, hero, breaking, status, tag, issue, author,
   } = req.query;
 
   const filter = {};
@@ -19,6 +19,8 @@ else if (!status) filter.status = 'published'; // public default hides drafts
 //   else filter.status = 'published'; // public default hides drafts
   if (featured === 'true') filter.isFeatured = true;
   if (hero === 'true') filter.isHero = true;
+  if (breaking === 'true') filter.isBreaking = true;
+  if (author) filter.author = author;
   if (tag) filter.tags = tag;
   if (issue) filter.issue = issue;
   if (search) filter.$text = { $search: search };

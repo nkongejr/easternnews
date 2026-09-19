@@ -24,8 +24,8 @@ export default function PageHeader({
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="min-w-0">
             <h1
-              className="border-b-4 border-brand-gold pb-2 font-headline text-3xl font-black uppercase leading-none tracking-tight md:text-4xl"
-              style={{ color: accent || 'var(--color-ink)' }}
+              className="inline-block bg-brand-primary px-3 py-2 font-headline text-2xl font-black uppercase leading-none tracking-tight text-white md:text-3xl"
+              style={accent ? { backgroundColor: accent } : undefined}
             >
               {title}
             </h1>

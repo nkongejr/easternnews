@@ -31,11 +31,16 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   try {
     const article = await api.getArticleBySlug(slug);
-    const description = article.deck || (article.body ? article.body.slice(0, 155) : '');
+    const description =
+      article.seoDescription || article.deck || (article.body ? article.body.slice(0, 155) : '');
     const image = absoluteUrl(article.featuredImage?.url);
+    const keywords = article.seoKeywords
+      ? article.seoKeywords.split(',').map((k) => k.trim()).filter(Boolean)
+      : article.tags;
     return {
-      title: article.title,
+      title: article.seoTitle || article.title,
       description,
+      keywords,
       alternates: { canonical: `/articles/${slug}` },
       openGraph: {
         type: 'article' as const,
@@ -155,26 +160,43 @@ export default async function ArticlePage({ params }: Props) {
         )}
 
         {/* Byline bar */}
-        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-y border-border py-3">
-          <p className="text-[13px]">
-            <span className="font-bold text-text">By {author}</span>
-            {article.author?.title && (
-              <span className="block text-[11px] text-muted">{article.author.title}</span>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-x-5 gap-y-3 border-y border-border py-3">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <p className="text-[13px]">
+              {article.author?.slug ? (
+                <Link href={`/authors/${article.author.slug}`} className="font-bold text-text hover:text-brand-primary">
+                  By {author}
+                </Link>
+              ) : (
+                <span className="font-bold text-text">By {author}</span>
+              )}
+              {article.author?.title && (
+                <span className="block text-[11px] text-muted">{article.author.title}</span>
+              )}
+            </p>
+            <p className="text-[12px] text-muted">
+              {article.publishDate && (
+                <time dateTime={article.publishDate}>{formatDateLong(article.publishDate)}</time>
+              )}
+              {article.bylineCredit && article.bylineCredit !== (article.author?.name || '') && (
+                <>
+                  <span className="mx-1.5">·</span>
+                  {article.bylineCredit}
+                </>
+              )}
+              <span className="mx-1.5">·</span>
+              {mins} min read
+            </p>
+            {categoryLink && (
+              <Link
+                href={categoryLink}
+                className="text-[12px] font-semibold text-brand-primary hover:underline"
+              >
+                {article.category}
+              </Link>
             )}
-          </p>
-          <p className="text-[12px] text-muted">
-            {article.publishDate && (
-              <time dateTime={article.publishDate}>{formatDateLong(article.publishDate)}</time>
-            )}
-            {article.bylineCredit && article.bylineCredit !== (article.author?.name || '') && (
-              <>
-                <span className="mx-1.5">·</span>
-                {article.bylineCredit}
-              </>
-            )}
-            <span className="mx-1.5">·</span>
-            {mins} min read
-          </p>
+          </div>
+          <ShareButtons title={article.title} url={url} compact />
         </div>
 
         {showUpdated && article.updatedAt && (
@@ -243,9 +265,12 @@ export default async function ArticlePage({ params }: Props) {
                 title={`More from ${article.category}`}
                 href={categoryLink ?? undefined}
                 accent="var(--brand-primary)"
+                variant="bar"
               />
             </div>
-            <NewsGrid articles={moreStories} columns={3} />
+            <div className="mt-5">
+              <NewsGrid articles={moreStories} columns={3} />
+            </div>
           </section>
         )}
       </article>
