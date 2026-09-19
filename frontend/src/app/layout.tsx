@@ -80,8 +80,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
 
-        <TopBar />
-        <Header />
+        <header>
+          <TopBar />
+          <Header />
+        </header>
+
         <MainNav />
 
         <main id="main">{children}</main>

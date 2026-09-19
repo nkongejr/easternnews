@@ -200,6 +200,11 @@
   @apply text-[11px] font-bold uppercase tracking-[0.14em];
 }
 
+/* Masthead dateline — matches the utility-strip dateline used on desktop. */
+.en-dateline {
+  @apply text-[11px] font-semibold tracking-wide;
+}
+
 /* Article body — comfortable reading measure + line height. */
 .prose-article {
   max-width: 68ch;

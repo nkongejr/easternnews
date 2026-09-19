@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { SITE } from '@/lib/constants';
+import { formatToday } from '@/lib/format';
 
 /**
  * Newspaper masthead. The wordmark is type-set (no raster logo shipped in the
@@ -34,17 +35,18 @@ export default function Header() {
 
         {/* Utility cluster */}
         <div className="flex shrink-0 items-center gap-3">
+          {/*
+            Dateline. The utility strip that normally carries it is hidden below
+            md, so the masthead carries it there instead — a dateline is masthead
+            furniture on a newspaper and should never disappear on a phone.
+          */}
+          <p className="en-dateline text-muted md:hidden">{formatToday()}</p>
+
           <p className="hidden text-right text-[11px] leading-tight text-muted lg:block">
             Regional monthly newspaper
             <br />
             <span className="font-semibold text-ink">{SITE.city}</span>
           </p>
-          <Link
-            href="/advertise"
-            className="inline-flex items-center rounded-sm bg-brand-gold px-4 py-2 text-xs font-bold uppercase tracking-wider text-brand-blue-darker transition-colors hover:bg-brand-gold-dark hover:text-white"
-          >
-            Advertise With Us
-          </Link>
         </div>
       </div>
     </div>

@@ -68,7 +68,7 @@ export default function MainNav() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b-2 border-brand-secondary bg-brand-primary text-white shadow-sm">
+      <div className="sticky top-0 z-50 border-b-2 border-brand-secondary bg-brand-primary text-white shadow-sm">
         <div className="en-container">
           <div className="flex h-12 items-center justify-between gap-4 md:h-14">
             {/* Mobile: hamburger + compact wordmark */}
@@ -213,7 +213,7 @@ export default function MainNav() {
             <SearchBar onNavigate={() => setSearchOpen(false)} />
           </div>
         </div>
-      </header>
+      </div>
 
       {mobileOpen && <MobileNavigation open onClose={() => setMobileOpen(false)} />}
     </>
