@@ -1,12 +1,12 @@
 /**
- * Consistent chrome for every rail module: uppercase rule-titled heading on
- * a hairline, then the module body. Keeps all sidebar boxes visually aligned.
+ * Consistent chrome for every rail module: a solid Eastern-blue bar with a
+ * white uppercase title, then the module body inside a hairline box.
  */
 export default function SidebarWidget({
   title,
   subtitle,
   children,
-  accent = 'var(--color-brand-blue)',
+  accent = 'var(--color-brand-secondary)',
   className = '',
 }: {
   title: string;
@@ -16,14 +16,17 @@ export default function SidebarWidget({
   className?: string;
 }) {
   return (
-    <section className={className}>
-      <div className="mb-4 border-b-2 pb-2" style={{ borderColor: accent }}>
-        <h2 className="font-headline text-base font-black uppercase tracking-tight" style={{ color: accent }}>
+    <section className={`overflow-hidden border border-border ${className}`}>
+      <div
+        className="border-l-4 bg-brand-primary px-3.5 py-2.5"
+        style={{ borderLeftColor: accent }}
+      >
+        <h2 className="font-headline text-[13px] font-black uppercase tracking-wide text-white">
           {title}
         </h2>
-        {subtitle && <p className="mt-0.5 text-[11px] text-muted">{subtitle}</p>}
+        {subtitle && <p className="mt-0.5 text-[11px] text-white/70">{subtitle}</p>}
       </div>
-      {children}
+      <div className="bg-white p-3.5">{children}</div>
     </section>
   );
 }

@@ -28,6 +28,10 @@ export default function ArticleForm({ initial }: { initial?: Article }) {
     tags: initial?.tags?.join(', ') || '',
     isFeatured: initial?.isFeatured || false,
     isHero: initial?.isHero || false,
+    isBreaking: initial?.isBreaking || false,
+    seoTitle: initial?.seoTitle || '',
+    seoDescription: initial?.seoDescription || '',
+    seoKeywords: initial?.seoKeywords || '',
     status: initial?.status || 'draft',
   });
   const [saving, setSaving] = useState(false);
@@ -54,6 +58,10 @@ export default function ArticleForm({ initial }: { initial?: Article }) {
       tags: form.tags.split(',').map((t) => t.trim()).filter(Boolean),
       isFeatured: form.isFeatured,
       isHero: form.isHero,
+      isBreaking: form.isBreaking,
+      seoTitle: form.seoTitle,
+      seoDescription: form.seoDescription,
+      seoKeywords: form.seoKeywords,
       status: form.status,
     };
 
@@ -104,10 +112,20 @@ export default function ArticleForm({ initial }: { initial?: Article }) {
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={form.isHero} onChange={(e) => setForm({ ...form, isHero: e.target.checked })} /> Hero (cover story)
         </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={form.isBreaking} onChange={(e) => setForm({ ...form, isBreaking: e.target.checked })} /> Breaking news
+        </label>
         <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as 'draft' | 'published' })} className="border rounded px-2 py-1 text-sm">
           <option value="draft">Draft</option>
           <option value="published">Published</option>
         </select>
+      </div>
+
+      <div className="border-t pt-4 space-y-2">
+        <p className="text-sm font-semibold">SEO (optional)</p>
+        <input placeholder="SEO title" value={form.seoTitle} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} className="w-full border rounded px-3 py-2" />
+        <input placeholder="SEO description" value={form.seoDescription} onChange={(e) => setForm({ ...form, seoDescription: e.target.value })} className="w-full border rounded px-3 py-2" />
+        <input placeholder="SEO keywords (comma separated)" value={form.seoKeywords} onChange={(e) => setForm({ ...form, seoKeywords: e.target.value })} className="w-full border rounded px-3 py-2" />
       </div>
 
       <button disabled={saving} className="bg-brand-blue text-white px-6 py-2 rounded font-semibold">

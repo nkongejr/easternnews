@@ -17,11 +17,11 @@ export default function CountyDirectory({
   return (
     <section aria-labelledby="county-directory">
       <div id="county-directory">
-        <SectionHeader title={title} accent="var(--color-ink)" />
+        <SectionHeader title={title} href="/counties" accent="var(--color-ink)" variant="bar" />
       </div>
-      {description && <p className="-mt-2 mb-5 text-sm text-muted">{description}</p>}
+      {description && <p className="mt-3 mb-5 text-sm text-muted">{description}</p>}
 
-      <nav aria-label="Counties">
+      <nav aria-label="Counties" className={description ? '' : 'mt-5'}>
         <ul className="grid grid-cols-2 gap-x-6 border-t border-border sm:grid-cols-3 lg:grid-cols-4">
           {COUNTIES.map((c) => (
             <li key={c.slug} className="border-b border-border">

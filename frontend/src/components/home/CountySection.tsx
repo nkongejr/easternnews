@@ -30,7 +30,7 @@ export default function CountySection({
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+      <div className="mt-4 grid gap-6 lg:grid-cols-2 lg:gap-8">
         <ArticleCard article={lead} variant="featured" />
         {rest.length > 0 && <NewsList articles={rest.slice(0, 3)} variant="compact" />}
       </div>

@@ -7,8 +7,8 @@ export default function RelatedArticles({ articles }: { articles: Article[] }) {
 
   return (
     <section className="mt-12" aria-labelledby="related-heading">
-      <SectionHeader title="Related Stories" accent="var(--color-ink)" />
-      <div id="related-heading">
+      <SectionHeader title="Related Stories" accent="var(--color-ink)" variant="bar" />
+      <div id="related-heading" className="mt-5">
         <NewsGrid articles={articles} columns={3} />
       </div>
     </section>

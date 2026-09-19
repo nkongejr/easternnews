@@ -42,6 +42,7 @@ const articles = [
     authorName: 'Eastern Newspaper Team',
     isHero: true,
     isFeatured: true,
+    isBreaking: true,
     tags: ['debt', 'pending bills', 'counties', 'devolution'],
     featuredImage: {
       url: '/seed/cover-story.jpg',

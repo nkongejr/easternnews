@@ -21,7 +21,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/sports',
     '/opinion',
     '/editorial',
+    '/features',
     '/politics',
+    '/counties',
     '/technology',
     '/entertainment',
     '/lifestyle',
@@ -32,6 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/archive',
     '/privacy',
     '/terms',
+    '/search',
   ].map((path) => ({ url: `${base}${path}` }));
 
   return [

@@ -21,9 +21,8 @@ function isActive(pathname: string, href: string) {
 }
 
 /**
- * Primary navigation. Sticks to the top of the viewport once the masthead
- * scrolls away, so County/Section navigation is always one click away —
- * the behaviour readers expect from a national news portal.
+ * Primary navigation. Sticks once the masthead scrolls away so section and
+ * county desks stay one tap away.
  */
 export default function MainNav() {
   const pathname = usePathname();
@@ -35,8 +34,6 @@ export default function MainNav() {
   const inCounties = pathname.startsWith('/counties');
   const inMore = MORE_NAV.some((l) => isActive(pathname, l.href));
 
-  // Close transient UI when the route changes (render-time adjustment —
-  // avoids the extra render pass an effect would cost).
   const [lastPath, setLastPath] = useState(pathname);
   if (pathname !== lastPath) {
     setLastPath(pathname);
@@ -45,7 +42,6 @@ export default function MainNav() {
     setOpenMenu(null);
   }
 
-  // Dismiss an open dropdown on outside click / Escape.
   useEffect(() => {
     if (!openMenu) return;
 
@@ -70,8 +66,7 @@ export default function MainNav() {
     <>
       <div className="sticky top-0 z-50 border-b-2 border-brand-secondary bg-brand-primary text-white shadow-sm">
         <div className="en-container">
-          <div className="flex h-12 items-center justify-between gap-4 md:h-14">
-            {/* Mobile: hamburger + compact wordmark */}
+          <div className="flex h-12 items-center justify-between gap-4 md:h-12">
             <div className="flex items-center gap-2 lg:hidden">
               <button
                 type="button"
@@ -82,21 +77,20 @@ export default function MainNav() {
               >
                 <FaBars size={18} />
               </button>
-              <span className="font-headline text-sm font-black tracking-tight text-white">
+              <Link href="/" className="font-headline text-sm font-black tracking-tight text-white">
                 {SITE.wordmarkTop}
                 <span className="text-brand-secondary">{SITE.wordmarkBottom}</span>
-              </span>
+              </Link>
             </div>
 
-            {/* Desktop menu */}
             <nav aria-label="Primary" className="hidden lg:block">
-              <ul ref={navRef} className="flex items-center gap-0.5">
+              <ul ref={navRef} className="flex items-center gap-0">
                 {PRIMARY_NAV.map((l) => (
                   <li key={l.href}>
                     <Link
                       href={l.href}
                       aria-current={isActive(pathname, l.href) ? 'page' : undefined}
-                      className={`block px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
+                      className={`block px-3 py-3.5 text-[12px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
                         isActive(pathname, l.href) ? 'text-brand-secondary' : 'text-white'
                       }`}
                     >
@@ -105,7 +99,6 @@ export default function MainNav() {
                   </li>
                 ))}
 
-                {/* Counties */}
                 <li className="relative" onMouseLeave={() => openMenu === 'counties' && setOpenMenu(null)}>
                   <button
                     type="button"
@@ -113,7 +106,7 @@ export default function MainNav() {
                     aria-expanded={openMenu === 'counties'}
                     aria-haspopup="true"
                     aria-controls="counties-menu"
-                    className={`flex items-center gap-1.5 px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
+                    className={`flex items-center gap-1.5 px-3 py-3.5 text-[12px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
                       inCounties ? 'text-brand-secondary' : 'text-white'
                     }`}
                   >
@@ -127,10 +120,18 @@ export default function MainNav() {
                   <div
                     id="counties-menu"
                     hidden={openMenu !== 'counties'}
-                    className={`${menuPanel} w-[420px]`}
+                    className={`${menuPanel} w-[440px]`}
                   >
                     <p className="en-kicker mb-3 text-muted">County desks</p>
                     <ul className="grid grid-cols-2 gap-x-4">
+                      <li className="col-span-2">
+                        <Link
+                          href="/counties"
+                          className="mb-1 block border-b border-border py-2 text-sm font-bold text-brand-primary"
+                        >
+                          All county news
+                        </Link>
+                      </li>
                       {COUNTIES.map((c) => (
                         <li key={c.slug}>
                           <Link
@@ -147,7 +148,6 @@ export default function MainNav() {
                   </div>
                 </li>
 
-                {/* More */}
                 <li className="relative" onMouseLeave={() => openMenu === 'more' && setOpenMenu(null)}>
                   <button
                     type="button"
@@ -155,7 +155,7 @@ export default function MainNav() {
                     aria-expanded={openMenu === 'more'}
                     aria-haspopup="true"
                     aria-controls="more-menu"
-                    className={`flex items-center gap-1.5 px-3 py-4 text-[13px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
+                    className={`flex items-center gap-1.5 px-3 py-3.5 text-[12px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
                       inMore ? 'text-brand-secondary' : 'text-white'
                     }`}
                   >
@@ -192,7 +192,7 @@ export default function MainNav() {
               </ul>
             </nav>
 
-            <div className="flex items-center">
+            <div className="flex items-center lg:hidden">
               <button
                 type="button"
                 onClick={() => setSearchOpen((v) => !v)}
@@ -207,10 +207,9 @@ export default function MainNav() {
           </div>
         </div>
 
-        {/* Expanding search drawer */}
-        <div id="nav-search" hidden={!searchOpen} className="border-t border-white/15 bg-brand-primary-darker">
+        <div id="nav-search" hidden={!searchOpen} className="border-t border-white/15 bg-brand-primary-darker lg:hidden">
           <div className="en-container py-3">
-            <SearchBar onNavigate={() => setSearchOpen(false)} />
+            <SearchBar inputId="nav-search-input" onNavigate={() => setSearchOpen(false)} />
           </div>
         </div>
       </div>

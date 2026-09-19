@@ -4,14 +4,25 @@ import { SITE, TILL_NUMBER } from '@/lib/constants';
 import { formatToday } from '@/lib/format';
 
 /**
- * Slim utility strip above the masthead: dateline, the paper's M-PESA till,
- * secondary links and social accounts. Deliberately low-contrast so it reads
- * as furniture rather than competing with the news.
+ * Slim utility strip above the masthead.
+ * On mobile this is the dateline (Kenyanews-style) plus the M-PESA till —
+ * it must never disappear on a phone.
  */
 export default function TopBar() {
   return (
-    <div className="hidden bg-brand-blue-darker text-white md:block">
-      <div className="en-container flex h-9 items-center justify-between gap-6 text-[11px]">
+    <div className="bg-brand-blue-darker text-white">
+      {/* Mobile dateline */}
+      <div className="en-container flex h-8 items-center justify-between gap-3 text-[11px] md:hidden">
+        <p className="min-w-0 truncate font-semibold tracking-wide text-white">
+          {formatToday()}
+        </p>
+        <span className="shrink-0 rounded-sm bg-brand-gold px-2 py-0.5 font-bold text-brand-blue-darker">
+          Till {TILL_NUMBER}
+        </span>
+      </div>
+
+      {/* Desktop strip */}
+      <div className="en-container hidden h-9 items-center justify-between gap-6 text-[11px] md:flex">
         <p className="truncate font-semibold tracking-wide text-white/70">
           {formatToday()}
         </p>

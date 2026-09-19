@@ -20,12 +20,14 @@ export default function CountyRoundup({ entries }: { entries: CountyEntry[] }) {
         <div id="county-roundup">
           <SectionHeader
             title="Around the Counties"
+            href="/counties"
             kicker="County desk"
             accent="var(--color-brand-blue)"
+            variant="bar"
           />
         </div>
 
-        <ul className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-5 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
           {entries.map(({ county, article }) => (
             <li key={county.slug} className="border-t-2 border-brand-gold pt-3">
               <Link

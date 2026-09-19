@@ -74,7 +74,7 @@ export default function MobileNavigation({
         </div>
 
         <div className="px-4 py-4">
-          <SearchBar onNavigate={onClose} />
+          <SearchBar inputId="mobile-search" onNavigate={onClose} />
         </div>
 
         <nav aria-label="Primary" className="border-t border-border">
@@ -112,6 +112,15 @@ export default function MobileNavigation({
                 hidden={openSection !== 'counties'}
                 className="grid grid-cols-2 gap-x-2 border-t border-border bg-surface-alt px-4 py-3"
               >
+                <li className="col-span-2">
+                  <Link
+                    href="/counties"
+                    onClick={onClose}
+                    className="block py-2 text-sm font-bold text-brand-primary"
+                  >
+                    All county news
+                  </Link>
+                </li>
                 {COUNTIES.map((c) => (
                   <li key={c.slug}>
                     <Link

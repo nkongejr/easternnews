@@ -3,21 +3,36 @@ import { Article } from '@/types';
 import { articleHref } from '@/lib/format';
 
 /**
- * Compact "Latest" strip under the navigation.
+ * Compact ticker under the navigation.
  *
- * A single horizontally-scrollable row of headlines — deliberately low-key so
- * it never pushes the lead story below the fold. No auto-scrolling marquee:
- * it would fail reduced-motion users and cost layout stability for nothing.
+ * When editors flag stories as breaking, the label turns red and those
+ * headlines lead. Otherwise it is a “Latest” strip of the newest stories.
  */
-export default function BreakingNews({ articles }: { articles: Article[] }) {
+export default function BreakingNews({
+  articles,
+  breaking = false,
+}: {
+  articles: Article[];
+  breaking?: boolean;
+}) {
   if (!articles?.length) return null;
 
   return (
-    <section aria-label="Latest news" className="border-b border-border bg-white">
+    <section
+      aria-label={breaking ? 'Breaking news' : 'Latest news'}
+      className="border-b border-border bg-white"
+    >
       <div className="en-container flex items-center gap-3 py-2 md:gap-4">
-        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-sm bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-          <span className="h-1.5 w-1.5 rounded-full bg-white motion-safe:animate-pulse" aria-hidden="true" />
-          Latest
+        <span
+          className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white ${
+            breaking ? 'bg-accent' : 'bg-brand-primary'
+          }`}
+        >
+          <span
+            className="h-1.5 w-1.5 rounded-full bg-white motion-safe:animate-pulse"
+            aria-hidden="true"
+          />
+          {breaking ? 'Breaking' : 'Latest'}
         </span>
 
         <ul className="en-scrollbar-none flex min-w-0 flex-1 items-center overflow-x-auto">
@@ -28,7 +43,7 @@ export default function BreakingNews({ articles }: { articles: Article[] }) {
               )}
               <Link
                 href={articleHref(a)}
-                className="line-clamp-1 max-w-[62vw] text-[13px] font-semibold text-ink/85 transition-colors hover:text-brand-blue sm:max-w-[340px]"
+                className="line-clamp-1 max-w-[62vw] text-[13px] font-semibold text-ink/85 transition-colors hover:text-brand-primary sm:max-w-[380px]"
               >
                 {a.title}
               </Link>
@@ -37,8 +52,8 @@ export default function BreakingNews({ articles }: { articles: Article[] }) {
         </ul>
 
         <Link
-          href="/archive"
-          className="hidden shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:text-brand-blue lg:block"
+          href="/latest"
+          className="hidden shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:text-brand-primary lg:block"
         >
           All stories
         </Link>
