@@ -13,8 +13,11 @@ export default function Header() {
   return (
     <div className="border-b border-border bg-white">
       <div className="en-container flex items-center justify-between gap-6 py-3 md:py-4">
-        <Link href="/" className="shrink-0" aria-label={`${SITE.name} — home`}>
+        <Link href="/" className="min-w-0 shrink-0" aria-label={`${SITE.name} — home`}>
           <Wordmark size="lg" />
+          <span className="mt-1.5 block text-[11px] font-semibold tracking-wide text-muted md:hidden">
+            {formatToday()}
+          </span>
         </Link>
 
         <div className="hidden min-w-0 flex-1 items-center justify-end gap-6 md:flex">
