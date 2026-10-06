@@ -23,6 +23,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <h2 className="font-bold mb-4">Newsroom Admin</h2>
           <Link href="/admin/dashboard" className="block py-1 hover:text-brand-gold">Dashboard</Link>
           <Link href="/admin/articles" className="block py-1 hover:text-brand-gold">Articles</Link>
+          <Link href="/admin/authors" className="block py-1 hover:text-brand-gold">Authors</Link>
           <Link href="/admin/advertisers" className="block py-1 hover:text-brand-gold">Advertisers</Link>
           <button onClick={logout} className="block py-1 mt-6 text-red-300 hover:text-red-100">Logout</button>
         </aside>
