@@ -37,10 +37,10 @@ export const PRIMARY_NAV = [
 ];
 
 export const MORE_NAV = [
+  { label: 'Profiles', href: '/profiles' },
   { label: 'Technology', href: '/technology' },
   { label: 'Entertainment', href: '/entertainment' },
   { label: 'Lifestyle', href: '/lifestyle' },
-  { label: 'Profiles', href: '/profiles' },
   { label: 'About', href: '/about' },
   { label: 'Advertise', href: '/advertise' },
   { label: 'Contact', href: '/contact' },
@@ -142,7 +142,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   Technology: '#1a4d8f',
   Entertainment: '#8e44ad',
   Lifestyle: '#16a085',
-  Profiles: '#8e6c1f',
+  Profiles: '#0b2545',
 };
 
 export const DEFAULT_ACCENT = '#1a4d8f';

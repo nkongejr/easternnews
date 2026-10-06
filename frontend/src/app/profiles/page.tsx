@@ -4,24 +4,17 @@ export const metadata = {
   alternates: { canonical: '/profiles' },
   title: 'Eastern 33 Profiles',
   description:
-    'Eastern 33 Profiles — the leaders, educationists, innovators and achievers shaping Eastern Kenya.',
+    'Eastern 33 Profiles — leaders, innovators and achievers shaping the Eastern region.',
 };
 
 type Props = { searchParams: Promise<{ page?: string }> };
 
-/**
- * Eastern 33 Profiles.
- *
- * Profiles are filed through the normal article workflow under the
- * "Profiles" category, so the newsroom publishes them exactly the way it
- * publishes any other story.
- */
 export default async function ProfilesPage({ searchParams }: Props) {
   const { page } = await searchParams;
   return (
     <ArchivePage
       title="Eastern 33 Profiles"
-      description="Leaders, educationists, innovators and achievers shaping Eastern Kenya."
+      description="Profiles of the leaders, innovators and achievers shaping the Eastern region."
       baseHref="/profiles"
       page={Number(page || 1)}
       category="Profiles"
