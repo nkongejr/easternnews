@@ -4,7 +4,7 @@ const slugify = require('slugify');
 const CATEGORY_NAMES = [
   'Meru', 'Tharaka Nithi', 'Isiolo', 'Embu', 'Samburu', 'Kirinyaga',
   'Laikipia', 'Kitui', 'Machakos', 'Makueni', 'Marsabit',
-  'Business', 'Sports', 'Opinion', 'Editorial', 'National',
+  'Business', 'Sports', 'Opinion', 'Editorial', 'National', 'Profiles',
 ];
 
 const categorySchema = new mongoose.Schema(
