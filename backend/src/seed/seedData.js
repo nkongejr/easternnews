@@ -17,6 +17,7 @@ const categories = [
   { name: 'Opinion', description: 'Op-eds and analysis', colorAccent: '#333333', type: 'section' },
   { name: 'Editorial', description: 'The Eastern Newspaper editorial voice', colorAccent: '#333333', type: 'section' },
   { name: 'National', description: 'National news affecting the region', colorAccent: '#1a4d8f', type: 'section' },
+  { name: 'Profiles', description: 'Eastern 33 Profiles — leaders, innovators and achievers shaping the region', colorAccent: '#0b2545', type: 'section' },
 ];
 
 const authors = [
