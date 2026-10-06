@@ -14,6 +14,7 @@ const SECTION_ROUTES: Record<string, string> = {
   Technology: '/technology',
   Entertainment: '/entertainment',
   Lifestyle: '/lifestyle',
+  Profiles: '/profiles',
 };
 
 export function categoryRoute(category?: string): string | null {
@@ -39,6 +40,8 @@ export const CATEGORY_ALIASES: Record<string, string> = {
   technology: '/technology',
   entertainment: '/entertainment',
   lifestyle: '/lifestyle',
+  profiles: '/profiles',
+  'eastern-33-profiles': '/profiles',
   latest: '/latest',
   'county-news': '/counties',
   counties: '/counties',
