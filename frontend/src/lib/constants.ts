@@ -40,6 +40,7 @@ export const MORE_NAV = [
   { label: 'Technology', href: '/technology' },
   { label: 'Entertainment', href: '/entertainment' },
   { label: 'Lifestyle', href: '/lifestyle' },
+  { label: 'Profiles', href: '/profiles' },
   { label: 'About', href: '/about' },
   { label: 'Advertise', href: '/advertise' },
   { label: 'Contact', href: '/contact' },
@@ -141,6 +142,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   Technology: '#1a4d8f',
   Entertainment: '#8e44ad',
   Lifestyle: '#16a085',
+  Profiles: '#8e6c1f',
 };
 
 export const DEFAULT_ACCENT = '#1a4d8f';
