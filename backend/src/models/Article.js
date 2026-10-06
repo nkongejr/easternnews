@@ -22,7 +22,12 @@ const articleSchema = new mongoose.Schema(
       required: true,
       enum: mongoose.model('Category').schema.path('name').enumValues,
     },
+    // Keep the legacy single author field as the primary author for
+    // backwards compatibility with existing queries and clients.
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' },
+    // Ordered list of all credited authors. Mongoose preserves array order,
+    // which lets editors control the public byline sequence.
+    authors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Author' }],
     bylineCredit: { type: String, default: 'Eastern Correspondent' },
     featuredImage: { type: imageSchema, required: true },
     gallery: [imageSchema],

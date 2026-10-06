@@ -44,11 +44,15 @@ const run = async () => {
 
   // 3. Articles
   await Article.deleteMany();
-  const articleDocs = articles.map(({ authorName, ...rest }) => ({
-    ...rest,
-    author: authorMap[authorName] || null,
-    status: 'published',
-  }));
+  const articleDocs = articles.map(({ authorName, ...rest }) => {
+    const authorId = authorMap[authorName] || null;
+    return {
+      ...rest,
+      author: authorId,
+      authors: authorId ? [authorId] : [],
+      status: 'published',
+    };
+  });
   const createdArticles = await Article.insertMany(articleDocs);
   console.log(`✅ ${createdArticles.length} articles created`);
 

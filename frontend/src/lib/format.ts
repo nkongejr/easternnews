@@ -1,5 +1,5 @@
 import { format, isValid, parseISO } from 'date-fns';
-import { Article } from '@/types';
+import { Article, Author } from '@/types';
 import { CATEGORY_COLORS, DEFAULT_ACCENT, COUNTIES, SITE } from './constants';
 
 /** Safely turn a Mongo/ISO date string into a Date (or null). */
@@ -25,9 +25,49 @@ export function readingTime(body?: string): number {
   return Math.max(1, Math.round(words / 200));
 }
 
-/** Byline shown on cards and article pages. */
+function isAuthorObject(author: Author | null | undefined): author is Author {
+  return Boolean(author && typeof author === 'object' && author.name);
+}
+
+/** Ordered author objects, with a legacy single-author fallback. */
+export function articleAuthors(article: Article): Author[] {
+  const authors = (article.authors || []).filter(isAuthorObject);
+  if (authors.length > 0) return authors;
+  return isAuthorObject(article.author) ? [article.author] : [];
+}
+
+export function joinNames(names: string[]): string {
+  if (names.length <= 1) return names[0] || '';
+  if (names.length === 2) return `${names[0]} and ${names[1]}`;
+  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+}
+
+/** Extra newsroom/byline credit, omitted when it duplicates an author name. */
+export function bylineCredit(article: Article): string | null {
+  const credit = article.bylineCredit?.trim();
+  if (!credit) return null;
+
+  const authorNames = articleAuthors(article).map((author) => author.name.trim()).filter(Boolean);
+  if (authorNames.length === 0) return null;
+
+  const normalisedCredit = credit.toLowerCase();
+  const duplicatesAuthor = authorNames.some((name) => name.toLowerCase() === normalisedCredit);
+  const duplicatesJoinedAuthors = joinNames(authorNames).toLowerCase() === normalisedCredit;
+
+  return duplicatesAuthor || duplicatesJoinedAuthors ? null : credit;
+}
+
+/** Byline shown on cards and article pages, without the leading "By". */
 export function byline(article: Article): string {
-  return article.author?.name || article.bylineCredit || 'Eastern Newspaper Team';
+  const names = articleAuthors(article).map((author) => author.name).filter(Boolean);
+
+  if (names.length === 0) {
+    return article.bylineCredit?.trim() || 'Eastern Newspaper Team';
+  }
+
+  const authorText = joinNames(names);
+  const credit = bylineCredit(article);
+  return credit ? `${authorText} ${credit}` : authorText;
 }
 
 /** Card excerpt: prefer the editor-written deck, fall back to the lede. */

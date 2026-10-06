@@ -1,9 +1,12 @@
+import { Fragment } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { api, safe } from '@/lib/api';
 import {
   absoluteUrl,
+  articleAuthors,
   byline,
+  bylineCredit,
   formatDateLong,
   hasMaterialUpdate,
   readingTime,
@@ -80,6 +83,11 @@ export default async function ArticlePage({ params }: Props) {
   const url = `${SITE.url}/articles/${slug}`;
   const categoryLink = categoryRoute(article.category);
   const author = byline(article);
+  const authors = articleAuthors(article);
+  const credit = bylineCredit(article);
+  const authorTitles = Array.from(new Set(
+    authors.map((item) => item.title).filter((title): title is string => Boolean(title)),
+  ));
   const mins = readingTime(article.body);
   const isOpinion = article.category === 'Opinion' || article.category === 'Editorial';
   const showUpdated = hasMaterialUpdate(article.publishDate, article.updatedAt);
@@ -97,6 +105,14 @@ export default async function ArticlePage({ params }: Props) {
     { label: article.title },
   ];
 
+  const structuredAuthors = authors.length > 0
+    ? authors.map((item) => ({
+        '@type': 'Person',
+        name: item.name,
+        ...(item.slug ? { url: `${SITE.url}/authors/${item.slug}` } : {}),
+      }))
+    : [{ '@type': 'Person', name: author }];
+
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': isOpinion ? 'OpinionNewsArticle' : 'NewsArticle',
@@ -105,7 +121,7 @@ export default async function ArticlePage({ params }: Props) {
     image: absoluteUrl(article.featuredImage?.url) ? [absoluteUrl(article.featuredImage?.url)] : undefined,
     datePublished: article.publishDate,
     dateModified: article.updatedAt || article.publishDate,
-    author: { '@type': 'Person', name: author },
+    author: structuredAuthors.length === 1 ? structuredAuthors[0] : structuredAuthors,
     publisher: {
       '@type': 'Organization',
       name: SITE.name,
@@ -163,26 +179,33 @@ export default async function ArticlePage({ params }: Props) {
         <div className="mt-5 flex flex-wrap items-center justify-between gap-x-5 gap-y-3 border-y border-border py-3">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <p className="text-[13px]">
-              {article.author?.slug ? (
-                <Link href={`/authors/${article.author.slug}`} className="font-bold text-text hover:text-brand-primary">
-                  By {author}
-                </Link>
+              {authors.length > 0 ? (
+                <span className="font-bold text-text">
+                  By{' '}
+                  {authors.map((item, index) => (
+                    <Fragment key={item._id || item.slug || item.name}>
+                      {index > 0 ? (index === authors.length - 1 ? ' and ' : ', ') : ''}
+                      {item.slug ? (
+                        <Link href={`/authors/${item.slug}`} className="hover:text-brand-primary">
+                          {item.name}
+                        </Link>
+                      ) : (
+                        item.name
+                      )}
+                    </Fragment>
+                  ))}
+                  {credit ? ` ${credit}` : ''}
+                </span>
               ) : (
                 <span className="font-bold text-text">By {author}</span>
               )}
-              {article.author?.title && (
-                <span className="block text-[11px] text-muted">{article.author.title}</span>
+              {authorTitles.length > 0 && (
+                <span className="block text-[11px] text-muted">{authorTitles.join(' · ')}</span>
               )}
             </p>
             <p className="text-[12px] text-muted">
               {article.publishDate && (
                 <time dateTime={article.publishDate}>{formatDateLong(article.publishDate)}</time>
-              )}
-              {article.bylineCredit && article.bylineCredit !== (article.author?.name || '') && (
-                <>
-                  <span className="mx-1.5">·</span>
-                  {article.bylineCredit}
-                </>
               )}
               <span className="mx-1.5">·</span>
               {mins} min read

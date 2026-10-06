@@ -30,7 +30,10 @@ export interface Article {
   deck?: string;
   body?: string; // optional — related/partial article queries may omit this
   category: string;
-  author?: Author;
+  /** Primary author retained for legacy API clients. */
+  author?: Author | null;
+  /** Ordered list used for public multi-author bylines. */
+  authors?: Author[];
   bylineCredit?: string;
   featuredImage: ImageBlock;
   gallery?: ImageBlock[];
