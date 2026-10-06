@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import adminApi from '@/lib/adminApi';
 import ImageUploader from './ImageUploader';
-import { Article } from '@/types';
+import { Article, Author } from '@/types';
 
 const CATEGORIES = [
   'Meru', 'Tharaka Nithi', 'Isiolo', 'Embu', 'Samburu', 'Kirinyaga',
@@ -12,15 +12,21 @@ const CATEGORIES = [
   'Business', 'Sports', 'Opinion', 'Editorial', 'National',
 ];
 
+const initialAuthorIds = (article?: Article) => {
+  const authors = article?.authors?.map((author) => author._id).filter(Boolean) || [];
+  if (authors.length > 0) return authors;
+  return article?.author?._id ? [article.author._id] : [];
+};
+
 export default function ArticleForm({ initial }: { initial?: Article }) {
   const router = useRouter();
-  const [authors, setAuthors] = useState<{ _id: string; name: string }[]>([]);
+  const [authors, setAuthors] = useState<Author[]>([]);
   const [form, setForm] = useState({
     title: initial?.title || '',
     deck: initial?.deck || '',
     body: initial?.body || '',
     category: initial?.category || 'Meru',
-    author: initial?.author?._id || '',
+    authors: initialAuthorIds(initial),
     bylineCredit: initial?.bylineCredit || 'Eastern Correspondent',
     featuredImageUrl: initial?.featuredImage?.url || '',
     featuredImageCaption: initial?.featuredImage?.caption || '',
@@ -40,15 +46,48 @@ export default function ArticleForm({ initial }: { initial?: Article }) {
     adminApi.get('/authors').then((res) => setAuthors(res.data));
   }, []);
 
+  const addAuthor = (authorId: string) => {
+    if (!authorId) return;
+    setForm((current) => ({
+      ...current,
+      authors: current.authors.includes(authorId) ? current.authors : [...current.authors, authorId],
+    }));
+  };
+
+  const removeAuthor = (authorId: string) => {
+    setForm((current) => ({
+      ...current,
+      authors: current.authors.filter((id) => id !== authorId),
+    }));
+  };
+
+  const moveAuthor = (index: number, direction: -1 | 1) => {
+    setForm((current) => {
+      const nextIndex = index + direction;
+      if (nextIndex < 0 || nextIndex >= current.authors.length) return current;
+      const ordered = [...current.authors];
+      [ordered[index], ordered[nextIndex]] = [ordered[nextIndex], ordered[index]];
+      return { ...current, authors: ordered };
+    });
+  };
+
+  const selectedAuthors = form.authors.map((id) => ({
+    id,
+    name: authors.find((author) => author._id === id)?.name || 'Selected author',
+  }));
+  const availableAuthors = authors.filter((author) => !form.authors.includes(author._id));
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    const selectedAuthorIds = form.authors.filter(Boolean);
     const payload = {
       title: form.title,
       deck: form.deck,
       body: form.body,
       category: form.category,
-      author: form.author || undefined,
+      author: selectedAuthorIds[0] || null,
+      authors: selectedAuthorIds,
       bylineCredit: form.bylineCredit,
       featuredImage: {
         url: form.featuredImageUrl,
@@ -86,10 +125,30 @@ export default function ArticleForm({ initial }: { initial?: Article }) {
         <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="border rounded px-3 py-2">
           {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
-        <select value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} className="border rounded px-3 py-2">
-          <option value="">-- Select Author --</option>
-          {authors.map((a) => <option key={a._id} value={a._id}>{a.name}</option>)}
+        <select value="" onChange={(e) => { addAuthor(e.target.value); e.target.value = ''; }} className="border rounded px-3 py-2">
+          <option value="">-- Add Author --</option>
+          {availableAuthors.map((a) => <option key={a._id} value={a._id}>{a.name}</option>)}
         </select>
+      </div>
+
+      <div className="rounded border border-dashed border-gray-300 p-3">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">Authors in byline order</p>
+        {selectedAuthors.length > 0 ? (
+          <ol className="space-y-2">
+            {selectedAuthors.map((author, index) => (
+              <li key={author.id} className="flex items-center justify-between rounded bg-gray-50 px-3 py-2 text-sm">
+                <span className="font-medium">{index + 1}. {author.name}</span>
+                <span className="flex items-center gap-2">
+                  <button type="button" onClick={() => moveAuthor(index, -1)} disabled={index === 0} className="text-xs font-semibold text-brand-blue disabled:text-gray-300">Up</button>
+                  <button type="button" onClick={() => moveAuthor(index, 1)} disabled={index === selectedAuthors.length - 1} className="text-xs font-semibold text-brand-blue disabled:text-gray-300">Down</button>
+                  <button type="button" onClick={() => removeAuthor(author.id)} className="text-xs font-semibold text-red-600">Remove</button>
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="text-sm text-gray-500">No author selected. The byline credit below will be used as the fallback.</p>
+        )}
       </div>
 
       <input placeholder="Byline credit (e.g. KNA)" value={form.bylineCredit} onChange={(e) => setForm({ ...form, bylineCredit: e.target.value })} className="w-full border rounded px-3 py-2" />

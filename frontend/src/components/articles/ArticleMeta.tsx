@@ -1,6 +1,6 @@
 import { FaRegClock, FaRegComment, FaRegEye } from 'react-icons/fa6';
 import { Article } from '@/types';
-import { formatDate, readingTime } from '@/lib/format';
+import { byline, formatDate, readingTime } from '@/lib/format';
 
 /**
  * One metadata line, used identically on cards and article pages:
@@ -28,11 +28,7 @@ export default function ArticleMeta({
   const comments = article.commentCount ?? 0;
   const views = article.viewCount ?? 0;
 
-  // `bylineCredit` is often the same string as the author name (e.g. "KNA"),
-  // so only render it when it actually adds information.
-  const authorName = article.author?.name || article.bylineCredit || 'Eastern Newspaper Team';
-  const credit =
-    article.bylineCredit && article.bylineCredit !== authorName ? article.bylineCredit : null;
+  const authorName = byline(article);
 
   return (
     <div
@@ -41,7 +37,6 @@ export default function ArticleMeta({
       {showAuthor && (
         <span className="font-semibold text-ink/80">
           By {authorName}
-          {credit ? ` · ${credit}` : ''}
         </span>
       )}
       {date && (
