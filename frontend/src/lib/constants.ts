@@ -26,7 +26,13 @@ export const COUNTY_NAMES = COUNTIES.map((c) => c.name);
    crowds the bar. Secondary desks collapse into "More".
    ------------------------------------------------------------ */
 
-export const PRIMARY_NAV = [
+/**
+ * `highlight` renders the link as a gold button — used for Publications so the
+ * print-edition library is the most visible item in the desk list.
+ */
+export type NavLink = { label: string; href: string; highlight?: boolean };
+
+export const PRIMARY_NAV: NavLink[] = [
   { label: 'Home', href: '/' },
   { label: 'Latest', href: '/latest' },
   { label: 'Politics', href: '/politics' },
@@ -34,9 +40,10 @@ export const PRIMARY_NAV = [
   { label: 'Sports', href: '/sports' },
   { label: 'Opinion', href: '/opinion' },
   { label: 'Features', href: '/editorial' },
+  { label: 'Publications', href: '/publications', highlight: true },
 ];
 
-export const MORE_NAV = [
+export const MORE_NAV: NavLink[] = [
   { label: 'Profiles', href: '/profiles' },
   { label: 'Technology', href: '/technology' },
   { label: 'Entertainment', href: '/entertainment' },
@@ -44,7 +51,6 @@ export const MORE_NAV = [
   { label: 'About', href: '/about' },
   { label: 'Advertise', href: '/advertise' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Back Issues', href: '/archive' },
 ];
 
 export const NAV_LINKS = [...PRIMARY_NAV, ...MORE_NAV];

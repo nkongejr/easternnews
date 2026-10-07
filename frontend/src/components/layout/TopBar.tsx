@@ -40,8 +40,8 @@ export default function TopBar() {
             <Link href="/search" className="text-white/75 transition-colors hover:text-brand-secondary">
               Search
             </Link>
-            <Link href="/archive" className="text-white/75 transition-colors hover:text-brand-gold">
-              Back Issues
+            <Link href="/publications" className="text-white/75 transition-colors hover:text-brand-gold">
+              Publications
             </Link>
             <Link href="/advertisers" className="text-white/75 transition-colors hover:text-brand-gold">
               Advertisers

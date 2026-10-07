@@ -45,7 +45,8 @@ After seeding, an admin user is created using `ADMIN_EMAIL` / `ADMIN_PASSWORD` f
 | Advertisers | `/api/advertisers` |
 | Issues | `/api/issues` |
 | Contact / Newsletter | `/api/contact` |
-| Image upload | `/api/upload` |
+| Image upload | `/api/upload` (field `image`) |
+| Issue PDF upload | `/api/upload/pdf` (field `file`, ≤30 MB) |
 
 Full endpoint list is in the Postman collection (`postman/Eastern-Newspaper-API.postman_collection.json`).
 
@@ -62,12 +63,15 @@ Full endpoint list is in the Postman collection (`postman/Eastern-Newspaper-API.
    - `GET {{baseUrl}}/articles/counties-chocking-in-massive-debts`
    - `POST {{baseUrl}}/articles` (with token) to create a new article
    - `POST {{baseUrl}}/upload` (form-data, key `image`, type File) to upload a photo
+   - `POST {{baseUrl}}/upload/pdf` (form-data, key `file`, type File) to upload an issue PDF
+   - `GET {{baseUrl}}/issues` then `POST {{baseUrl}}/issues` to publish a new edition
 
 ## 7. Deployment
 
 - **Database:** MongoDB Atlas — create a cluster, whitelist `0.0.0.0/0` (or Render's IPs), copy connection string into `MONGO_URI`.
 - **API:** Render — create a new Web Service pointing at this repo, build command `npm install`, start command `npm start`, add all `.env` variables in Render's dashboard.
-  - Note: local disk image uploads are **ephemeral on Render**. For production, swap `src/middleware/upload.js` to upload to Cloudinary/S3 instead.
+  - Uploads (`/api/upload` for images, `/api/upload/pdf` for issue PDFs) stream straight to Cloudinary, so nothing is written to Render's ephemeral disk.
+  - **PDF delivery:** Cloudinary accounts restrict delivery of PDF/ZIP files by default. Enable it under **Settings → Security** ("Allow delivery of PDF and ZIP files"), otherwise a stored issue PDF answers `401` and the reader-facing Download button will not open.
 - **Frontend:** Vercel (Next.js) — set `NEXT_PUBLIC_API_URL` to your Render API URL.
 
 ## 8. Content Model Summary

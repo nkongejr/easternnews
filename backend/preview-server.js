@@ -3,11 +3,17 @@
  * Used when Atlas is unreachable. Production still uses server.js + Mongo.
  *
  *   node preview-server.js
+ *
+ * The newsroom admin is demoable here too: sign in with ADMIN_EMAIL /
+ * ADMIN_PASSWORD from .env and any publication you add is kept in memory for
+ * the life of the process (a restart returns to the seed edition).
  */
 const express = require('express');
 const cors = require('cors');
 const slugify = require('slugify');
 const { categories, authors, articles, advertisers, issueMeta } = require('./src/seed/seedData');
+const uploadImageMiddleware = require('./src/middleware/upload');
+const uploadPdfMiddleware = require('./src/middleware/uploadPdf');
 
 const app = express();
 app.use(cors({ origin: true, credentials: true }));
@@ -58,14 +64,104 @@ const advertiserDocs = advertisers.map((a, i) => ({
   ...a,
 }));
 
-const issue = {
-  _id: 'issue-current',
-  ...issueMeta,
-  articles: articleDocs.map(({ body, relatedArticles, ...rest }) => rest),
+/* ------------------------------------------------------------------
+   Publications (issues) — in-memory, so the admin section can be
+   previewed before the API is pointed at MongoDB.
+   ------------------------------------------------------------------ */
+const stamp = '2026-07-18T08:00:00.000Z';
+let issueDocs = [
+  { _id: 'issue-1', ...issueMeta, articles: [], createdAt: stamp, updatedAt: stamp },
+];
+let issueCounter = issueDocs.length;
+
+const publicIssue = ({ articles: _articles, ...rest }) => rest;
+
+const findIssue = (id) => issueDocs.find((i) => i._id === id);
+
+/**
+ * Mirrors backend/src/controllers/issueController.js: whitelist the fields an
+ * editor may change, then validate the ones the public library depends on.
+ * Throws a 400-flavoured error that the route turns into JSON.
+ */
+const buildIssuePayload = (body = {}, res, existingId) => {
+  const updates = {};
+  ['issueNumber', 'title', 'month', 'year', 'coverImage', 'coverHeadline', 'pdfUrl', 'isCurrent']
+    .forEach((field) => {
+      if (body[field] !== undefined) updates[field] = body[field];
+    });
+
+  if (updates.issueNumber !== undefined) updates.issueNumber = Number(updates.issueNumber);
+  if (updates.year !== undefined) updates.year = Number(updates.year);
+
+  const bad = (message) => {
+    res.status(400);
+    throw new Error(message);
+  };
+
+  if (updates.title !== undefined && !String(updates.title).trim()) bad('An issue title is required');
+  if (updates.issueNumber !== undefined && !Number.isFinite(updates.issueNumber)) {
+    bad('An issue number is required');
+  }
+  if (
+    updates.issueNumber !== undefined &&
+    issueDocs.some((i) => i.issueNumber === updates.issueNumber && i._id !== existingId)
+  ) {
+    bad(`Issue ${updates.issueNumber} already exists`);
+  }
+
+  if (updates.pdfUrl !== undefined) {
+    const url = String(updates.pdfUrl || '').trim();
+    const isPublicLink = /^https?:\/\//i.test(url) || /^\/(?!\/)/.test(url);
+    if (url && !isPublicLink) {
+      bad('PDF link must be a public address (https://…) or a site path starting with /');
+    }
+    updates.pdfUrl = url;
+  }
+
+  return updates;
+};
+
+/* ------------------------------------------------------------------
+   Newsroom sign-in (demo only — the real API issues a JWT)
+   ------------------------------------------------------------------ */
+const DEMO_USER = {
+  _id: 'user-demo',
+  name: process.env.ADMIN_NAME || 'Newsroom Admin',
+  email: process.env.ADMIN_EMAIL || 'admin@easternnewspaper.co.ke',
+  role: 'admin',
+};
+const DEMO_PASSWORD = process.env.ADMIN_PASSWORD || 'ChangeMe123!';
+const DEMO_TOKEN = 'preview-demo-token';
+
+const requireAuth = (req, res, next) => {
+  const header = req.headers.authorization || '';
+  if (!header.startsWith('Bearer ') || header.slice(7) !== DEMO_TOKEN) {
+    return res.status(401).json({ success: false, message: 'Not authorized, no token provided' });
+  }
+  next();
+};
+
+/* ------------------------------------------------------------------
+   Stored files (images / PDFs uploaded from the admin, kept in RAM)
+   ------------------------------------------------------------------ */
+const storedFiles = new Map();
+
+const storeFile = (file) => {
+  const id = `file-${storedFiles.size + 1}-${Date.now()}`;
+  storedFiles.set(id, { buffer: file.buffer, mimetype: file.mimetype, originalname: file.originalname });
+  return id;
 };
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', service: 'Eastern Newspaper API (preview)', time: new Date().toISOString() });
+});
+
+app.get('/api/preview-file/:id', (req, res) => {
+  const file = storedFiles.get(req.params.id);
+  if (!file) return res.status(404).json({ message: 'Not found' });
+  res.type(file.mimetype);
+  res.set('Content-Disposition', `inline; filename="${file.originalname || 'file'}"`);
+  res.send(file.buffer);
 });
 
 app.get('/api/categories', (req, res) => {
@@ -137,8 +233,116 @@ app.get('/api/advertisers', (req, res) => {
   res.json(list);
 });
 
-app.get('/api/issues/current', (_req, res) => res.json(issue));
-app.get('/api/issues', (_req, res) => res.json([issue]));
+/* ---------------- Publications ---------------- */
+
+app.get('/api/issues/current', (_req, res) => {
+  const issue = issueDocs.find((i) => i.isCurrent) || issueDocs[0];
+  if (!issue) return res.status(404).json({ message: 'No current issue set' });
+  res.json({
+    ...issue,
+    articles: articleDocs.map(({ body, relatedArticles, ...rest }) => rest),
+  });
+});
+
+app.get('/api/issues/id/:id', requireAuth, (req, res) => {
+  const issue = findIssue(req.params.id);
+  if (!issue) return res.status(404).json({ message: 'Issue not found' });
+  res.json(issue);
+});
+
+app.get('/api/issues/:issueNumber', (req, res) => {
+  const issue = issueDocs.find((i) => String(i.issueNumber) === String(req.params.issueNumber));
+  if (!issue) return res.status(404).json({ message: 'Issue not found' });
+  res.json(issue);
+});
+
+app.get('/api/issues', (_req, res) => {
+  res.json([...issueDocs].sort((a, b) => b.issueNumber - a.issueNumber).map(publicIssue));
+});
+
+app.post('/api/issues', requireAuth, (req, res) => {
+  let payload;
+  try {
+    payload = buildIssuePayload(req.body, res);
+  } catch (err) {
+    return res.status(res.statusCode).json({ success: false, message: err.message });
+  }
+
+  if (payload.isCurrent) issueDocs.forEach((i) => { i.isCurrent = false; });
+
+  issueCounter += 1;
+  const now = new Date().toISOString();
+  const issue = {
+    _id: `issue-${issueCounter}`,
+    coverImage: '',
+    coverHeadline: '',
+    pdfUrl: '',
+    isCurrent: false,
+    ...payload,
+    articles: [],
+    createdAt: now,
+    updatedAt: now,
+  };
+  issueDocs.push(issue);
+  res.status(201).json(issue);
+});
+
+app.put('/api/issues/:id', requireAuth, (req, res) => {
+  const issue = findIssue(req.params.id);
+  if (!issue) return res.status(404).json({ message: 'Issue not found' });
+
+  let updates;
+  try {
+    updates = buildIssuePayload(req.body, res, issue._id);
+  } catch (err) {
+    return res.status(res.statusCode).json({ success: false, message: err.message });
+  }
+
+  if (updates.isCurrent) issueDocs.forEach((i) => { if (i._id !== issue._id) i.isCurrent = false; });
+
+  Object.assign(issue, updates, { updatedAt: new Date().toISOString() });
+  res.json(issue);
+});
+
+app.delete('/api/issues/:id', requireAuth, (req, res) => {
+  const issue = findIssue(req.params.id);
+  if (!issue) return res.status(404).json({ message: 'Issue not found' });
+  issueDocs = issueDocs.filter((i) => i._id !== issue._id);
+  res.json({ message: 'Issue removed' });
+});
+
+/* ---------------- Auth (demo) ---------------- */
+
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body || {};
+  const matchesEmail = String(email || '').trim().toLowerCase() === DEMO_USER.email.toLowerCase();
+  if (matchesEmail && password === DEMO_PASSWORD) {
+    return res.json({ ...DEMO_USER, token: DEMO_TOKEN });
+  }
+  res.status(401).json({ success: false, message: 'Invalid email or password' });
+});
+
+app.get('/api/auth/me', requireAuth, (_req, res) => res.json(DEMO_USER));
+
+/* ---------------- Uploads (kept in memory) ---------------- */
+
+app.post('/api/upload', requireAuth, uploadImageMiddleware.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, message: 'No image file uploaded' });
+  const id = storeFile(req.file);
+  res.status(201).json({ url: `/api/preview-file/${id}`, width: null, height: null });
+});
+
+app.post('/api/upload/pdf', requireAuth, uploadPdfMiddleware.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, message: 'No PDF file uploaded' });
+  const id = storeFile(req.file);
+  res.status(201).json({ url: `/api/preview-file/${id}`, bytes: req.file.size });
+});
+
+// Multer rejections (wrong file type / too large) shouldn't surface as 500s.
+app.use((err, _req, res, _next) => {
+  const status = err.statusCode || (err.name === 'MulterError' ? 400 : res.statusCode >= 400 ? res.statusCode : 500);
+  res.status(status).json({ success: false, message: err.message });
+});
 
 app.post('/api/contact', (_req, res) => res.json({ ok: true }));
 app.post('/api/contact/newsletter', (_req, res) => res.json({ ok: true }));
@@ -146,4 +350,5 @@ app.post('/api/contact/newsletter', (_req, res) => res.json({ ok: true }));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Eastern Newspaper preview API on port ${PORT}`);
+  console.log(`Newsroom demo sign-in: ${DEMO_USER.email} / ${DEMO_PASSWORD}`);
 });

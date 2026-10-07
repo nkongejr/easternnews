@@ -6,7 +6,7 @@ const QUICK_LINKS = [
   { label: 'About Us', href: '/about' },
   { label: 'Advertise With Us', href: '/advertise' },
   { label: 'Advertiser Directory', href: '/advertisers' },
-  { label: 'Back Issues', href: '/archive' },
+  { label: 'Publications', href: '/publications' },
   { label: 'Newsletter', href: '/contact#newsletter' },
 ];
 

@@ -10,6 +10,15 @@ const nextConfig: NextConfig = {
     ],
   },
   allowedDevOrigins: ["*"],
+  async redirects() {
+    // The print-edition library replaced the old back-issues page. Kept as
+    // permanent redirects so existing /archive links and search results land
+    // on /publications instead of a dead end.
+    return [
+      { source: "/archive", destination: "/publications", permanent: true },
+      { source: "/archive/:path*", destination: "/publications", permanent: true },
+    ];
+  },
   async rewrites() {
     // Dev/preview only: browser calls same-origin /api, Next proxies to Express.
     // Production on Vercel keeps NEXT_PUBLIC_API_URL pointed at the live API.
