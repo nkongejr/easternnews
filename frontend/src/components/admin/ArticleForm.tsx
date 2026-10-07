@@ -6,11 +6,23 @@ import adminApi from '@/lib/adminApi';
 import ImageUploader from './ImageUploader';
 import { Article, Author } from '@/types';
 
-const CATEGORIES = [
+// Keep values in sync with backend/src/models/Category.js. The public site
+// presents the National desk as Politics & Governance, but the API still stores
+// and accepts the category value as "National".
+const CATEGORY_VALUES = [
   'Meru', 'Tharaka Nithi', 'Isiolo', 'Embu', 'Samburu', 'Kirinyaga',
   'Laikipia', 'Kitui', 'Machakos', 'Makueni', 'Marsabit',
-  'Business', 'Sports', 'Opinion', 'Editorial', 'National',
+  'Business', 'Sports', 'Opinion', 'Editorial', 'National', 'Profiles',
 ];
+
+const CATEGORY_LABELS: Record<string, string> = {
+  National: 'Politics & Governance',
+};
+
+const CATEGORIES = CATEGORY_VALUES.map((value) => ({
+  value,
+  label: CATEGORY_LABELS[value] ?? value,
+}));
 
 const initialAuthorIds = (article?: Article) => {
   const authors = article?.authors?.map((author) => author._id).filter(Boolean) || [];
@@ -122,8 +134,15 @@ export default function ArticleForm({ initial }: { initial?: Article }) {
       <input placeholder="Deck / subheadline" value={form.deck} onChange={(e) => setForm({ ...form, deck: e.target.value })} className="w-full border rounded px-3 py-2" />
 
       <div className="grid grid-cols-2 gap-4">
-        <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="border rounded px-3 py-2">
-          {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+        <select
+          aria-label="Category"
+          value={form.category}
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
+          className="border rounded px-3 py-2"
+        >
+          {CATEGORIES.map((category) => (
+            <option key={category.value} value={category.value}>{category.label}</option>
+          ))}
         </select>
         <select value="" onChange={(e) => { addAuthor(e.target.value); e.target.value = ''; }} className="border rounded px-3 py-2">
           <option value="">-- Add Author --</option>
