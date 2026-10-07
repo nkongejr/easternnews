@@ -87,15 +87,29 @@ export default function MainNav() {
               <ul ref={navRef} className="flex items-center gap-0">
                 {PRIMARY_NAV.map((l) => (
                   <li key={l.href}>
-                    <Link
-                      href={l.href}
-                      aria-current={isActive(pathname, l.href) ? 'page' : undefined}
-                      className={`block px-3 py-3.5 text-[12px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
-                        isActive(pathname, l.href) ? 'text-brand-secondary' : 'text-white'
-                      }`}
-                    >
-                      {l.label}
-                    </Link>
+                    {l.highlight ? (
+                      <Link
+                        href={l.href}
+                        aria-current={isActive(pathname, l.href) ? 'page' : undefined}
+                        className={`ml-1.5 block rounded-sm px-3.5 py-1.5 text-[12px] font-black uppercase tracking-wide shadow-sm transition-colors ${
+                          isActive(pathname, l.href)
+                            ? 'bg-white text-brand-primary-darker'
+                            : 'bg-brand-secondary text-brand-primary-darker hover:bg-brand-secondary-dark'
+                        }`}
+                      >
+                        {l.label}
+                      </Link>
+                    ) : (
+                      <Link
+                        href={l.href}
+                        aria-current={isActive(pathname, l.href) ? 'page' : undefined}
+                        className={`block px-3 py-3.5 text-[12px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
+                          isActive(pathname, l.href) ? 'text-brand-secondary' : 'text-white'
+                        }`}
+                      >
+                        {l.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
 

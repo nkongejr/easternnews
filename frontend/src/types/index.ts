@@ -83,9 +83,13 @@ export interface Issue {
   year: number;
   coverImage?: string;
   coverHeadline?: string;
+  /** Expanded on /issues/current; the /issues listing returns ObjectId strings. */
   articles: Article[];
+  /** Public download link for the print edition, set from the admin dashboard. */
   pdfUrl?: string;
   isCurrent: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface AdminUser {

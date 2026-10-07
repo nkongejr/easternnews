@@ -80,14 +80,27 @@ export default function MobileNavigation({
         <nav aria-label="Primary" className="border-t border-border">
           <ul className="divide-y divide-border">
             {PRIMARY_NAV.map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  onClick={onClose}
-                  className="block px-4 py-3.5 font-headline text-lg font-bold text-text"
-                >
-                  {l.label}
-                </Link>
+              <li key={l.href} className={l.highlight ? 'p-3' : undefined}>
+                {l.highlight ? (
+                  <Link
+                    href={l.href}
+                    onClick={onClose}
+                    className="flex items-center justify-between rounded-sm bg-brand-secondary px-4 py-3 font-headline text-lg font-black text-brand-primary-darker"
+                  >
+                    {l.label}
+                    <span aria-hidden="true" className="text-sm">
+                      →
+                    </span>
+                  </Link>
+                ) : (
+                  <Link
+                    href={l.href}
+                    onClick={onClose}
+                    className="block px-4 py-3.5 font-headline text-lg font-bold text-text"
+                  >
+                    {l.label}
+                  </Link>
+                )}
               </li>
             ))}
 

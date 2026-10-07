@@ -40,7 +40,9 @@ export const api = {
 
   getCurrentIssue: () => fetchJSON<Issue>('/issues/current'),
 
-  getIssues: () => fetchJSON<Issue[]>('/issues'),
+  // Editions are published from the newsroom dashboard, so the library always
+  // requests the list fresh — an editor who publishes an issue must see it.
+  getIssues: () => fetchJSON<Issue[]>('/issues', 0),
 
   getAdvertisers: (params: Record<string, string> = {}) => {
     const qs = new URLSearchParams(params).toString();
