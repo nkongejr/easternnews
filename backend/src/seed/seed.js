@@ -10,7 +10,7 @@ const Comment = require('../models/Comment');
 const Issue = require('../models/Issue');
 const User = require('../models/User');
 
-const { categories, authors, articles, advertisers, issueMeta } = require('./seedData');
+const { categories, authors, articles, advertisers, issueMeta, issues } = require('./seedData');
 
 const destroy = process.argv.includes('--destroy');
 
@@ -26,11 +26,11 @@ const run = async () => {
       Comment.deleteMany(),
       Issue.deleteMany(),
     ]);
-    console.log('🗑  All content collections cleared.');
+    console.log('All content collections cleared.');
     process.exit(0);
   }
 
-  console.log('🌱 Seeding database...');
+  console.log('Seeding database...');
 
   // 1. Categories
   await Category.deleteMany();
@@ -67,7 +67,7 @@ const run = async () => {
     article.relatedArticles = related;
     await article.save();
   }
-  console.log('🔗 Related articles linked');
+  console.log('Related articles linked');
 
   // 3b. A few reader comments so no article opens with an empty comment section.
   await Comment.deleteMany();
@@ -110,14 +110,22 @@ const run = async () => {
   const createdAdvertisers = await Advertiser.insertMany(advertisers);
   console.log(`✅ ${createdAdvertisers.length} advertisers created`);
 
-  // 5. Issue
+  // 5. Issues (31-33 archive)
   await Issue.deleteMany();
-  const issue = await Issue.create({
-    ...issueMeta,
-    articles: createdArticles.map((a) => a._id),
-  });
-  await Article.updateMany({}, { issue: issue._id });
-  console.log(`✅ Issue "${issue.title}" created with ${issue.articles.length} articles`);
+  const issuesToSeed = issues && issues.length ? issues : [issueMeta];
+  const createdIssues = [];
+  for (const meta of issuesToSeed) {
+    const issue = await Issue.create({
+      ...meta,
+      articles: createdArticles.map((a) => a._id),
+    });
+    createdIssues.push(issue);
+    console.log(`✅ Issue "${issue.title}" created with ${issue.articles.length} articles`);
+  }
+  const currentIssue = createdIssues.find((i) => i.isCurrent) || createdIssues[createdIssues.length - 1];
+  if (currentIssue) {
+    await Article.updateMany({}, { issue: currentIssue._id });
+  }
 
   // 6. Default admin user
   const adminExists = await User.findOne({ email: process.env.ADMIN_EMAIL });

@@ -11,7 +11,7 @@
 const express = require('express');
 const cors = require('cors');
 const slugify = require('slugify');
-const { categories, authors, articles, advertisers, issueMeta } = require('./src/seed/seedData');
+const { categories, authors, articles, advertisers, issueMeta, issues } = require('./src/seed/seedData');
 const uploadImageMiddleware = require('./src/middleware/upload');
 const uploadPdfMiddleware = require('./src/middleware/uploadPdf');
 
@@ -180,9 +180,14 @@ app.post('/api/articles/:articleId/comments', (req, res) => {
 
 /* ---------------- Publications ---------------- */
 const stamp = '2026-07-18T08:00:00.000Z';
-let issueDocs = [
-  { _id: 'issue-1', ...issueMeta, articles: [], createdAt: stamp, updatedAt: stamp },
-];
+const seedIssues = issues && issues.length ? issues : [issueMeta];
+let issueDocs = seedIssues.map((meta, idx) => ({
+  _id: `issue-${idx + 1}`,
+  ...meta,
+  articles: [],
+  createdAt: stamp,
+  updatedAt: stamp,
+}));
 let issueCounter = issueDocs.length;
 
 const publicIssue = ({ articles: _articles, ...rest }) => rest;
