@@ -6,7 +6,7 @@ const imageSchema = new mongoose.Schema(
   {
     url: { type: String, required: true },
     caption: { type: String, default: '' },
-    credit: { type: String, default: 'Photo KNA' },
+    credit: { type: String, default: '' },
   },
   { _id: false }
 );
@@ -28,7 +28,7 @@ const articleSchema = new mongoose.Schema(
     // Ordered list of all credited authors. Mongoose preserves array order,
     // which lets editors control the public byline sequence.
     authors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Author' }],
-    bylineCredit: { type: String, default: 'Eastern Correspondent' },
+    bylineCredit: { type: String, default: '' },
     featuredImage: { type: imageSchema, required: true },
     gallery: [imageSchema],
     publishDate: { type: Date, default: Date.now },

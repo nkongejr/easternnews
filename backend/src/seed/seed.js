@@ -11,6 +11,7 @@ const Issue = require('../models/Issue');
 const User = require('../models/User');
 
 const { categories, authors, articles, advertisers, issueMeta, issues } = require('./seedData');
+const { fillMissingSeoFields } = require('../utils/seo');
 
 const destroy = process.argv.includes('--destroy');
 

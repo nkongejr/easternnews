@@ -48,7 +48,6 @@ const articles = [
     featuredImage: {
       url: '/seed/cover-story.jpg',
       caption: 'A section of a county headquarters affected by unpaid pending bills.',
-      credit: 'Photo KNA',
     },
     body: `Counties across the Eastern region are choking under the weight of massive pending bills running into billions of shillings, a situation that has crippled service delivery and left contractors and suppliers stranded.
 
@@ -75,7 +74,7 @@ The Eastern Newspaper will continue to track this story as more counties table t
     bylineCredit: 'KNA',
     authorName: 'Dennis Mwiti',
     tags: ['security', 'banditry', 'Meru'],
-    featuredImage: { url: '/seed/meru-banditry.jpg', caption: 'Security officers on patrol in a forested area of Meru.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/meru-banditry.jpg', caption: 'Security officers on patrol in a forested area of Meru.' },
     body: `A multi-agency security team comprising police, administration police and the military has intensified operations targeting armed bandits hiding in forested parts of Meru County.
 
 The operation follows a spike in cases of livestock theft and attacks on residents living near forest fringes. Area security officials say the crackdown has already led to the recovery of illegal firearms and the arrest of several suspects.
@@ -88,10 +87,9 @@ Area leaders have welcomed the operation but urged the government to also invest
     title: 'Political temperatures rise as gubernatorial race heats up in Meru',
     deck: 'Aspirants intensify grassroots mobilization ahead of the next General Election',
     category: 'Meru',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Dennis Mwiti',
     tags: ['politics', 'governor', 'Meru'],
-    featuredImage: { url: '/seed/meru-politics.jpg', caption: 'A past political rally in Meru town.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/meru-politics.jpg', caption: 'A past political rally in Meru town.' },
     body: `Political temperatures in Meru County are rising as more aspirants declare interest in the gubernatorial seat, with grassroots mobilization already gathering pace across the county's nine sub-counties.
 
 Political analysts say the race is shaping up to be one of the most competitive in the county's recent history, with aspirants drawn from various political formations crisscrossing wards to popularize their agenda.
@@ -105,7 +103,7 @@ Residents have called on aspirants to focus on issues-based campaigns, particula
     bylineCredit: 'KNA',
     authorName: 'Dennis Mwiti',
     tags: ['development', 'Nyambene', 'infrastructure'],
-    featuredImage: { url: '/seed/meru-nyambene.jpg', caption: 'Residents of Nyambene ward during a community baraza.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/meru-nyambene.jpg', caption: 'Residents of Nyambene ward during a community baraza.' },
     body: `Residents of Nyambene ward have petitioned the county government to expedite the completion of several stalled development projects, including a market shed and a water project that have remained incomplete for over two years.
 
 Speaking during a community baraza, residents said the delays had denied traders proper trading space and left households without reliable access to clean water.
@@ -122,7 +120,7 @@ The area Member of County Assembly promised to raise the matter with the relevan
     authorName: 'Dennis Mwiti',
     isFeatured: true,
     tags: ['Kindiki', 'development', 'Tharaka Nithi'],
-    featuredImage: { url: '/seed/tharaka-kindiki.jpg', caption: 'Cabinet Secretary Kithure Kindiki addressing residents during the launch.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/tharaka-kindiki.jpg', caption: 'Cabinet Secretary Kithure Kindiki addressing residents during the launch.' },
     body: `Cabinet Secretary Kithure Kindiki has launched development projects worth Sh21 billion in Tharaka Nithi County, targeting road infrastructure, water supply and health facility upgrades.
 
 Speaking during the launch, the CS said the projects were part of the government's broader agenda to open up marginalized areas and stimulate local economic activity.
@@ -135,10 +133,9 @@ Area leaders lauded the initiative, saying it would significantly improve connec
     title: 'Farmers receive free coffee seedlings to boost production',
     deck: 'County partners with national government to revive coffee farming',
     category: 'Tharaka Nithi',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Dennis Mwiti',
     tags: ['agriculture', 'coffee', 'farmers'],
-    featuredImage: { url: '/seed/tharaka-coffee.jpg', caption: 'A farmer inspects coffee seedlings at a distribution point.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/tharaka-coffee.jpg', caption: 'A farmer inspects coffee seedlings at a distribution point.' },
     body: `Hundreds of farmers in Tharaka Nithi County have received free coffee seedlings under a revival programme aimed at boosting production of the cash crop, which has seen declining acreage over the past decade.
 
 The programme, a partnership between the county government and national agricultural agencies, targets distribution of over 500,000 seedlings to farmers across coffee-growing wards.
@@ -154,7 +151,7 @@ The programme, a partnership between the county government and national agricult
     bylineCredit: 'KNA',
     authorName: 'Halima Guyo',
     tags: ['youth', 'digital skills', 'Safaricom Foundation'],
-    featuredImage: { url: '/seed/isiolo-safaricom.jpg', caption: 'Youth undergo digital skills training in Isiolo town.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/isiolo-safaricom.jpg', caption: 'Youth undergo digital skills training in Isiolo town.' },
     body: `The Safaricom Foundation has rolled out a digital skills training programme targeting unemployed youth in Isiolo County, as part of efforts to bridge the digital divide in marginalized regions.
 
 The training covers basic computer literacy, mobile money entrepreneurship and online freelancing, with organizers hoping participants will use the skills to create income-generating opportunities.
@@ -168,7 +165,7 @@ The training covers basic computer literacy, mobile money entrepreneurship and o
     bylineCredit: 'KNA',
     authorName: 'Halima Guyo',
     tags: ['security', 'firearms', 'Isiolo'],
-    featuredImage: { url: '/seed/isiolo-firearms.jpg', caption: 'Recovered illegal firearms displayed by police in Isiolo.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/isiolo-firearms.jpg', caption: 'Recovered illegal firearms displayed by police in Isiolo.' },
     body: `Security agencies in Isiolo County have intensified a crackdown on illegal firearms following a spike in cattle rustling incidents in the region's border areas.
 
 The operation, conducted jointly by police and administration police officers, has so far led to the recovery of several illegal weapons and the arrest of individuals suspected to be involved in arms trafficking.
@@ -181,10 +178,9 @@ Area security officials have urged residents with information on illegal firearm
     title: 'Governor launches free Wi-Fi in Embu town',
     deck: 'Initiative aims to boost digital connectivity for residents and small businesses',
     category: 'Embu',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Grace Karimi',
     tags: ['Embu', 'Wi-Fi', 'digital'],
-    featuredImage: { url: '/seed/embu-wifi.jpg', caption: 'Residents access free public Wi-Fi at a hotspot in Embu town.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/embu-wifi.jpg', caption: 'Residents access free public Wi-Fi at a hotspot in Embu town.' },
     body: `Embu County has launched a free public Wi-Fi initiative in Embu town, providing residents and small business owners with internet access at designated hotspots.
 
 The Governor said the initiative was aimed at bridging the digital divide and empowering small businesses to embrace e-commerce and digital marketing.
@@ -198,7 +194,7 @@ The Governor said the initiative was aimed at bridging the digital divide and em
     bylineCredit: 'KNA',
     authorName: 'Grace Karimi',
     tags: ['roads', 'infrastructure', 'Embu'],
-    featuredImage: { url: '/seed/embu-roads.jpg', caption: 'A grader repairs a rural access road in Embu County.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/embu-roads.jpg', caption: 'A grader repairs a rural access road in Embu County.' },
     body: `Embu County government has commenced repair works on several rural access roads that had become impassable, cutting off residents in some areas from accessing markets and health facilities.
 
 The road grading exercise, funded through the county's roads maintenance levy, targets over 50 kilometers of rural roads across the county's four sub-counties.
@@ -212,7 +208,7 @@ Farmers have welcomed the exercise, saying it will ease transportation of agricu
     bylineCredit: 'KNA',
     authorName: 'Grace Karimi',
     tags: ['EACC', 'corruption', 'Embu'],
-    featuredImage: { url: '/seed/embu-eacc.jpg', caption: 'EACC officials during a past investigation exercise.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/embu-eacc.jpg', caption: 'EACC officials during a past investigation exercise.' },
     body: `The Ethics and Anti-Corruption Commission (EACC) has launched an investigation into alleged irregularities in the award of tenders by the Embu County government.
 
 Sources within the county assembly say the probe follows a petition by a section of MCAs alleging that due procurement procedures were flouted in the award of multi-million shilling contracts.
@@ -228,7 +224,7 @@ The County Government has pledged full cooperation with investigators, saying it
     bylineCredit: 'KNA',
     authorName: 'Halima Guyo',
     tags: ['Samburu', 'governor', 'protest', 'security'],
-    featuredImage: { url: '/seed/samburu-protest.jpg', caption: 'Residents gather in solidarity following the attack.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/samburu-protest.jpg', caption: 'Residents gather in solidarity following the attack.' },
     body: `Residents of Samburu County took to the streets in protest following an assault incident involving the county governor, an act that has been widely condemned by leaders across the political divide.
 
 Area leaders called for calm and urged residents to allow investigative agencies to establish the circumstances surrounding the incident.
@@ -241,10 +237,9 @@ Police have launched investigations into the matter and promised that those foun
     title: "Tobong'Nawi cultural festival celebrated in Samburu",
     deck: 'Annual festival showcases the county\'s rich cultural heritage and boosts tourism',
     category: 'Samburu',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Halima Guyo',
     tags: ['culture', 'tourism', 'Samburu'],
-    featuredImage: { url: '/seed/samburu-festival.jpg', caption: 'Morans perform a traditional dance during the Tobong\'Nawi festival.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/samburu-festival.jpg', caption: 'Morans perform a traditional dance during the Tobong\'Nawi festival.' },
     body: `The annual Tobong'Nawi cultural festival was celebrated with pomp in Samburu County, drawing thousands of visitors eager to experience the community's rich cultural heritage.
 
 The festival featured traditional dances, warrior displays, beadwork exhibitions and culinary showcases, and is increasingly becoming a key driver of cultural tourism in the region.
@@ -260,7 +255,7 @@ County tourism officials said the festival had significantly boosted local hospi
     bylineCredit: 'KNA',
     authorName: 'Grace Karimi',
     tags: ['health', 'tuberculosis', 'Kirinyaga'],
-    featuredImage: { url: '/seed/kirinyaga-tb.jpg', caption: 'Health workers sensitize residents on TB symptoms and treatment.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/kirinyaga-tb.jpg', caption: 'Health workers sensitize residents on TB symptoms and treatment.' },
     body: `The Kirinyaga County health department has launched a tuberculosis awareness campaign targeting early detection and improved treatment adherence among residents.
 
 Health officials said cases of TB in the county remain a concern, particularly in informal settlements and among populations with limited access to healthcare.
@@ -271,10 +266,9 @@ Health officials said cases of TB in the county remain a concern, particularly i
     title: 'County sets up bursary kitty for needy students',
     deck: 'Initiative targets bright students from vulnerable households',
     category: 'Kirinyaga',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Grace Karimi',
     tags: ['education', 'bursary', 'Kirinyaga'],
-    featuredImage: { url: '/seed/kirinyaga-bursary.jpg', caption: 'Beneficiaries of the county bursary kitty during the award ceremony.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/kirinyaga-bursary.jpg', caption: 'Beneficiaries of the county bursary kitty during the award ceremony.' },
     body: `Kirinyaga County has set up a bursary kitty targeting bright students from needy backgrounds, in a move aimed at cushioning families struggling to meet rising education costs.
 
 The kitty will benefit students in secondary schools and tertiary institutions, with priority given to orphans, students with disabilities and those from single-parent households.
@@ -290,7 +284,7 @@ The kitty will benefit students in secondary schools and tertiary institutions, 
     bylineCredit: 'KNA',
     authorName: 'Peter Mutuku',
     tags: ['women empowerment', 'Kitui', 'business'],
-    featuredImage: { url: '/seed/kitui-women.jpg', caption: 'Women group members receive their startup capital cheques.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/kitui-women.jpg', caption: 'Women group members receive their startup capital cheques.' },
     body: `Dozens of women groups in Kitui County have received startup capital from the county government under a women empowerment fund aimed at boosting small businesses.
 
 The beneficiaries, drawn from across the county's sub-counties, will use the funds to expand existing businesses or start new income-generating ventures.
@@ -301,10 +295,9 @@ The beneficiaries, drawn from across the county's sub-counties, will use the fun
     title: 'County launches forest replenishing programme',
     deck: 'Initiative targets planting of thousands of trees to combat deforestation',
     category: 'Kitui',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Peter Mutuku',
     tags: ['environment', 'forest', 'Kitui'],
-    featuredImage: { url: '/seed/kitui-forest.jpg', caption: 'Residents participate in a tree planting exercise in Kitui.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/kitui-forest.jpg', caption: 'Residents participate in a tree planting exercise in Kitui.' },
     body: `Kitui County has launched a forest replenishing programme targeting the planting of over 200,000 tree seedlings in degraded forest areas, as part of the national 15 billion trees agenda.
 
 The programme brings together the county government, national government agencies and community forest associations to restore tree cover in a county that has faced recurrent droughts.
@@ -320,7 +313,7 @@ The programme brings together the county government, national government agencie
     bylineCredit: 'KNA',
     authorName: 'Peter Mutuku',
     tags: ['health', 'hearing screening', 'Machakos'],
-    featuredImage: { url: '/seed/machakos-hearing.jpg', caption: 'A child undergoes a free hearing screening test.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/machakos-hearing.jpg', caption: 'A child undergoes a free hearing screening test.' },
     body: `Hundreds of residents, majority of them children, benefited from a free hearing screening exercise held in Machakos County, aimed at the early detection and management of hearing impairments.
 
 The camp, organized in partnership with medical volunteers and the county health department, provided free consultations, hearing tests and referrals for further treatment where necessary.
@@ -331,10 +324,9 @@ The camp, organized in partnership with medical volunteers and the county health
     title: 'New water project to serve thousands of residents',
     deck: 'Project expected to ease water shortage in several villages',
     category: 'Machakos',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Peter Mutuku',
     tags: ['water', 'infrastructure', 'Machakos'],
-    featuredImage: { url: '/seed/machakos-water.jpg', caption: 'Construction works underway at a water project site in Machakos.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/machakos-water.jpg', caption: 'Construction works underway at a water project site in Machakos.' },
     body: `A new water project set to serve thousands of residents in Machakos County is nearing completion, offering hope to communities that have grappled with chronic water shortages for years.
 
 The project, funded jointly by the county government and a development partner, includes construction of a water pan, piping network and distribution points across several villages.
@@ -350,7 +342,7 @@ Area residents expressed optimism that the project would reduce the long distanc
     bylineCredit: 'KNA',
     authorName: 'Peter Mutuku',
     tags: ['floods', 'relief food', 'Makueni'],
-    featuredImage: { url: '/seed/makueni-floods.jpg', caption: 'Flooded farmland in a section of Makueni County.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/makueni-floods.jpg', caption: 'Flooded farmland in a section of Makueni County.' },
     body: `The Makueni County Governor has appealed to the national government and well-wishers to provide relief food to families affected by recent flooding that destroyed crops and displaced households in low-lying areas.
 
 Preliminary assessments indicate that hundreds of acres of farmland were submerged, wiping out crops that were almost ready for harvest and worsening food insecurity in the affected areas.
@@ -361,10 +353,9 @@ Preliminary assessments indicate that hundreds of acres of farmland were submerg
     title: 'UHC registration drive rolled out across county',
     deck: 'Campaign seeks to enroll more residents into the Universal Health Coverage scheme',
     category: 'Makueni',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Peter Mutuku',
     tags: ['UHC', 'healthcare', 'Makueni'],
-    featuredImage: { url: '/seed/makueni-uhc.jpg', caption: 'Residents register for the Universal Health Coverage scheme.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/makueni-uhc.jpg', caption: 'Residents register for the Universal Health Coverage scheme.' },
     body: `Makueni County has rolled out an intensive registration drive aimed at enrolling more residents into the Universal Health Coverage (UHC) scheme, targeting households that have yet to register.
 
 Health officials have set up registration desks at public facilities, markets and administrative offices to make the process more accessible to residents in rural areas.
@@ -380,7 +371,7 @@ Health officials have set up registration desks at public facilities, markets an
     bylineCredit: 'KNA',
     authorName: 'Dennis Mwiti',
     tags: ['infrastructure', 'bridge', 'Laikipia'],
-    featuredImage: { url: '/seed/laikipia-bridge.jpg', caption: 'The newly completed bridge in Laikipia County.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/laikipia-bridge.jpg', caption: 'The newly completed bridge in Laikipia County.' },
     body: `A key bridge in Laikipia County that had stalled for years has finally been completed, easing the movement of residents, students and traders who previously risked their lives crossing a flooded river.
 
 The bridge had become a symbol of delayed development in the area, with residents recounting numerous incidents of near-drownings during the rainy season before its completion.
@@ -391,10 +382,9 @@ The bridge had become a symbol of delayed development in the area, with resident
     title: 'Digital literacy programme launched in schools',
     deck: 'Initiative equips learners with basic computer skills',
     category: 'Laikipia',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Dennis Mwiti',
     tags: ['education', 'digital literacy', 'Laikipia'],
-    featuredImage: { url: '/seed/laikipia-digital.jpg', caption: 'Pupils use laptops during a digital literacy lesson.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/laikipia-digital.jpg', caption: 'Pupils use laptops during a digital literacy lesson.' },
     body: `Several primary schools in Laikipia County have received laptops and digital learning materials under a digital literacy programme aimed at equipping learners with basic computer skills from an early age.
 
 The programme is part of a broader national effort to integrate technology into the curriculum and prepare learners for a digital future.
@@ -410,7 +400,7 @@ The programme is part of a broader national effort to integrate technology into 
     bylineCredit: 'KNA',
     authorName: 'Halima Guyo',
     tags: ['ID cards', 'services', 'Marsabit'],
-    featuredImage: { url: '/seed/marsabit-id.jpg', caption: 'Residents queue at a registration office in Marsabit.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/marsabit-id.jpg', caption: 'Residents queue at a registration office in Marsabit.' },
     body: `Residents of Marsabit County have decried a huge backlog in the processing of national identity cards, with some saying they have waited for over a year without receiving their documents.
 
 The lack of an ID card has locked out many young people from accessing critical services, including opening bank accounts, registering for government programmes and seeking formal employment.
@@ -421,10 +411,9 @@ Area leaders have petitioned the national registration bureau to deploy addition
     title: 'Leaders commend Ruto administration on development',
     deck: 'Area MPs cite improved road network and health infrastructure',
     category: 'Marsabit',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Halima Guyo',
     tags: ['politics', 'development', 'Marsabit'],
-    featuredImage: { url: '/seed/marsabit-leaders.jpg', caption: 'Area leaders during a development tour in Marsabit County.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/marsabit-leaders.jpg', caption: 'Area leaders during a development tour in Marsabit County.' },
     body: `A section of leaders from Marsabit County have commended the national government for what they termed as remarkable progress in opening up the historically marginalized region through improved road networks and health infrastructure.
 
 Speaking during a development tour, the leaders cited ongoing tarmacking of key roads and the upgrade of health facilities as evidence of the government's commitment to the region.
@@ -441,7 +430,7 @@ Speaking during a development tour, the leaders cited ongoing tarmacking of key 
     authorName: 'Eastern Newspaper Team',
     isFeatured: true,
     tags: ['tax relief', 'SMEs', 'business'],
-    featuredImage: { url: '/seed/business-tax.jpg', caption: 'A trader at a local market in the Eastern region.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/business-tax.jpg', caption: 'A trader at a local market in the Eastern region.' },
     body: `The National Treasury has announced tax relief measures targeting small and medium enterprises (SMEs), in a move aimed at cushioning traders from the current harsh economic conditions.
 
 The relief package includes simplified tax compliance procedures and reduced penalties for SMEs with an annual turnover below a specified threshold.
@@ -460,7 +449,7 @@ Business associations across the Eastern region have welcomed the announcement, 
     authorName: 'Eastern Newspaper Team',
     isFeatured: true,
     tags: ['marathon', 'Lewa', 'sports', 'conservation'],
-    featuredImage: { url: '/seed/sports-lewa.jpg', caption: 'Runners at the starting line of the Lewa Safari Marathon.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/sports-lewa.jpg', caption: 'Runners at the starting line of the Lewa Safari Marathon.' },
     body: `The annual Lewa Safari Marathon attracted hundreds of runners, including international athletes, who converged at the Lewa Wildlife Conservancy to compete while raising funds for conservation and community projects.
 
 The marathon, held against the backdrop of Mount Kenya and free-roaming wildlife, has grown into one of the region's most iconic sporting events, drawing global attention to conservation efforts in Laikipia and Meru counties.
@@ -471,10 +460,9 @@ Proceeds from the event support education, healthcare and wildlife conservation 
     title: 'Regional badminton championship held in Meru',
     deck: 'Tournament brings together players from across the Eastern region',
     category: 'Sports',
-    bylineCredit: 'Eastern Correspondent',
     authorName: 'Dennis Mwiti',
     tags: ['badminton', 'sports', 'Meru'],
-    featuredImage: { url: '/seed/sports-badminton.jpg', caption: 'Players compete during the regional badminton championship in Meru.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/sports-badminton.jpg', caption: 'Players compete during the regional badminton championship in Meru.' },
     body: `Meru town played host to a regional badminton championship that brought together players from across the Eastern region, in what organizers described as a step towards reviving the sport in the region.
 
 The tournament featured categories for juniors, seniors and mixed doubles, with winners earning slots to represent the region in upcoming national championships.
@@ -488,7 +476,7 @@ The tournament featured categories for juniors, seniors and mixed doubles, with 
     bylineCredit: 'KNA',
     authorName: 'Eastern Newspaper Team',
     tags: ['sports', 'inclusivity', 'donation'],
-    featuredImage: { url: '/seed/sports-deaf.jpg', caption: 'Learners from a school for the deaf receive sports equipment.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/sports-deaf.jpg', caption: 'Learners from a school for the deaf receive sports equipment.' },
     body: `Several schools for the deaf within the region have received sports equipment donations aimed at promoting inclusivity and encouraging participation in sports among learners with hearing impairments.
 
 The donation, comprising footballs, volleyballs, nets and athletics gear, is expected to boost the schools' participation in regional and national sports competitions for learners with special needs.
@@ -504,7 +492,7 @@ The donation, comprising footballs, volleyballs, nets and athletics gear, is exp
     bylineCredit: 'Opinion',
     authorName: 'Dr. James Kirimi',
     tags: ['opinion', 'jobs', 'economy'],
-    featuredImage: { url: '/seed/opinion-jobs.jpg', caption: 'Youth at a vocational training workshop.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/opinion-jobs.jpg', caption: 'Youth at a vocational training workshop.' },
     body: `Kenya's youth unemployment crisis demands more than rhetoric — it requires a clear, deliberate roadmap anchored on value addition, agro-processing and support for micro and small enterprises.
 
 Our region, blessed with abundant agricultural produce ranging from coffee and tea to avocado, miraa and livestock products, continues to export raw, unprocessed goods while importing finished products at a premium. This is a missed opportunity for job creation.
@@ -526,7 +514,7 @@ If implemented deliberately, such a roadmap could transform the Eastern region f
     bylineCredit: 'Opinion',
     authorName: 'Editorial Board',
     tags: ['opinion', 'Meru', 'politics'],
-    featuredImage: { url: '/seed/opinion-meru-noise.jpg', caption: 'A political rally in Meru County.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/opinion-meru-noise.jpg', caption: 'A political rally in Meru County.' },
     body: `Meru County has, in recent months, been engulfed in political noise that has overshadowed the substantive development conversations residents desperately need.
 
 From social media wars between political camps to needless press conferences dedicated to personal attacks, the discourse coming out of Meru risks distracting both leaders and residents from pressing issues such as pending bills, unemployment and stalled projects.
@@ -544,7 +532,7 @@ Meru's history is one of resilience and hard work. It is time the county's polit
     bylineCredit: 'Editorial',
     authorName: 'Editorial Board',
     tags: ['editorial', 'coffee', 'avocado', 'agriculture'],
-    featuredImage: { url: '/seed/editorial-avocado.jpg', caption: 'Avocado farmers sort their produce for market.', credit: 'Photo KNA' },
+    featuredImage: { url: '/seed/editorial-avocado.jpg', caption: 'Avocado farmers sort their produce for market.' },
     body: `Across the Eastern region, many coffee factories built decades ago now stand idle or grossly underutilized as coffee farming continues to decline in several areas. Meanwhile, avocado farming has emerged as one of the region's most promising cash crops, with rising local and export demand.
 
 This newspaper proposes a practical solution: convert idle or underused coffee factories into avocado aggregation and grading centers. These facilities already have the basic infrastructure - buildings, water access and proximity to farming communities - needed to support aggregation, sorting and initial processing of avocados before they are transported to exporters.
