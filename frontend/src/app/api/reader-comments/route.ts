@@ -55,15 +55,30 @@ async function forward(path: string, init: RequestInit) {
 
   const body = await upstream.text();
 
-  // A 404 for the comment path itself (rather than for an article) means the
-  // API build in front of this site predates the comment routes. Say so in
-  // plain language for the reader, and loudly in the server log for whoever
-  // deploys the API, instead of showing the raw Express "Not Found - …" text.
+  // A 404 can mean two very different things:
+  //   1. the API build predates the comment routes — its global handler answers
+  //      "Not Found - /api/articles/<id>/comments" (what a lagging deployment
+  //      looks like);
+  //   2. the routes exist and the article really is not there — the controller
+  //      answers {"message":"Article not found"}.
+  // Only the first is "comments are not switched on yet"; the second is passed
+  // through so it is never misreported.
   if (upstream.status === 404) {
-    console.warn(
-      `[reader-comments] ${API_BASE}${path} answered 404 — the API deployment looks older than this website (the comment routes ship with the frontend release), so comments cannot be saved yet.`,
-    );
-    return json({ message: NOT_ENABLED_MESSAGE }, 503);
+    let message = '';
+    try {
+      message = String((JSON.parse(body) as { message?: string })?.message || '');
+    } catch {
+      // Not JSON at all — fall through to the generic handling below.
+    }
+
+    if (/^Not Found - \/api\//i.test(message)) {
+      console.warn(
+        `[reader-comments] ${API_BASE}${path} answered 404 — the API deployment looks older than this website (the comment routes ship with the frontend release), so comments cannot be saved yet.`,
+      );
+      return json({ message: NOT_ENABLED_MESSAGE }, 503);
+    }
+
+    if (message) return json({ message }, 404);
   }
 
   try {
