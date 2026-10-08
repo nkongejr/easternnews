@@ -56,7 +56,7 @@ export default function NewsletterBand() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="h-12 w-full flex-1 rounded-sm border-0 px-4 text-sm text-text placeholder:text-muted focus:outline-none focus-visible:outline-2 focus-visible:outline-brand-secondary"
+              className="h-12 w-full flex-1 rounded-sm border-0 bg-white px-4 text-sm text-text placeholder:text-muted focus:outline-none focus-visible:outline-2 focus-visible:outline-brand-secondary"
             />
             <button
               type="submit"

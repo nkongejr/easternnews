@@ -113,45 +113,132 @@ export const FEATURED_COUNTIES = [
 
 /* ------------------------------------------------------------
    BRAND PALETTE
-   The existing Eastern Newspaper colours. Mirrored as CSS custom
-   properties in globals.css (--brand-primary, --brand-secondary,
-   --brand-accent, --background, --surface, --text, --muted,
-   --border) so a rebrand is a one-file change.
+   The nine colours of the Eastern Newspaper logo, verbatim, plus
+   the five derived shades the logo palette cannot supply on its
+   own. Mirrored as CSS custom properties in globals.css (`--en-*`
+   for the raw palette, `--brand-*` for the roles those colours
+   play) — keep the two in step, as this file is what any
+   non-Tailwind surface (SVG, canvas, meta theme) reads from.
    ------------------------------------------------------------ */
 
-export const BRAND = {
-  primary: '#1a4d8f',
-  primaryDark: '#123563',
-  primaryDarker: '#0b2545',
-  secondary: '#f2c94c',
-  secondaryDark: '#d4a92e',
-  accent: '#c0392b',
+const LOGO = {
+  navy: '#133041',
+  blue: '#409ef4',
+  cyan: '#57d7f4',
+  steel: '#59a2c0',
+  lime: '#edfb20',
+  limeSoft: '#d7f953',
+  green: '#6fb286',
+  pale: '#aee174',
+  ice: '#e5fcfc',
 } as const;
 
-export const CATEGORY_COLORS: Record<string, string> = {
-  Meru: '#1a4d8f',
-  'Tharaka Nithi': '#2e7d32',
-  Isiolo: '#b8860b',
-  Embu: '#8e44ad',
-  Samburu: '#d35400',
-  Kirinyaga: '#16a085',
-  Laikipia: '#c0392b',
-  Kitui: '#f2c94c',
-  Machakos: '#2980b9',
-  Makueni: '#27ae60',
-  Marsabit: '#7f8c8d',
-  Business: '#1a4d8f',
-  Sports: '#f2c94c',
-  Opinion: '#333333',
-  Editorial: '#333333',
-  National: '#1a4d8f',
-  Technology: '#1a4d8f',
-  Entertainment: '#8e44ad',
-  Lifestyle: '#16a085',
-  Profiles: '#0b2545',
+/* Shades of the logo colours — see the note in globals.css. */
+const SHADE = {
+  navyDark: '#0d2432',
+  navyDeep: '#081a25',
+  navyTint: '#24506a',
+  blueDeep: '#1874c6',
+  cyanDeep: '#2ba8cc',
+  greenDeep: '#4e8f66',
+  limeDark: '#d3e312',
+} as const;
+
+export const BRAND = {
+  /* The nine logo colours, untouched. */
+  ...LOGO,
+  /* The derived shades. */
+  ...SHADE,
+  /* Semantic roles, pointing at the values above so the two can
+     never drift apart. */
+  primary: LOGO.navy,
+  primaryDark: SHADE.navyDark,
+  primaryDarker: SHADE.navyDeep,
+  secondary: LOGO.lime,
+  secondaryDark: SHADE.limeDark,
+  accent: LOGO.blue,
+  accentDeep: SHADE.blueDeep,
+  danger: '#c0392b', // errors only — outside the logo palette
+} as const;
+
+export const WHITE = '#ffffff';
+
+/**
+ * Hex values behind the CSS custom properties.
+ *
+ * Components may pass a brand colour either as a hex or as a token
+ * reference (`accent="var(--color-ink)"`). Contrast maths needs the
+ * actual value, so anything that measures a colour resolves it through
+ * this map first. Keep in step with the `:root` block in globals.css.
+ */
+export const TOKEN_HEX: Record<string, string> = {
+  '--brand-primary': BRAND.navy,
+  '--brand-primary-dark': BRAND.navyDark,
+  '--brand-primary-darker': BRAND.navyDeep,
+  '--brand-secondary': BRAND.lime,
+  '--brand-secondary-dark': BRAND.secondaryDark,
+  '--brand-accent': BRAND.blue,
+  '--brand-accent-deep': BRAND.blueDeep,
+  '--brand-cyan': BRAND.cyan,
+  '--brand-steel': BRAND.steel,
+  '--brand-green': BRAND.green,
+  '--brand-pale': BRAND.pale,
+  '--brand-tint': BRAND.ice,
+  '--danger': BRAND.danger,
+  '--text': BRAND.navy,
+  '--text-soft': BRAND.navyTint,
+  /* Tailwind theme names. */
+  '--color-brand-primary': BRAND.navy,
+  '--color-brand-primary-dark': BRAND.navyDark,
+  '--color-brand-primary-darker': BRAND.navyDeep,
+  '--color-brand-secondary': BRAND.lime,
+  '--color-brand-secondary-dark': BRAND.secondaryDark,
+  '--color-brand-accent': BRAND.blue,
+  '--color-brand-accent-deep': BRAND.blueDeep,
+  '--color-brand-blue': BRAND.navy,
+  '--color-brand-blue-dark': BRAND.navyDark,
+  '--color-brand-blue-darker': BRAND.navyDeep,
+  '--color-brand-gold': BRAND.lime,
+  '--color-brand-gold-dark': BRAND.secondaryDark,
+  '--color-ink': BRAND.navy,
+  '--color-text': BRAND.navy,
+  '--color-accent': BRAND.blue,
+  '--color-danger': BRAND.danger,
 };
 
-export const DEFAULT_ACCENT = '#1a4d8f';
+/**
+ * Desk colours.
+ *
+ * Every value is a logo colour or a shade of one, which is why the
+ * eleven county desks read as a single navy → blue → cyan → green →
+ * lime spectrum instead of a bag of unrelated hues. Badges and
+ * section bars always ask `readableInk()` which ink to set on top,
+ * so no entry here has to be legibility-checked by hand.
+ */
+export const CATEGORY_COLORS: Record<string, string> = {
+  Meru: BRAND.navy,
+  'Tharaka Nithi': BRAND.blue,
+  Isiolo: BRAND.cyanDeep,
+  Embu: BRAND.cyan,
+  Samburu: BRAND.steel,
+  Kirinyaga: BRAND.green,
+  Laikipia: BRAND.pale,
+  Kitui: BRAND.lime,
+  Machakos: BRAND.limeSoft,
+  Makueni: BRAND.ice,
+  Marsabit: BRAND.navyTint,
+  Business: BRAND.navyTint,
+  Sports: BRAND.blue,
+  Opinion: BRAND.steel,
+  Editorial: BRAND.cyanDeep,
+  National: BRAND.navy,
+  Technology: BRAND.cyan,
+  Entertainment: BRAND.green,
+  Lifestyle: BRAND.pale,
+  Profiles: BRAND.limeSoft,
+};
+
+export const DEFAULT_ACCENT = BRAND.navy;
 
 export const TILL_NUMBER = '610589';
 

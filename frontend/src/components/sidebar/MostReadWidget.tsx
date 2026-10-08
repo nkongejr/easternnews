@@ -24,7 +24,7 @@ export default async function MostReadWidget({ limit = 6 }: { limit?: number }) 
           <li key={a._id} className="flex gap-3 border-b border-border py-3 first:pt-0 last:border-0">
             <span
               aria-hidden="true"
-              className="w-7 shrink-0 font-headline text-2xl font-black leading-none text-brand-gold"
+              className="w-7 shrink-0 font-headline text-2xl font-black leading-none text-brand-accent-deep"
             >
               {i + 1}
             </span>

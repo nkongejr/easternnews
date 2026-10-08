@@ -49,7 +49,7 @@ export default function NewsletterWidget() {
         </button>
         <p aria-live="polite" className="mt-2 min-h-4 text-[11px]">
           {status === 'sent' && <span className="text-green-700">Thank you — you’re subscribed.</span>}
-          {status === 'error' && <span className="text-accent">Something went wrong. Try again.</span>}
+          {status === 'error' && <span className="text-danger">Something went wrong. Try again.</span>}
         </p>
       </form>
     </SidebarWidget>
