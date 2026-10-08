@@ -3,34 +3,82 @@
 /* ============================================================
    EASTERN NEWSPAPER — DESIGN TOKENS
 
-   Brand palette is the EXISTING Eastern Newspaper palette
-   (blue #1a4d8f, gold #f2c94c). Nothing here is borrowed from
-   any other publication.
+   Every colour below is derived from the nine colours of the
+   Eastern Newspaper logo. Nothing here is borrowed from any
+   other publication.
 
-   The eight canonical tokens below are the single source of
-   truth; the Tailwind theme and every component read from them,
-   so a rebrand is a change to this one block.
+   The nine logo colours live in `--en-*` and are the single
+   source of truth. The semantic tokens below them map those
+   colours onto roles (ink, surface, accent), and the Tailwind
+   theme maps the semantics onto utility classes. A rebrand is
+   therefore a change to the `--en-*` block only.
    ============================================================ */
 
 :root {
+  /* ── The logo palette — nine colours, verbatim ──────────── */
+  --en-navy: #133041; /* deep navy-teal  */
+  --en-blue: #409ef4; /* bright blue     */
+  --en-cyan: #57d7f4; /* sky cyan        */
+  --en-steel: #59a2c0; /* steel blue      */
+  --en-lime: #edfb20; /* signature lime  */
+  --en-lime-soft: #d7f953; /* soft lime       */
+  --en-green: #6fb286; /* muted green     */
+  --en-pale: #aee174; /* pale green      */
+  --en-ice: #e5fcfc; /* pale cyan wash  */
+
+  /* Derived steps.
+
+     These are shades of the nine colours above, added only where
+     the logo palette alone cannot carry a role: the palette has no
+     colour darker than the navy (needed for layered dark surfaces)
+     and none dark enough to be read as text on white (bright blue
+     is 2.8:1 on white; the same blue one step down is 4.2:1). */
+  --en-navy-dark: #0d2432; /* nav / utility-strip depth  */
+  --en-navy-deep: #081a25; /* footer, darkest surface    */
+  --en-blue-deep: #1874c6; /* blue as text on light      */
+  --en-cyan-deep: #2ba8cc; /* cyan as a fill on light    */
+  --en-green-deep: #4e8f66; /* green as text on light     */
+
   /* ── Canonical brand tokens ─────────────────────────────── */
-  --brand-primary: #1a4d8f;
-  --brand-primary-dark: #123563;
-  --brand-primary-darker: #0b2545;
-  --brand-secondary: #f2c94c;
-  --brand-secondary-dark: #d4a92e;
-  --brand-accent: #c0392b;
+  /* Navy is the dominant ink and surface — it is the one colour
+     in the palette that stays legible on all eight others, so it
+     is the foreground for every lime/blue/cyan/green fill. */
+  --brand-primary: var(--en-navy);
+  --brand-primary-dark: var(--en-navy-dark);
+  --brand-primary-darker: var(--en-navy-deep);
+  /* Lime is the accent for DARK surfaces and for call-to-action
+     fills — always paired with navy text (12.06:1). Light
+     backgrounds are never used behind lime. */
+  --brand-secondary: var(--en-lime);
+  --brand-secondary-dark: #d3e312;
+  /* Blue is the accent for LIGHT surfaces (links, CTAs). The
+     bright palette blue sits at 2.8:1 on white, so text-sized
+     use takes the deeper step at 4.2:1. */
+  --brand-accent: var(--en-blue);
+  --brand-accent-deep: var(--en-blue-deep);
+
+  /* Rest of the palette, exposed for section/table/badge work. */
+  --brand-cyan: var(--en-cyan);
+  --brand-steel: var(--en-steel);
+  --brand-green: var(--en-green);
+  --brand-pale: var(--en-pale);
+  --brand-tint: var(--en-ice);
+
+  /* Status. Deliberately outside the logo palette: an error must
+     not read as brand messaging. 5.4:1 on white. */
+  --danger: #c0392b;
 
   --background: #ffffff;
   --surface: #ffffff;
-  --surface-alt: #f5f6f8;
-  --surface-sunken: #eceff3;
+  --surface-alt: var(--en-ice);
+  --surface-sunken: var(--en-ice);
 
-  --text: #16191f;
-  --muted: #5c6672;
+  --text: var(--en-navy);
+  --text-soft: #33505f; /* 8.5:1 — running body copy      */
+  --muted: #55707f; /* 5.2:1 — datelines, captions    */
 
-  --border: #dfe3e8;
-  --border-strong: #c6ccd4;
+  --border: #cfe6ea;
+  --border-strong: #a9cfd6;
 
   /* ── Type ───────────────────────────────────────────────── */
   --font-headline: Georgia, Cambria, "Times New Roman", Times, serif;
@@ -42,6 +90,17 @@
 
 /* Tailwind theme mapped onto those tokens. */
 @theme {
+  /* The nine logo colours, addressable directly: e.g. `bg-en-lime`. */
+  --color-en-navy: var(--en-navy);
+  --color-en-blue: var(--en-blue);
+  --color-en-cyan: var(--en-cyan);
+  --color-en-steel: var(--en-steel);
+  --color-en-lime: var(--en-lime);
+  --color-en-lime-soft: var(--en-lime-soft);
+  --color-en-green: var(--en-green);
+  --color-en-pale: var(--en-pale);
+  --color-en-ice: var(--en-ice);
+
   /* Canonical names */
   --color-brand-primary: var(--brand-primary);
   --color-brand-primary-dark: var(--brand-primary-dark);
@@ -49,6 +108,13 @@
   --color-brand-secondary: var(--brand-secondary);
   --color-brand-secondary-dark: var(--brand-secondary-dark);
   --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-deep: var(--brand-accent-deep);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-steel: var(--brand-steel);
+  --color-brand-green: var(--brand-green);
+  --color-brand-pale: var(--brand-pale);
+  --color-brand-tint: var(--brand-tint);
+  --color-danger: var(--danger);
 
   --color-background: var(--background);
   --color-surface: var(--surface);
@@ -56,6 +122,7 @@
   --color-surface-sunken: var(--surface-sunken);
 
   --color-text: var(--text);
+  --color-text-soft: var(--text-soft);
   --color-muted: var(--muted);
 
   --color-border: var(--border);
@@ -108,11 +175,17 @@
     color: var(--text);
   }
 
-  /* One consistent, highly visible focus ring everywhere. */
+  /* One consistent, highly visible focus ring everywhere.
+
+     Navy supplies the contrast against light surfaces (13.8:1 on
+     white); the lime halo supplies it against the navy masthead,
+     nav and footer, where a navy outline would disappear. Between
+     them the ring is visible on every surface in the paper. */
   :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
     outline: 2px solid var(--brand-primary);
-    outline-offset: 2px;
+    outline-offset: 3px;
     border-radius: 2px;
+    box-shadow: 0 0 0 2px var(--brand-secondary);
   }
 
   .skip-link {
@@ -129,7 +202,7 @@
 
   ::selection {
     background: var(--brand-secondary);
-    color: var(--text);
+    color: var(--brand-primary);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -238,8 +311,8 @@
 .pull-quote {
   @apply my-8 pl-5 text-xl italic md:text-2xl;
   font-family: var(--font-headline);
-  border-left: 4px solid var(--brand-secondary);
-  color: #374151;
+  border-left: 4px solid var(--brand-accent-deep);
+  color: var(--text-soft);
   line-height: 1.45;
 }
 
@@ -248,7 +321,7 @@
   font-family: var(--font-read);
   font-size: 1.0625rem;
   line-height: 1.78;
-  color: #374151;
+  color: var(--text-soft);
 }
 
 .prose-page p {
@@ -291,7 +364,7 @@
   height: 100%;
   width: 100%;
   background:
-    linear-gradient(180deg, #f3f5f8 0%, #e8ecf1 100%);
+    linear-gradient(180deg, #f4fdfd 0%, var(--brand-tint) 100%);
 }
 
 .en-imgfallback::after {
@@ -300,7 +373,7 @@
   inset: 0;
   background-image: repeating-linear-gradient(
     180deg,
-    rgba(26, 77, 143, 0.05) 0 1px,
+    rgba(19, 48, 65, 0.06) 0 1px,
     transparent 1px 7px
   );
   pointer-events: none;
@@ -314,25 +387,27 @@
 .en-overlay-grad {
   background: linear-gradient(
     to top,
-    rgba(11, 37, 69, 0.94) 0%,
-    rgba(11, 37, 69, 0.58) 42%,
-    rgba(11, 37, 69, 0.12) 72%,
+    rgba(19, 48, 65, 0.95) 0%,
+    rgba(19, 48, 65, 0.6) 42%,
+    rgba(19, 48, 65, 0.14) 72%,
     transparent 100%
   );
 }
 
+/* The bar's ink is set per-instance by SectionHeader, which measures
+   whether the desk colour takes navy or white — so the title simply
+   inherits it rather than hard-coding white. */
 .en-section-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   background: var(--brand-primary);
-  color: #fff;
   padding: 0.65rem 0.9rem;
 }
 
 .en-section-bar h2 {
-  color: #fff;
+  color: inherit;
   font-family: var(--font-headline);
   font-size: 0.95rem;
   font-weight: 900;

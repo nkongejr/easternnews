@@ -23,13 +23,18 @@ export default function BreakingNews({
       className="border-b border-border bg-white"
     >
       <div className="en-container flex items-center gap-3 py-2 md:gap-4">
+        {/* Breaking takes the signature lime — the palette's attention
+            colour — with navy type on it. Everything else is the navy
+            flag with white type. Neither pairing drops below 12:1. */}
         <span
-          className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white ${
-            breaking ? 'bg-accent' : 'bg-brand-primary'
+          className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
+            breaking ? 'bg-brand-secondary text-brand-primary' : 'bg-brand-primary text-white'
           }`}
         >
           <span
-            className="h-1.5 w-1.5 rounded-full bg-white motion-safe:animate-pulse"
+            className={`h-1.5 w-1.5 rounded-full motion-safe:animate-pulse ${
+              breaking ? 'bg-brand-primary' : 'bg-white'
+            }`}
             aria-hidden="true"
           />
           {breaking ? 'Breaking' : 'Latest'}

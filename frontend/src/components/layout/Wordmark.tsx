@@ -41,7 +41,10 @@ export default function Wordmark({
       <span className="flex min-w-0 flex-col leading-none">
         <span className={`font-headline font-black tracking-tight ${name}`}>
           <span className={inverse ? 'text-white' : 'text-brand-primary'}>{SITE.wordmarkTop}</span>{' '}
-          <span className={inverse ? 'text-brand-secondary' : 'text-brand-secondary'}>
+          {/* On dark surfaces the second word is lime, matching the footer
+              and nav. On white it takes the deep blue instead — lime is
+              1.1:1 against white and would simply disappear. */}
+          <span className={inverse ? 'text-brand-secondary' : 'text-brand-accent-deep'}>
             {SITE.wordmarkBottom}
           </span>
         </span>

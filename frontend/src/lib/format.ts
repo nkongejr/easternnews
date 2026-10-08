@@ -1,6 +1,14 @@
 import { format, isValid, parseISO } from 'date-fns';
 import { Article, Author } from '@/types';
-import { CATEGORY_COLORS, DEFAULT_ACCENT, COUNTIES, SITE } from './constants';
+import {
+  BRAND,
+  CATEGORY_COLORS,
+  DEFAULT_ACCENT,
+  COUNTIES,
+  SITE,
+  TOKEN_HEX,
+  WHITE,
+} from './constants';
 
 /** Safely turn a Mongo/ISO date string into a Date (or null). */
 export function toDate(value?: string | Date | null): Date | null {
@@ -82,6 +90,63 @@ export function excerpt(article: Article, length = 150): string {
 
 export function categoryColor(category?: string): string {
   return (category && CATEGORY_COLORS[category]) || DEFAULT_ACCENT;
+}
+
+/* ------------------------------------------------------------
+   CONTRAST HELPERS
+
+   The logo palette has one very useful property: navy is legible on
+   all eight of the other colours (4.8:1 at worst), while the bright
+   end — blue, cyan, lime, pale, ice — cannot carry white text at
+   all. So instead of hard-coding which colour takes dark ink and
+   which takes light, every coloured surface asks for the ink that
+   actually passes. Adding a colour to CATEGORY_COLORS can therefore
+   never silently produce unreadable text.
+   ------------------------------------------------------------ */
+
+function channel(value: number): number {
+  const c = value / 255;
+  return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+}
+
+/**
+ * Accepts either a hex colour or a token reference like
+ * `var(--color-ink)` and returns a hex. Unrecognised tokens fall back to
+ * navy — the palette's universal ink — so a typo degrades to a legible
+ * default rather than an unreadable one.
+ */
+export function resolveColour(value: string): string {
+  const token = /^var\(\s*(--[a-z0-9-]+)\s*\)$/i.exec(value.trim());
+  if (!token) return value;
+  return TOKEN_HEX[token[1]] || BRAND.navy;
+}
+
+/** WCAG relative luminance of a #rrggbb string (0 for anything else). */
+export function relativeLuminance(hex: string): number {
+  const h = hex.trim().replace('#', '');
+  if (!/^[0-9a-f]{6}$/i.test(h)) return 0;
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+
+/** WCAG contrast ratio between two #rrggbb strings (1–21). */
+export function contrastRatio(a: string, b: string): number {
+  const la = relativeLuminance(a);
+  const lb = relativeLuminance(b);
+  const [hi, lo] = la > lb ? [la, lb] : [lb, la];
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+/** The ink — navy or white — that carries the most contrast on a fill. */
+export function readableInk(background: string): string {
+  return contrastRatio(background, WHITE) > contrastRatio(background, BRAND.navy)
+    ? WHITE
+    : BRAND.navy;
+}
+
+/** True for fills in the pale half of the palette (ice, pale, limes). */
+export function isPaleFill(colour: string): boolean {
+  return relativeLuminance(colour) > 0.5;
 }
 
 /** '/counties/meru' for a county name, otherwise undefined. */
