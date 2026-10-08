@@ -9,12 +9,19 @@ import Wordmark from './Wordmark';
  * Mirrors the Kenyanews header structure while keeping Eastern Newspaper
  * colours, wordmark and tagline. No date here on mobile — the TopBar
  * dateline is the single auto-updating date on phones.
+ *
+ * On phones the wordmark spans the full header width (the search field and
+ * dateline only appear from md up), so the masthead carries no dead space.
  */
 export default function Header() {
   return (
     <div className="border-b border-border bg-white">
       <div className="en-container flex items-center justify-between gap-6 py-3 md:py-4">
-        <Link href="/" className="min-w-0 shrink-0" aria-label={`${SITE.name} — home`}>
+        <Link
+          href="/"
+          className="w-full min-w-0 md:w-auto md:shrink-0"
+          aria-label={`${SITE.name} — home`}
+        >
           <Wordmark size="lg" />
         </Link>
 
