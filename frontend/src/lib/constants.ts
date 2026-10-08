@@ -113,45 +113,77 @@ export const FEATURED_COUNTIES = [
 
 /* ------------------------------------------------------------
    BRAND PALETTE
-   The existing Eastern Newspaper colours. Mirrored as CSS custom
-   properties in globals.css (--brand-primary, --brand-secondary,
-   --brand-accent, --background, --surface, --text, --muted,
-   --border) so a rebrand is a one-file change.
+   Extracted from the official mark "EASTERN NEWSPAPER LOGO 1.jpg".
+   Cyan #44d8fe (73% of the logo's ink) is the wordmark colour,
+   blue #449ddf (15%) the band, lime #c4ee5f (7%) the accent
+   stripe, and #001b2e the outline ink.
+
+   The interactive shades below keep those exact hues but are
+   darkened until they clear WCAG AA (4.5:1) against white — the
+   raw logo cyan is only 1.8:1 on white, so it stays decorative
+   (see --logo-* in globals.css).
+
+   Mirrored as CSS custom properties in globals.css
+   (--brand-primary, --brand-secondary, --brand-accent,
+   --background, --surface, --text, --muted, --border) so a
+   rebrand is a one-file change.
    ------------------------------------------------------------ */
 
 export const BRAND = {
-  primary: '#1a4d8f',
-  primaryDark: '#123563',
-  primaryDarker: '#0b2545',
-  secondary: '#f2c94c',
-  secondaryDark: '#d4a92e',
-  accent: '#c0392b',
+  primary: '#0d6b80',
+  primaryDark: '#085060',
+  primaryDarker: '#072c3c',
+  secondary: '#c4ee5f',
+  secondaryDark: '#97ca21',
+  accent: '#13629a',
+  /** Verbatim logo colours, for decorative fills only. */
+  logoCyan: '#44d8fe',
+  logoBlue: '#449ddf',
+  logoLime: '#c4ee5f',
+  logoInk: '#001b2e',
 } as const;
 
+/**
+ * County + section badge colours.
+ *
+ * Every hue below is one that actually occurs in the logo — the
+ * mark carries a full sweep from yellow (60°) through green (120°)
+ * and teal (167°) to cyan (191°) and blue (225°) — so the badges
+ * stay distinguishable without reaching outside it. Each shade is
+ * darkened to clear 4.5:1 against the white badge label, except
+ * Kitui, which is the logo's lime and therefore takes dark text
+ * (see CategoryBadge).
+ */
 export const CATEGORY_COLORS: Record<string, string> = {
-  Meru: '#1a4d8f',
-  'Tharaka Nithi': '#2e7d32',
-  Isiolo: '#b8860b',
-  Embu: '#8e44ad',
-  Samburu: '#d35400',
-  Kirinyaga: '#16a085',
-  Laikipia: '#c0392b',
-  Kitui: '#f2c94c',
-  Machakos: '#2980b9',
-  Makueni: '#27ae60',
-  Marsabit: '#7f8c8d',
-  Business: '#1a4d8f',
-  Sports: '#f2c94c',
-  Opinion: '#333333',
-  Editorial: '#333333',
-  National: '#1a4d8f',
-  Technology: '#1a4d8f',
-  Entertainment: '#8e44ad',
-  Lifestyle: '#16a085',
-  Profiles: '#0b2545',
+  Meru: '#0d6b80', // cyan 191°
+  'Tharaka Nithi': '#1f6b2f', // green 133°
+  Isiolo: '#72760a', // olive 62°
+  Embu: '#21488c', // blue 218°
+  Samburu: '#487515', // lime-green 88°
+  Kirinyaga: '#157568', // teal 172°
+  Laikipia: '#1468a3', // blue 205°
+  Kitui: '#c4ee5f', // lime 78° — dark text
+  Machakos: '#1378aa', // cyan-blue 200°
+  Makueni: '#217343', // green 145°
+  Marsabit: '#51595d', // slate
+  Business: '#137396', // cyan 196°
+  Sports: '#507d12', // lime 85°
+  Opinion: '#313a3f',
+  Editorial: '#313a3f',
+  National: '#0d6c82', // cyan 191°
+  Technology: '#185491', // blue 210°
+  Entertainment: '#1b745e', // teal-green 165°
+  Lifestyle: '#256d22', // green 118°
+  Profiles: '#1c3440', // ink
 };
 
-export const DEFAULT_ACCENT = '#1a4d8f';
+export const DEFAULT_ACCENT = '#0d6b80';
+
+/**
+ * Badge fills light enough that the label must flip to dark ink
+ * to stay legible. Kept in sync with CATEGORY_COLORS.
+ */
+export const LIGHT_BADGE_COLORS: readonly string[] = ['#c4ee5f'];
 
 export const TILL_NUMBER = '610589';
 

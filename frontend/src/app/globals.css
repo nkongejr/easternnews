@@ -3,34 +3,59 @@
 /* ============================================================
    EASTERN NEWSPAPER — DESIGN TOKENS
 
-   Brand palette is the EXISTING Eastern Newspaper palette
-   (blue #1a4d8f, gold #f2c94c). Nothing here is borrowed from
-   any other publication.
+   Brand palette extracted from the official mark
+   "EASTERN NEWSPAPER LOGO 1.jpg" (666×666).
 
-   The eight canonical tokens below are the single source of
-   truth; the Tailwind theme and every component read from them,
-   so a rebrand is a change to this one block.
+   Measured ink breakdown of the logo (share of non-background
+   pixels, k-means + exact-pixel clustering):
+
+     cyan  H191  #44D8FE   73.1%   ← the wordmark. PRIMARY
+     blue  H207  #449DDF   15.1%   ← the band.      ACCENT
+     lime  H78   #C4EE5F    6.8%   ← the stripe.    SECONDARY
+     teal  H167             1.9%
+     green H117             1.5%
+     ink   H200  #001B2E           ← outlines
+
+   The logo's own colours are kept verbatim as --logo-* below and
+   are the reference for every derived value. The eight canonical
+   tokens are the single source of truth; the Tailwind theme and
+   every component read from them, so a rebrand is a change to
+   this one block.
+
+   Interactive shades are darkened from the logo hue until they
+   clear WCAG AA (4.5:1) on white — the raw logo cyan #44D8FE is
+   only 1.8:1 on white, so it is reserved for decorative fills.
    ============================================================ */
 
 :root {
+  /* ── Verbatim logo colours (reference) ──────────────────── */
+  --logo-cyan: #44d8fe;
+  --logo-blue: #449ddf;
+  --logo-lime: #c4ee5f;
+  --logo-ink: #001b2e;
+
   /* ── Canonical brand tokens ─────────────────────────────── */
-  --brand-primary: #1a4d8f;
-  --brand-primary-dark: #123563;
-  --brand-primary-darker: #0b2545;
-  --brand-secondary: #f2c94c;
-  --brand-secondary-dark: #d4a92e;
-  --brand-accent: #c0392b;
+  --brand-primary: #0d6b80; /* cyan H191 — 6.12:1 on white, lime 4.59:1 on it */
+  --brand-primary-dark: #085060; /* 9.03:1 */
+  --brand-primary-darker: #072c3c; /* 14.64:1 — dark bars, ink on lime */
+  --brand-secondary: #c4ee5f; /* lime H78 — 10.97:1 vs ink */
+  --brand-secondary-dark: #97ca21; /* 7.52:1 vs ink */
+  --brand-accent: #13629a; /* blue H207 — 6.48:1 on white */
 
   --background: #ffffff;
   --surface: #ffffff;
-  --surface-alt: #f5f6f8;
-  --surface-sunken: #eceff3;
+  --surface-alt: #f3f9fc;
+  --surface-sunken: #e9f2f7;
 
-  --text: #16191f;
-  --muted: #5c6672;
+  --text: #122630;
+  --muted: #5a6f7c;
 
-  --border: #dfe3e8;
-  --border-strong: #c6ccd4;
+  --border: #d7e3ea;
+  --border-strong: #b7cbd7;
+
+  /* Functional state colour. Not a brand colour on purpose:
+     form errors must read as errors rather than as branding. */
+  --state-error: #a8231f;
 
   /* ── Type ───────────────────────────────────────────────── */
   --font-headline: Georgia, Cambria, "Times New Roman", Times, serif;
@@ -50,6 +75,12 @@
   --color-brand-secondary-dark: var(--brand-secondary-dark);
   --color-brand-accent: var(--brand-accent);
 
+  /* Verbatim logo colours, for decorative fills and gradients */
+  --color-logo-cyan: var(--logo-cyan);
+  --color-logo-blue: var(--logo-blue);
+  --color-logo-lime: var(--logo-lime);
+  --color-logo-ink: var(--logo-ink);
+
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-alt: var(--surface-alt);
@@ -60,6 +91,8 @@
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+
+  --color-state-error: var(--state-error);
 
   /* Legacy aliases (original project names) kept so nothing breaks */
   --color-brand-blue: var(--brand-primary);
@@ -239,7 +272,7 @@
   @apply my-8 pl-5 text-xl italic md:text-2xl;
   font-family: var(--font-headline);
   border-left: 4px solid var(--brand-secondary);
-  color: #374151;
+  color: var(--text);
   line-height: 1.45;
 }
 
@@ -248,7 +281,7 @@
   font-family: var(--font-read);
   font-size: 1.0625rem;
   line-height: 1.78;
-  color: #374151;
+  color: var(--text);
 }
 
 .prose-page p {
@@ -291,7 +324,7 @@
   height: 100%;
   width: 100%;
   background:
-    linear-gradient(180deg, #f3f5f8 0%, #e8ecf1 100%);
+    linear-gradient(180deg, var(--surface-alt) 0%, var(--surface-sunken) 100%);
 }
 
 .en-imgfallback::after {
@@ -300,7 +333,7 @@
   inset: 0;
   background-image: repeating-linear-gradient(
     180deg,
-    rgba(26, 77, 143, 0.05) 0 1px,
+    rgba(15, 115, 138, 0.06) 0 1px,
     transparent 1px 7px
   );
   pointer-events: none;
@@ -314,9 +347,9 @@
 .en-overlay-grad {
   background: linear-gradient(
     to top,
-    rgba(11, 37, 69, 0.94) 0%,
-    rgba(11, 37, 69, 0.58) 42%,
-    rgba(11, 37, 69, 0.12) 72%,
+    rgba(7, 44, 60, 0.94) 0%,
+    rgba(7, 44, 60, 0.58) 42%,
+    rgba(7, 44, 60, 0.12) 72%,
     transparent 100%
   );
 }

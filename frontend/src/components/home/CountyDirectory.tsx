@@ -33,7 +33,7 @@ export default function CountyDirectory({
                 <FaArrowRight
                   size={10}
                   aria-hidden="true"
-                  className="shrink-0 text-border-strong transition-all group-hover:translate-x-0.5 group-hover:text-brand-gold"
+                  className="shrink-0 text-border-strong transition-all group-hover:translate-x-0.5 group-hover:text-brand-blue"
                 />
               </Link>
             </li>
