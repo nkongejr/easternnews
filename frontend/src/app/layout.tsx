@@ -25,10 +25,6 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   authors: [{ name: SITE.name, url: SITE.url }],
   publisher: SITE.name,
-  icons: {
-    icon: [{ url: SITE.logo, type: 'image/jpeg' }],
-    apple: [{ url: SITE.logo, type: 'image/jpeg' }],
-  },
   alternates: { canonical: '/' },
   openGraph: {
     siteName: SITE.name,
