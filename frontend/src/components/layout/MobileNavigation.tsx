@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FaChevronDown, FaFacebookF, FaWhatsapp, FaXTwitter, FaXmark } from 'react-icons/fa6';
 import { CONTACT, COUNTIES, MORE_NAV, PRIMARY_NAV, SITE, TILL_NUMBER, SHOW_MPESA_TILL } from '@/lib/constants';
 import SearchBar from '@/components/shared/SearchBar';
+import Wordmark from './Wordmark';
 
 /**
  * Full-height off-canvas menu for phones and tablets.
@@ -59,10 +60,7 @@ export default function MobileNavigation({
         className="relative h-full w-[86%] max-w-sm overflow-y-auto bg-white outline-none"
       >
         <div className="flex items-center justify-between border-b border-border bg-brand-primary px-4 py-3">
-          <span className="font-headline text-lg font-black text-white">
-            {SITE.wordmarkTop}{' '}
-            <span className="text-brand-secondary">{SITE.wordmarkBottom}</span>
-          </span>
+          <Wordmark size="sm" inverse />
           <button
             type="button"
             onClick={onClose}

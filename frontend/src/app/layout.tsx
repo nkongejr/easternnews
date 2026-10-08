@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   authors: [{ name: SITE.name, url: SITE.url }],
   publisher: SITE.name,
+  icons: {
+    icon: [{ url: SITE.logo, type: 'image/jpeg' }],
+    apple: [{ url: SITE.logo, type: 'image/jpeg' }],
+  },
   alternates: { canonical: '/' },
   openGraph: {
     siteName: SITE.name,
@@ -56,6 +60,7 @@ const organizationLd = {
   name: SITE.name,
   alternateName: 'Eastern Newspaper',
   url: SITE.url,
+  logo: `${SITE.url}${SITE.logo}`,
   description: SITE.description,
   slogan: SITE.tagline,
   foundingDate: '2016',
