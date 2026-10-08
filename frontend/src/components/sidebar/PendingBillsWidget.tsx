@@ -31,7 +31,7 @@ export default function PendingBillsWidget() {
               aria-label={`${d.county}: Ksh ${d.amount} billion`}
             >
               <div
-                className="h-2 bg-brand-gold"
+                className="h-2 bg-brand-primary"
                 style={{ width: `${(d.amount / max) * 100}%` }}
               />
             </div>

@@ -41,7 +41,7 @@ export default function Wordmark({
       <span className="flex min-w-0 flex-col leading-none">
         <span className={`font-headline font-black tracking-tight ${name}`}>
           <span className={inverse ? 'text-white' : 'text-brand-primary'}>{SITE.wordmarkTop}</span>{' '}
-          <span className={inverse ? 'text-brand-secondary' : 'text-brand-secondary'}>
+          <span className={inverse ? 'text-brand-secondary' : 'text-brand-accent'}>
             {SITE.wordmarkBottom}
           </span>
         </span>

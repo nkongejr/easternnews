@@ -104,7 +104,7 @@ export default function ContactForm() {
 
         <p aria-live="polite" className="min-h-5 text-sm">
           {status === 'sent' && <span className="text-green-700">Message sent — thank you!</span>}
-          {status === 'error' && <span className="text-accent">Something went wrong. Try again.</span>}
+          {status === 'error' && <span className="text-state-error">Something went wrong. Try again.</span>}
         </p>
       </form>
 
@@ -136,7 +136,7 @@ export default function ContactForm() {
         </form>
         <p aria-live="polite" className="min-h-5 pt-2 text-sm">
           {subStatus === 'sent' && <span className="text-green-700">Subscribed!</span>}
-          {subStatus === 'error' && <span className="text-accent">Something went wrong.</span>}
+          {subStatus === 'error' && <span className="text-state-error">Something went wrong.</span>}
         </p>
       </div>
     </>

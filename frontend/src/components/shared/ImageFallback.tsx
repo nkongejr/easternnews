@@ -36,12 +36,12 @@ export default function ImageFallback({
           fontSize="58"
           fontWeight="700"
           letterSpacing="2"
-          fill="#1a4d8f"
+          fill="var(--brand-primary)"
           opacity="0.16"
         >
           EN
         </text>
-        <line x1="58" y1="78" x2="102" y2="78" stroke="#f2c94c" strokeWidth="4" opacity="0.85" />
+        <line x1="58" y1="78" x2="102" y2="78" stroke="var(--brand-secondary)" strokeWidth="4" opacity="0.85" />
       </svg>
     </span>
   );
