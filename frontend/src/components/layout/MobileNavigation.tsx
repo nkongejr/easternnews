@@ -167,7 +167,7 @@ export default function MobileNavigation({
             </p>
           )}
           <p className="text-center text-[13px] font-semibold text-text">
-            {CONTACT.verifiedEmail}
+            {CONTACT.deskEmails[0].email}
           </p>
           <div className="flex items-center justify-center gap-5">
             <Link

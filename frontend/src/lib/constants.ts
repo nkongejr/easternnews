@@ -216,8 +216,8 @@ export const CONTACT = {
   /** Currently verified, deliverable address — kept alongside the above. */
   verifiedEmail: 'info@easternnewspaper.co.ke',
   altEmail: 'themasharikinewspaper@gmail.com',
-  phones: ['0712 992269', '0722 599651'],
-  phoneHref: 'tel:+254712992269',
+  phones: ['0722 599651'],
+  phoneHref: 'tel:+254722599651',
   address: 'Mashariki Communications Centre, Meru-Maua Road',
   postal: 'P.O Box 2736-60200, Meru',
   city: 'Meru, Kenya',
@@ -244,7 +244,7 @@ export const SITE = {
   /** Used for canonical URLs / structured data. */
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.easternnewspaper.co.ke',
   social: {
-    facebook: 'https://facebook.com',
+    facebook: 'https://www.facebook.com/people/The-Eastern-Newspaper/100063521515739/?locale=lv_LV#',
     x: 'https://x.com',
   },
 };
