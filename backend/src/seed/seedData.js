@@ -658,13 +658,49 @@ const advertisers = [
 
 const issueMeta = {
   issueNumber: 32,
-  title: 'Issue 32, April-May 2026',
-  month: 'April-May',
+  title: 'Issue 32, May-June 2026',
+  month: 'May-June',
   year: 2026,
   coverImage: '/seed/cover-story.jpg',
   coverHeadline: 'Counties chocking in massive debts',
-  isCurrent: true,
+  isCurrent: false,
   pdfUrl: '',
 };
 
-module.exports = { categories, authors, articles, advertisers, issueMeta };
+// Full archive including 31-33 forwarded Oct 7 2026
+// PDFs are in gmail/ folder (gitignored) — upload via /api/upload/pdf to get Cloudinary URLs
+// Cover images: for 31/32 screenshot first page, for 33 use front-page photo from gmail/
+const issues = [
+  {
+    issueNumber: 31,
+    title: 'Issue 31, December 2025',
+    month: 'December',
+    year: 2025,
+    coverImage: '/seed/cover-story.jpg',
+    coverHeadline: 'Alarm in counties amid looming hunger',
+    isCurrent: false,
+    pdfUrl: '', // upload Eastern Issue 31-compressed.pdf
+  },
+  {
+    issueNumber: 32,
+    title: 'Issue 32, May-June 2026',
+    month: 'May-June',
+    year: 2026,
+    coverImage: '/seed/cover-story.jpg',
+    coverHeadline: 'Counties chocking in massive debts',
+    isCurrent: false,
+    pdfUrl: '', // upload THE EASTERN issue32-compressed-1.pdf
+  },
+  {
+    issueNumber: 33,
+    title: 'Issue 33, September 2026',
+    month: 'September',
+    year: 2026,
+    coverImage: '/seed/cover-story.jpg', // replace with Kindiki tour photo after upload
+    coverHeadline: 'Mt Kenya and Ukambani at political crossroads',
+    isCurrent: true,
+    pdfUrl: '', // upload THE EASTERN issue33.pdf from Drive link https://drive.google.com/file/d/1HeoYu4DqdHO8KX8ajFLoAHkdlJ4CtN8r/view?usp=drive_web
+  },
+];
+
+module.exports = { categories, authors, articles, advertisers, issueMeta, issues };
