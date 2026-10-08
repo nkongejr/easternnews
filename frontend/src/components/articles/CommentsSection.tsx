@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { FaRegComment } from 'react-icons/fa6';
 import { Comment } from '@/types';
-import { postArticleComment } from '@/lib/api';
+import { postArticleComment, readerCommentsUrl } from '@/lib/api';
 
 const MAX_BODY = 2000;
 const PAGE_SIZE = 10;
@@ -88,18 +88,27 @@ export default function CommentsSection({
     setError('');
     try {
       const res = await fetch(
-        `/api/articles/${encodeURIComponent(articleId)}/comments?page=${page + 1}&limit=${PAGE_SIZE}`,
+        `${readerCommentsUrl(articleId)}&page=${page + 1}&limit=${PAGE_SIZE}`,
       );
-      if (!res.ok) throw new Error('Could not load more comments.');
-      const data: { data: Comment[]; page: number; totalPages: number } = await res.json();
+      const data = (await res.json().catch(() => null)) as {
+        data: Comment[];
+        page: number;
+        totalPages: number;
+        message?: string;
+      } | null;
+      if (!res.ok || !data) {
+        throw new Error(data?.message || 'Could not load more comments.');
+      }
       setComments((prev) => [
         ...prev,
         ...data.data.filter((item) => !prev.some((existing) => existing._id === item._id)),
       ]);
       setPage(data.page);
       setPages(data.totalPages);
-    } catch {
-      setError('Could not load more comments. Please try again.');
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : 'Could not load more comments. Please try again.',
+      );
     } finally {
       setLoadingMore(false);
     }

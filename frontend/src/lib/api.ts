@@ -78,6 +78,15 @@ export const api = {
   },
 };
 
+/**
+ * Reader-facing comment endpoint (list + post). It is a same-origin Next route
+ * rather than the raw API rewrite so the browser always gets JSON, and a
+ * restarting API shows a readable message instead of a broken form.
+ */
+export function readerCommentsUrl(articleId: string): string {
+  return `/api/reader-comments?articleId=${encodeURIComponent(articleId)}`;
+}
+
 export const EMPTY_COMMENTS: PaginatedComments = {
   data: [],
   page: 1,
@@ -87,17 +96,27 @@ export const EMPTY_COMMENTS: PaginatedComments = {
 
 /**
  * Post a reader comment. Called from the browser, so it goes through the
- * same-origin proxy; the API's validation message is surfaced to the reader.
+ * same-origin `/api/reader-comments` route, which always answers in JSON — the
+ * API's own validation message is surfaced to the reader, and a brief API
+ * restart is retried once instead of being reported as a failure.
  */
 export async function postArticleComment(
   articleId: string,
   payload: { name: string; email?: string; body: string; honeypot?: string },
 ): Promise<CommentPostResult> {
-  const res = await fetch(apiUrl(`/articles/${encodeURIComponent(articleId)}/comments`), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+  const send = () =>
+    fetch(readerCommentsUrl(articleId), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+  let res = await send();
+  // A 5xx/503 means "try again in a moment", not "your comment is bad".
+  if (res.status >= 500) {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    res = await send();
+  }
 
   const data = await res.json().catch(() => null);
   if (!res.ok) {

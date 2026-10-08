@@ -76,6 +76,7 @@ Full endpoint list is in the Postman collection (`postman/Eastern-Newspaper-API.
   - **PDF delivery:** Cloudinary accounts restrict delivery of PDF/ZIP files by default. Enable it under **Settings → Security** ("Allow delivery of PDF and ZIP files"), otherwise a stored issue PDF answers `401` and the reader-facing Download button will not open.
 - **Frontend:** Vercel (Next.js) — set `NEXT_PUBLIC_API_URL` to your Render API URL.
 - **Comments:** `GET/POST /api/articles/:articleId/comments` accepts an article **id or slug**, so the website can post straight from the story URL. Comments publish immediately; set `COMMENTS_REQUIRE_APPROVAL=true` in the API environment to hold new comments as `pending` until an editor clears them in the newsroom (**Comments** in the admin sidebar). The public list only ever returns `approved` comments, and reader emails are never returned by the public endpoint.
+  - The website's browser calls go through its own same-origin route, `GET/POST /api/reader-comments?articleId=…` (see `frontend/src/app/api/reader-comments/route.ts`), which forwards here and always answers in JSON — so a restarting API produces a readable "try again in a moment" for the reader instead of a broken form.
 
 ## 8. Content Model Summary
 
