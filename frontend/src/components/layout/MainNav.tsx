@@ -9,9 +9,10 @@ import {
   FaMagnifyingGlass,
   FaXmark,
 } from 'react-icons/fa6';
-import { COUNTIES, MORE_NAV, PRIMARY_NAV, SITE } from '@/lib/constants';
+import { COUNTIES, MORE_NAV, PRIMARY_NAV } from '@/lib/constants';
 import SearchBar from '@/components/shared/SearchBar';
 import MobileNavigation from './MobileNavigation';
+import Wordmark from './Wordmark';
 
 type MenuId = 'counties' | 'more' | null;
 
@@ -77,9 +78,8 @@ export default function MainNav() {
               >
                 <FaBars size={18} />
               </button>
-              <Link href="/" className="font-headline text-sm font-black tracking-tight text-white">
-                {SITE.wordmarkTop}
-                <span className="text-brand-secondary">{SITE.wordmarkBottom}</span>
+              <Link href="/" aria-label="The Eastern Newspaper — home">
+                <Wordmark size="sm" inverse />
               </Link>
             </div>
 

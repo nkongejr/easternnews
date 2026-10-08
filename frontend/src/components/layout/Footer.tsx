@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { CONTACT, COUNTIES, MORE_NAV, PRIMARY_NAV, SITE, TILL_NUMBER, SHOW_MPESA_TILL } from '@/lib/constants';
+import Wordmark from './Wordmark';
 
 const QUICK_LINKS = [
   { label: 'About Us', href: '/about' },
@@ -31,14 +32,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Brand */}
           <div>
-            <p className="font-headline text-2xl font-black leading-none">
-              {SITE.wordmarkTop}
-              <br />
-              <span className="text-brand-secondary">{SITE.wordmarkBottom}</span>
-            </p>
-            <p className="mt-3 border-l-2 border-brand-secondary pl-3 font-headline text-sm italic text-white/70">
-              {SITE.tagline}
-            </p>
+            <Wordmark size="md" inverse />
             <p className="mt-4 text-[13px] leading-relaxed text-white/70">{SITE.description}</p>
             {SHOW_MPESA_TILL && (
               <p className="mt-4 inline-block rounded-sm bg-brand-secondary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-brand-primary-darker">

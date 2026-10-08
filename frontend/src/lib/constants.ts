@@ -228,6 +228,8 @@ export const SITE = {
   wordmarkTop: 'EASTERN',
   wordmarkBottom: 'NEWSPAPER',
   tagline: 'Be in the Know',
+  /** Official masthead mark (trimmed from “EASTERN NEWSPAPER LOGO 1.jpg”). */
+  logo: '/eastern-newspaper-logo.jpg',
   description:
     'Regional newspaper covering Meru, Embu, Tharaka Nithi, Isiolo, Samburu, Marsabit, Laikipia, Machakos, Kitui, Makueni and Kirinyaga counties.',
   address: CONTACT.address,
