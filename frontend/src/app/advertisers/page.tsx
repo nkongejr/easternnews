@@ -20,7 +20,7 @@ export default async function AdvertisersPage() {
 
       <div className="en-container py-8 md:py-10">
         {all.length === 0 ? (
-          <p className="rounded-sm border border-border bg-surface-alt p-8 text-center text-sm text-muted">
+          <p className="border border-border-strong bg-surface-alt p-8 text-center text-sm text-muted">
             No advertisers listed yet.
           </p>
         ) : (
@@ -29,7 +29,7 @@ export default async function AdvertisersPage() {
             if (!items.length) return null;
             return (
               <section key={cat} className="mb-10 last:mb-0">
-                <h2 className="mb-5 border-b-2 border-brand-gold pb-2 font-headline text-xl font-black uppercase tracking-tight text-ink">
+                <h2 className="mb-5 border-b-2 border-brand-gold pb-2 font-headline text-xl font-black uppercase tracking-[-0.01em] text-headline">
                   {cat}
                 </h2>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

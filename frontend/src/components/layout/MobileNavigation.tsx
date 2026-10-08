@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { FaChevronDown, FaFacebookF, FaWhatsapp, FaXTwitter, FaXmark } from 'react-icons/fa6';
 import { CONTACT, COUNTIES, MORE_NAV, PRIMARY_NAV, SITE, TILL_NUMBER, SHOW_MPESA_TILL } from '@/lib/constants';
+import { LOGO_ALT, LOGO_SRC } from '@/lib/logo';
 import SearchBar from '@/components/shared/SearchBar';
 
 /**
@@ -47,7 +48,7 @@ export default function MobileNavigation({
         type="button"
         aria-label="Close menu"
         onClick={onClose}
-        className="absolute inset-0 h-full w-full bg-black/50"
+        className="absolute inset-0 h-full w-full bg-brand-ink/65"
       />
 
       <div
@@ -56,18 +57,25 @@ export default function MobileNavigation({
         role="dialog"
         aria-modal="true"
         aria-label="Site menu"
-        className="relative h-full w-[86%] max-w-sm overflow-y-auto bg-white outline-none"
+        className="relative h-full w-[86%] max-w-sm overflow-y-auto border-r-4 border-brand-secondary bg-white outline-none"
       >
-        <div className="flex items-center justify-between border-b border-border bg-brand-primary px-4 py-3">
-          <span className="font-headline text-lg font-black text-white">
-            {SITE.wordmarkTop}{' '}
-            <span className="text-brand-secondary">{SITE.wordmarkBottom}</span>
-          </span>
+        <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-brand-navy px-4 py-3.5">
+          {LOGO_SRC ? (
+            <span className="en-logo-frame en-logo-frame--sm">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={LOGO_SRC} alt={LOGO_ALT} className="en-logo" />
+            </span>
+          ) : (
+            <span className="font-headline text-lg font-black tracking-[-0.02em] text-white">
+              {SITE.wordmarkTop}{' '}
+              <span className="text-brand-cyan">{SITE.wordmarkBottom}</span>
+            </span>
+          )}
           <button
             type="button"
             onClick={onClose}
             aria-label="Close menu"
-            className="flex h-10 w-10 items-center justify-center text-white/90 hover:text-brand-secondary"
+            className="flex h-10 w-10 shrink-0 items-center justify-center text-white/90 transition-colors hover:text-brand-cyan"
           >
             <FaXmark size={20} />
           </button>
@@ -85,7 +93,7 @@ export default function MobileNavigation({
                   <Link
                     href={l.href}
                     onClick={onClose}
-                    className="flex items-center justify-between rounded-sm bg-brand-secondary px-4 py-3 font-headline text-lg font-black text-brand-primary-darker"
+                    className="en-btn flex items-center justify-between bg-brand-secondary px-4 py-3 text-[14px] text-brand-navy"
                   >
                     {l.label}
                     <span aria-hidden="true" className="text-sm">
@@ -96,7 +104,7 @@ export default function MobileNavigation({
                   <Link
                     href={l.href}
                     onClick={onClose}
-                    className="block px-4 py-3.5 font-headline text-lg font-bold text-text"
+                    className="block px-4 py-3.5 font-headline text-[19px] font-bold leading-snug text-headline transition-colors hover:text-brand-primary"
                   >
                     {l.label}
                   </Link>
@@ -110,7 +118,7 @@ export default function MobileNavigation({
                 onClick={() => toggle('counties')}
                 aria-expanded={openSection === 'counties'}
                 aria-controls="m-counties"
-                className="flex w-full items-center justify-between px-4 py-3.5 text-left font-headline text-lg font-bold text-text"
+                className="flex w-full items-center justify-between px-4 py-3.5 text-left font-headline text-[19px] font-bold leading-snug text-headline transition-colors hover:text-brand-primary"
               >
                 Counties
                 <FaChevronDown
@@ -153,7 +161,7 @@ export default function MobileNavigation({
                 <Link
                   href={l.href}
                   onClick={onClose}
-                  className="block px-4 py-3.5 font-headline text-lg font-bold text-text"
+                  className="block px-4 py-3.5 font-headline text-[19px] font-bold leading-snug text-headline transition-colors hover:text-brand-primary"
                 >
                   {l.label}
                 </Link>
@@ -164,7 +172,7 @@ export default function MobileNavigation({
 
         <div className="mt-6 space-y-4 border-t border-border px-4 py-6">
           {SHOW_MPESA_TILL && (
-            <p className="rounded-sm bg-brand-secondary px-3 py-2 text-center text-[11px] font-bold text-brand-primary-darker">
+            <p className="bg-brand-secondary px-3 py-2 text-center font-condensed text-[11px] font-black uppercase tracking-[0.12em] text-brand-navy">
               M-PESA Buy Goods Till: {TILL_NUMBER}
             </p>
           )}

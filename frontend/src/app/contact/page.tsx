@@ -25,7 +25,7 @@ export default function ContactPage() {
         <div className="grid gap-8 lg:grid-cols-5 lg:gap-10">
           {/* Directory */}
           <div className="lg:col-span-2">
-            <div className="border-t-2 border-brand-secondary bg-surface-alt p-5">
+            <div className="border-t-2 border-brand-navy bg-surface-alt p-5">
               <h2 className="en-kicker mb-4 text-brand-primary">Newsroom</h2>
               <address className="space-y-2 text-sm not-italic leading-relaxed text-muted">
                 <p>
@@ -42,12 +42,12 @@ export default function ContactPage() {
               </address>
             </div>
 
-            <div className="mt-6 border-t-2 border-brand-secondary bg-surface-alt p-5">
+            <div className="mt-6 border-t-2 border-brand-navy bg-surface-alt p-5">
               <h2 className="en-kicker mb-4 text-brand-primary">Who to contact</h2>
               <dl className="space-y-4">
                 {CONTACT.deskEmails.map((d) => (
                   <div key={d.email}>
-                    <dt className="text-[10px] font-bold uppercase tracking-wider text-muted">
+                    <dt className="font-condensed text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
                       {d.label}
                     </dt>
                     <dd className="break-all text-[15px] font-semibold text-text">
@@ -62,7 +62,7 @@ export default function ContactPage() {
                   </div>
                 ))}
                 <div>
-                  <dt className="text-[10px] font-bold uppercase tracking-wider text-muted">
+                  <dt className="font-condensed text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
                     Advertising & general (verified)
                   </dt>
                   <dd className="break-all text-[15px] font-semibold">
@@ -80,7 +80,7 @@ export default function ContactPage() {
 
           {/* Forms */}
           <div className="lg:col-span-3">
-            <h2 className="mb-4 font-headline text-xl font-bold text-text">Send us a message</h2>
+            <h2 className="mb-4 font-headline text-[23px] font-bold text-headline">Send us a message</h2>
             <ContactForm />
           </div>
         </div>

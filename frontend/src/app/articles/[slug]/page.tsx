@@ -165,22 +165,22 @@ export default async function ArticlePage({ params }: Props) {
 
         <CategoryBadge category={article.category} size="md" />
 
-        <h1 className="mt-3 font-headline text-[28px] font-black leading-[1.12] tracking-tight text-text sm:text-4xl lg:text-[42px]">
+        <h1 className="mt-4 font-headline text-[32px] font-black leading-[1.06] tracking-[-0.02em] text-headline sm:text-[42px] lg:text-[48px]">
           {article.title}
         </h1>
 
         {article.deck && (
-          <p className="mt-3 font-headline text-lg italic leading-relaxed text-muted md:text-xl">
+          <p className="mt-4 font-headline text-[19px] italic leading-[1.5] text-muted md:text-[22px]">
             {article.deck}
           </p>
         )}
 
         {/* Byline bar */}
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-x-5 gap-y-3 border-y border-border py-3">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-x-5 gap-y-3 border-t-2 border-brand-navy border-b border-border py-3.5">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <p className="text-[13px]">
               {authors.length > 0 ? (
-                <span className="font-bold text-text">
+                <span className="font-condensed text-[13.5px] font-bold tracking-[0.01em] text-brand-navy">
                   By{' '}
                   {authors.map((item, index) => (
                     <Fragment key={item._id || item.slug || item.name}>
@@ -197,13 +197,17 @@ export default async function ArticlePage({ params }: Props) {
                   {credit ? ` ${credit}` : ''}
                 </span>
               ) : (
-                <span className="font-bold text-text">By {author}</span>
+                <span className="font-condensed text-[13.5px] font-bold tracking-[0.01em] text-brand-navy">
+                  By {author}
+                </span>
               )}
               {authorTitles.length > 0 && (
-                <span className="block text-[11px] text-muted">{authorTitles.join(' · ')}</span>
+                <span className="mt-0.5 block font-condensed text-[10.5px] font-semibold uppercase tracking-[0.12em] text-muted">
+                  {authorTitles.join(' · ')}
+                </span>
               )}
             </p>
-            <p className="text-[12px] text-muted">
+            <p className="font-condensed text-[11.5px] font-semibold uppercase tracking-[0.08em] text-muted">
               {article.publishDate && (
                 <time dateTime={article.publishDate}>{formatDateLong(article.publishDate)}</time>
               )}
@@ -213,7 +217,7 @@ export default async function ArticlePage({ params }: Props) {
             {categoryLink && (
               <Link
                 href={categoryLink}
-                className="text-[12px] font-semibold text-brand-primary hover:underline"
+                className="font-condensed text-[11.5px] font-bold uppercase tracking-[0.08em] text-brand-primary hover:underline"
               >
                 {article.category}
               </Link>
@@ -231,7 +235,7 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Lead image */}
         <figure className="mt-5">
-          <div className="en-imgframe aspect-[16/9] w-full">
+          <div className="en-imgframe en-imgframe--framed aspect-[16/9] w-full">
             <SmartImage
               src={article.featuredImage?.url}
               alt={article.featuredImage?.caption || article.title}
@@ -240,7 +244,7 @@ export default async function ArticlePage({ params }: Props) {
             />
           </div>
           {(article.featuredImage?.caption || article.featuredImage?.credit) && (
-            <figcaption className="mt-2 border-b border-border pb-2 text-[11px] leading-relaxed text-muted">
+            <figcaption className="mt-2.5 border-b border-border pb-3 font-condensed text-[11.5px] leading-relaxed tracking-[0.02em] text-muted">
               {article.featuredImage?.caption}
               {article.featuredImage?.credit && (
                 <>
@@ -253,7 +257,7 @@ export default async function ArticlePage({ params }: Props) {
         </figure>
 
         {/* Body */}
-        <div className="mt-6">
+        <div className="mt-7">
           {article.body ? (
             <ArticleBody body={article.body} />
           ) : (
@@ -268,7 +272,7 @@ export default async function ArticlePage({ params }: Props) {
               <li key={t}>
                 <Link
                   href={`/search?q=${encodeURIComponent(t)}`}
-                  className="inline-block rounded-sm bg-surface-alt px-2.5 py-1 text-[11px] font-semibold text-muted transition-colors hover:bg-brand-primary hover:text-white"
+                  className="inline-block border border-border-strong bg-white px-2.5 py-1 font-condensed text-[11px] font-bold uppercase tracking-[0.08em] text-brand-navy transition-colors hover:border-brand-primary hover:bg-brand-primary hover:text-white"
                 >
                   {t}
                 </Link>

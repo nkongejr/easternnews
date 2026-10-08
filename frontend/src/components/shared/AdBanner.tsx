@@ -21,7 +21,7 @@ export default async function AdBanner() {
   const body = (
     <div className="en-container flex flex-col items-center gap-4 py-6 sm:flex-row sm:justify-center sm:gap-6">
       {ad.logo && (
-        <div className="relative h-14 w-32 shrink-0 overflow-hidden rounded-sm bg-white">
+        <div className="relative h-14 w-32 shrink-0 overflow-hidden border border-border bg-white">
           <Image
             src={ad.logo}
             alt={`${ad.businessName} logo`}
@@ -32,12 +32,12 @@ export default async function AdBanner() {
         </div>
       )}
       <div className="text-center sm:text-left">
-        <p className="font-headline text-lg font-bold text-ink">{ad.businessName}</p>
+        <p className="font-headline text-xl font-bold text-headline">{ad.businessName}</p>
         {ad.description && (
           <p className="mt-0.5 line-clamp-2 max-w-2xl text-[13px] text-muted">{ad.description}</p>
         )}
         {ad.contact?.phone && (
-          <p className="mt-1 text-[13px] font-semibold text-brand-blue">{ad.contact.phone}</p>
+          <p className="mt-1 font-condensed text-[13px] font-bold uppercase tracking-[0.06em] text-brand-primary">{ad.contact.phone}</p>
         )}
       </div>
     </div>
@@ -49,7 +49,7 @@ export default async function AdBanner() {
       className="border-y border-border bg-surface-alt"
       data-ad-placement="banner"
     >
-      <p className="en-container pt-2 text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
+      <p className="en-container pt-2 font-condensed text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
         Advertisement · Sponsored Content
       </p>
       {ad.linkURL ? (

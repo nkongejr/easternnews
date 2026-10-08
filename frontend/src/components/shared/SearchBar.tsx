@@ -47,12 +47,12 @@ export default function SearchBar({
           autoFocus={autoFocus}
           onChange={(e) => setQ(e.target.value)}
           placeholder={placeholder}
-          className="h-11 w-full rounded-sm border border-border bg-white pl-9 pr-3 text-sm text-ink placeholder:text-muted focus:border-brand-blue"
+          className="h-11 w-full border border-border-strong bg-white pl-9 pr-3 text-sm text-ink placeholder:text-muted transition-colors hover:border-brand-cyan-dark focus:border-brand-primary focus:outline-none"
         />
       </div>
       <button
         type="submit"
-        className="h-11 shrink-0 rounded-sm bg-brand-gold px-5 text-xs font-bold uppercase tracking-wider text-brand-blue-darker transition-colors hover:bg-brand-gold-dark hover:text-white"
+        className="en-btn h-11 shrink-0 bg-brand-secondary px-5 text-[12px] text-brand-navy transition-colors hover:bg-brand-secondary-dark"
       >
         Search
       </button>

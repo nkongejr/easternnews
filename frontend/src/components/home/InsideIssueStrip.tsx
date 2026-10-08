@@ -27,14 +27,21 @@ export default function InsideIssueStrip({
   return (
     <section
       aria-labelledby="inside-issue"
-      className="border-y border-brand-blue-darker bg-brand-blue py-8 text-white md:py-10"
+      className="border-y-2 border-brand-navy bg-brand-primary-darker py-9 text-white md:py-11"
     >
       <div className="en-container">
-        <div className="mb-5 flex flex-wrap items-baseline justify-between gap-2 border-b border-white/20 pb-3">
-          <h2 id="inside-issue" className="font-headline text-xl font-black uppercase tracking-tight text-brand-gold">
+        <div className="mb-5 flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-brand-secondary pb-3">
+          <h2
+            id="inside-issue"
+            className="font-condensed text-[22px] font-bold uppercase leading-none tracking-[0.06em] text-white"
+          >
             Inside This Issue
           </h2>
-          {issue?.title && <p className="text-[11px] uppercase tracking-wider text-white/60">{issue.title}</p>}
+          {issue?.title && (
+            <p className="font-condensed text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-cyan">
+              {issue.title}
+            </p>
+          )}
         </div>
 
         <ul className="grid gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -44,8 +51,8 @@ export default function InsideIssueStrip({
                 href={articleHref(article)}
                 className="group flex items-baseline gap-3 py-2.5"
               >
-                <span className="en-kicker w-24 shrink-0 text-brand-gold">{county.name}</span>
-                <span className="line-clamp-2 text-[13px] font-semibold text-white/85 transition-colors group-hover:text-brand-gold">
+                <span className="en-kicker w-24 shrink-0 text-brand-cyan">{county.name}</span>
+                <span className="line-clamp-2 text-[13.5px] font-semibold text-white/85 transition-colors group-hover:text-brand-secondary">
                   {article.title}
                 </span>
               </Link>

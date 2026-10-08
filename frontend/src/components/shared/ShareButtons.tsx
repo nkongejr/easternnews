@@ -27,13 +27,13 @@ export default function ShareButtons({
       label: 'Share on Facebook',
       href: `https://facebook.com/sharer/sharer.php?u=${encodedUrl}`,
       icon: <FaFacebookF size={13} />,
-      className: 'bg-brand-blue text-white hover:bg-brand-blue-dark',
+      className: 'bg-brand-primary text-white hover:bg-brand-primary-dark',
     },
     {
       label: 'Share on X',
       href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
       icon: <FaXTwitter size={13} />,
-      className: 'bg-ink text-white hover:bg-black',
+      className: 'bg-brand-navy text-white hover:bg-brand-ink',
     },
     {
       label: 'Share on WhatsApp',
@@ -54,7 +54,7 @@ export default function ShareButtons({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={l.label}
-            className={`inline-flex h-9 w-9 items-center justify-center transition-opacity hover:opacity-90 ${l.className}`}
+            className={`inline-flex h-9 w-9 items-center justify-center transition-colors hover:opacity-90 ${l.className}`}
           >
             {l.icon}
           </a>
@@ -63,7 +63,7 @@ export default function ShareButtons({
           type="button"
           onClick={copy}
           aria-label="Copy link"
-          className="inline-flex h-9 w-9 items-center justify-center border border-border text-muted transition-colors hover:border-brand-blue hover:text-brand-blue"
+          className="inline-flex h-9 w-9 items-center justify-center border border-border-strong text-muted transition-colors hover:border-brand-primary hover:bg-brand-primary hover:text-white"
         >
           <FaLink size={13} />
         </button>

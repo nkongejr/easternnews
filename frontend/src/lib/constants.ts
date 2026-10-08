@@ -113,45 +113,69 @@ export const FEATURED_COUNTIES = [
 
 /* ------------------------------------------------------------
    BRAND PALETTE
-   The existing Eastern Newspaper colours. Mirrored as CSS custom
-   properties in globals.css (--brand-primary, --brand-secondary,
+   The Eastern Newspaper logo colours — cyan, blue and yellow on
+   black and white. Mirrored as CSS custom properties in
+   globals.css (--brand-primary, --brand-secondary, --brand-cyan,
    --brand-accent, --background, --surface, --text, --muted,
-   --border) so a rebrand is a one-file change.
+   --border) so a rebrand is still a one-file change.
+
+   `primary` is the logo blue deepened to #1573C4: identical hue
+   family, but it clears WCAG AA both as white-on-colour (buttons,
+   badges) and as a link colour on white. The unmodified logo blue
+   #3099F0 is kept as `primaryBright` for rules, gradients and
+   other decorative work that carries no text.
    ------------------------------------------------------------ */
 
 export const BRAND = {
-  primary: '#1a4d8f',
-  primaryDark: '#123563',
-  primaryDarker: '#0b2545',
-  secondary: '#f2c94c',
-  secondaryDark: '#d4a92e',
-  accent: '#c0392b',
+  cyan: '#45d8fe',
+  cyanDark: '#12b7e8',
+  cyanInk: '#0a6e8f',
+  primary: '#1573c4',
+  primaryDark: '#0f5ca8',
+  primaryDarker: '#0a2e52',
+  primaryBright: '#3099f0',
+  secondary: '#f5ff00',
+  secondaryDark: '#d9e300',
+  accent: '#c8102e',
 } as const;
 
+/**
+ * Desk and county slug colours.
+ *
+ * One tonal ramp built from the logo's blue and cyan — navy through
+ * brand blue to teal — plus ink for comment. Every value clears
+ * 4.5:1 against the white badge text, so the slugs stay legible on
+ * photographs and on white alike. Yellow is deliberately NOT used
+ * here: it is reserved for the paper's highlights (current issue,
+ * subscribe buttons, the active nav underline).
+ */
 export const CATEGORY_COLORS: Record<string, string> = {
-  Meru: '#1a4d8f',
-  'Tharaka Nithi': '#2e7d32',
-  Isiolo: '#b8860b',
-  Embu: '#8e44ad',
-  Samburu: '#d35400',
-  Kirinyaga: '#16a085',
-  Laikipia: '#c0392b',
-  Kitui: '#f2c94c',
-  Machakos: '#2980b9',
-  Makueni: '#27ae60',
-  Marsabit: '#7f8c8d',
-  Business: '#1a4d8f',
-  Sports: '#f2c94c',
-  Opinion: '#333333',
-  Editorial: '#333333',
-  National: '#1a4d8f',
-  Technology: '#1a4d8f',
-  Entertainment: '#8e44ad',
-  Lifestyle: '#16a085',
-  Profiles: '#0b2545',
+  Meru: '#0a2e52',
+  'Tharaka Nithi': '#12497c',
+  Isiolo: '#0a6e8f',
+  Embu: '#0f5ca8',
+  Samburu: '#1573c4',
+  Kirinyaga: '#0e5f86',
+  Laikipia: '#14508a',
+  Kitui: '#0b5f7a',
+  Machakos: '#1b4f86',
+  Makueni: '#12497c',
+  Marsabit: '#33475b',
+  Business: '#0f5ca8',
+  Sports: '#0a6e8f',
+  Opinion: '#111111',
+  Editorial: '#111111',
+  National: '#0a2e52',
+  Technology: '#14508a',
+  Entertainment: '#1b4f86',
+  Lifestyle: '#0e5f86',
+  Profiles: '#06121f',
 };
 
-export const DEFAULT_ACCENT = '#1a4d8f';
+export const DEFAULT_ACCENT = '#0f5ca8';
+
+/** Badge colours light enough to need ink rather than white text. */
+export const LIGHT_ACCENTS = ['#f5ff00', '#d9e300', '#45d8fe'];
 
 export const TILL_NUMBER = '610589';
 

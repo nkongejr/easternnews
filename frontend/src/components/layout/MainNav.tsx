@@ -10,6 +10,7 @@ import {
   FaXmark,
 } from 'react-icons/fa6';
 import { COUNTIES, MORE_NAV, PRIMARY_NAV, SITE } from '@/lib/constants';
+import { LOGO_ALT, LOGO_SRC } from '@/lib/logo';
 import SearchBar from '@/components/shared/SearchBar';
 import MobileNavigation from './MobileNavigation';
 
@@ -23,6 +24,10 @@ function isActive(pathname: string, href: string) {
 /**
  * Primary navigation. Sticks once the masthead scrolls away so section and
  * county desks stay one tap away.
+ *
+ * Desk bar treatment: condensed capitals on the logo's navy, a cyan hover
+ * wash, and a cyan rule under the desk you are reading. Publications keeps
+ * its yellow button so the print library stays the loudest item in the bar.
  */
 export default function MainNav() {
   const pathname = usePathname();
@@ -60,11 +65,15 @@ export default function MainNav() {
   }, [openMenu]);
 
   const menuPanel =
-    'absolute left-0 top-full z-50 border border-border bg-white p-4 shadow-xl';
+    'absolute left-0 top-full z-50 border border-border-strong border-t-2 border-t-brand-cyan bg-white p-4 shadow-2xl';
+
+  /** Shared chrome for a desk-bar item. */
+  const deskLink =
+    'en-navlink flex h-12 items-center px-3.5 text-[12.5px] font-bold uppercase tracking-[0.09em] transition-colors hover:bg-white/10 hover:text-brand-cyan';
 
   return (
     <>
-      <div className="sticky top-0 z-50 border-b-2 border-brand-secondary bg-brand-primary text-white shadow-sm">
+      <div className="sticky top-0 z-50 border-b-[3px] border-brand-secondary bg-brand-navy text-white shadow-sm">
         <div className="en-container">
           <div className="flex h-12 items-center justify-between gap-4 md:h-12">
             <div className="flex items-center gap-2 lg:hidden">
@@ -73,13 +82,22 @@ export default function MainNav() {
                 onClick={() => setMobileOpen(true)}
                 aria-label="Open menu"
                 aria-expanded={mobileOpen}
-                className="-ml-2 flex h-11 w-11 items-center justify-center text-white hover:text-brand-secondary"
+                className="-ml-2 flex h-11 w-11 items-center justify-center text-white transition-colors hover:text-brand-cyan"
               >
                 <FaBars size={18} />
               </button>
-              <Link href="/" className="font-headline text-sm font-black tracking-tight text-white">
-                {SITE.wordmarkTop}
-                <span className="text-brand-secondary">{SITE.wordmarkBottom}</span>
+              <Link href="/" className="min-w-0">
+                {LOGO_SRC ? (
+                  <span className="en-logo-frame en-logo-frame--sm">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={LOGO_SRC} alt={LOGO_ALT} className="en-logo" />
+                  </span>
+                ) : (
+                  <span className="font-headline text-[15px] font-black tracking-[-0.02em] text-white">
+                    {SITE.wordmarkTop}{' '}
+                    <span className="text-brand-cyan">{SITE.wordmarkBottom}</span>
+                  </span>
+                )}
               </Link>
             </div>
 
@@ -91,10 +109,10 @@ export default function MainNav() {
                       <Link
                         href={l.href}
                         aria-current={isActive(pathname, l.href) ? 'page' : undefined}
-                        className={`ml-1.5 block rounded-sm px-3.5 py-1.5 text-[12px] font-black uppercase tracking-wide shadow-sm transition-colors ${
+                        className={`en-btn ml-2 inline-flex h-8 items-center px-3.5 text-[12px] shadow-sm transition-colors ${
                           isActive(pathname, l.href)
-                            ? 'bg-white text-brand-primary-darker'
-                            : 'bg-brand-secondary text-brand-primary-darker hover:bg-brand-secondary-dark'
+                            ? 'bg-white text-brand-navy'
+                            : 'bg-brand-secondary text-brand-navy hover:bg-brand-secondary-dark'
                         }`}
                       >
                         {l.label}
@@ -103,8 +121,8 @@ export default function MainNav() {
                       <Link
                         href={l.href}
                         aria-current={isActive(pathname, l.href) ? 'page' : undefined}
-                        className={`block px-3 py-3.5 text-[12px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
-                          isActive(pathname, l.href) ? 'text-brand-secondary' : 'text-white'
+                        className={`${deskLink} ${
+                          isActive(pathname, l.href) ? 'text-brand-secondary' : 'text-white/95'
                         }`}
                       >
                         {l.label}
@@ -120,8 +138,8 @@ export default function MainNav() {
                     aria-expanded={openMenu === 'counties'}
                     aria-haspopup="true"
                     aria-controls="counties-menu"
-                    className={`flex items-center gap-1.5 px-3 py-3.5 text-[12px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
-                      inCounties ? 'text-brand-secondary' : 'text-white'
+                    className={`${deskLink} gap-1.5 ${
+                      inCounties ? 'en-navlink--active text-brand-secondary' : 'text-white/95'
                     }`}
                   >
                     Counties
@@ -141,7 +159,7 @@ export default function MainNav() {
                       <li className="col-span-2">
                         <Link
                           href="/counties"
-                          className="mb-1 block border-b border-border py-2 text-sm font-bold text-brand-primary"
+                          className="mb-1 block border-b-2 border-brand-navy py-2 font-condensed text-[13px] font-bold uppercase tracking-[0.08em] text-brand-navy transition-colors hover:text-brand-primary"
                         >
                           All county news
                         </Link>
@@ -169,8 +187,8 @@ export default function MainNav() {
                     aria-expanded={openMenu === 'more'}
                     aria-haspopup="true"
                     aria-controls="more-menu"
-                    className={`flex items-center gap-1.5 px-3 py-3.5 text-[12px] font-bold uppercase tracking-wide transition-colors hover:bg-brand-primary-darker hover:text-brand-secondary ${
-                      inMore ? 'text-brand-secondary' : 'text-white'
+                    className={`${deskLink} gap-1.5 ${
+                      inMore ? 'en-navlink--active text-brand-secondary' : 'text-white/95'
                     }`}
                   >
                     More
@@ -213,7 +231,7 @@ export default function MainNav() {
                 aria-expanded={searchOpen}
                 aria-controls="nav-search"
                 aria-label={searchOpen ? 'Close search' : 'Open search'}
-                className="flex h-11 w-11 items-center justify-center text-white transition-colors hover:text-brand-secondary"
+                className="flex h-11 w-11 items-center justify-center text-white transition-colors hover:text-brand-cyan"
               >
                 {searchOpen ? <FaXmark size={16} /> : <FaMagnifyingGlass size={15} />}
               </button>
@@ -221,7 +239,7 @@ export default function MainNav() {
           </div>
         </div>
 
-        <div id="nav-search" hidden={!searchOpen} className="border-t border-white/15 bg-brand-primary-darker lg:hidden">
+        <div id="nav-search" hidden={!searchOpen} className="border-t border-white/15 bg-brand-ink lg:hidden">
           <div className="en-container py-3">
             <SearchBar inputId="nav-search-input" onNavigate={() => setSearchOpen(false)} />
           </div>

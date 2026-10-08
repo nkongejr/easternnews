@@ -22,7 +22,7 @@ export default function TopicChips({
           <li key={t.label}>
             <Link
               href={t.href}
-              className="inline-block rounded-sm border border-border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted transition-colors hover:border-brand-primary hover:text-brand-primary"
+              className="inline-block border border-border-strong px-2.5 py-1 font-condensed text-[11px] font-bold uppercase tracking-[0.1em] text-muted transition-colors hover:border-brand-primary hover:bg-surface-tint hover:text-brand-primary"
             >
               {t.label}
             </Link>

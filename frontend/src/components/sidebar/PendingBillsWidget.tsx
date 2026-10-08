@@ -22,16 +22,16 @@ export default function PendingBillsWidget() {
         {DATA.map((d) => (
           <div key={d.county}>
             <div className="flex items-baseline justify-between gap-2 text-xs">
-              <dt className="font-semibold text-ink">{d.county}</dt>
-              <dd className="font-bold text-ink">Ksh {d.amount}B</dd>
+              <dt className="font-condensed font-bold uppercase tracking-[0.08em] text-brand-navy">{d.county}</dt>
+              <dd className="font-condensed font-bold tracking-[0.02em] text-text">Ksh {d.amount}B</dd>
             </div>
             <div
-              className="mt-1 h-2 w-full bg-surface-sunken"
+              className="mt-1.5 h-2.5 w-full bg-surface-sunken"
               role="img"
               aria-label={`${d.county}: Ksh ${d.amount} billion`}
             >
               <div
-                className="h-2 bg-brand-gold"
+                className="h-2.5 bg-[linear-gradient(90deg,var(--brand-primary),var(--brand-cyan))]"
                 style={{ width: `${(d.amount / max) * 100}%` }}
               />
             </div>

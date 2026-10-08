@@ -17,7 +17,7 @@ type Props = { searchParams: Promise<{ q?: string }> };
 const Chip = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <Link
     href={href}
-    className="inline-flex items-center rounded-sm border border-border bg-white px-3 py-1.5 text-[13px] font-semibold text-text transition-colors hover:border-brand-primary hover:text-brand-primary"
+    className="inline-flex items-center border border-border-strong bg-white px-3 py-1.5 font-condensed text-[12.5px] font-bold uppercase tracking-[0.07em] text-text transition-colors hover:border-brand-primary hover:bg-surface-tint hover:text-brand-primary"
   >
     {children}
   </Link>
@@ -68,7 +68,7 @@ export default async function SearchPage({ searchParams }: Props) {
           /* Browse state — a publication index, not an empty box */
           <div className="mt-12 grid gap-10 lg:grid-cols-2">
             <section aria-labelledby="browse-sections">
-              <h2 id="browse-sections" className="mb-4 border-b-2 border-brand-secondary pb-2 font-headline text-lg font-black uppercase tracking-tight text-text">
+              <h2 id="browse-sections" className="mb-4 border-b-2 border-brand-navy pb-2 font-headline text-lg font-black uppercase tracking-[-0.01em] text-headline">
                 Sections
               </h2>
               <ul className="flex flex-wrap gap-2">
@@ -81,7 +81,7 @@ export default async function SearchPage({ searchParams }: Props) {
             </section>
 
             <section aria-labelledby="browse-counties">
-              <h2 id="browse-counties" className="mb-4 border-b-2 border-brand-secondary pb-2 font-headline text-lg font-black uppercase tracking-tight text-text">
+              <h2 id="browse-counties" className="mb-4 border-b-2 border-brand-navy pb-2 font-headline text-lg font-black uppercase tracking-[-0.01em] text-headline">
                 Counties
               </h2>
               <ul className="flex flex-wrap gap-2">
@@ -150,7 +150,7 @@ export default async function SearchPage({ searchParams }: Props) {
                 )}
               </>
             ) : (
-              <div className="rounded-sm border border-border bg-surface-alt p-8 text-center">
+              <div className="border border-border-strong bg-surface-alt p-8 text-center">
                 <p className="text-sm text-muted">
                   Nothing matched “{term}”. Try a county name, a shorter phrase, or browse
                   below.

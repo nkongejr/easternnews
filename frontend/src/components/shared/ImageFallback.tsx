@@ -32,16 +32,16 @@ export default function ImageFallback({
           x="80"
           y="62"
           textAnchor="middle"
-          fontFamily="Georgia, Cambria, 'Times New Roman', serif"
+          fontFamily="'Playfair Display Variable', Georgia, Cambria, 'Times New Roman', serif"
           fontSize="58"
           fontWeight="700"
           letterSpacing="2"
-          fill="#1a4d8f"
-          opacity="0.16"
+          fill="#0a2e52"
+          opacity="0.18"
         >
           EN
         </text>
-        <line x1="58" y1="78" x2="102" y2="78" stroke="#f2c94c" strokeWidth="4" opacity="0.85" />
+        <line x1="58" y1="78" x2="102" y2="78" stroke="#45d8fe" strokeWidth="4" opacity="0.9" />
       </svg>
     </span>
   );

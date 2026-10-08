@@ -26,7 +26,7 @@ export default function AboutPage() {
             stories that matter where you live: county budgets and pending bills, roads, water,
             health, education, security and the local economy.
           </p>
-          <h2 className="mb-3 mt-8 font-headline text-2xl font-bold text-ink">Where we work</h2>
+          <h2 className="mb-3 mt-8 font-headline text-[26px] font-bold text-headline">Where we work</h2>
           <ul className="mb-6 grid grid-cols-2 gap-x-6 border-t border-border sm:grid-cols-3">
             {COUNTIES.map((c) => (
               <li key={c.slug} className="border-b border-border py-2 text-[15px] font-semibold">
@@ -36,7 +36,7 @@ export default function AboutPage() {
               </li>
             ))}
           </ul>
-          <h2 className="mb-3 mt-8 font-headline text-2xl font-bold text-ink">Contact</h2>
+          <h2 className="mb-3 mt-8 font-headline text-[26px] font-bold text-headline">Contact</h2>
           <p>
             {SITE.address}, {SITE.postal}.
             <br />

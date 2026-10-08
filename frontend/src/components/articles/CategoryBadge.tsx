@@ -1,10 +1,12 @@
 import Link from 'next/link';
-import { CATEGORY_COLORS, DEFAULT_ACCENT } from '@/lib/constants';
+import { CATEGORY_COLORS, DEFAULT_ACCENT, LIGHT_ACCENTS } from '@/lib/constants';
 import { categoryRoute } from '@/lib/routes';
 
 /**
  * Small solid category slug. Counties and sections link to their own page, so
  * every card doubles as a navigation surface.
+ *
+ * Set in the condensed face and squared off — a desk stamp rather than a pill.
  */
 export default function CategoryBadge({
   category,
@@ -16,15 +18,15 @@ export default function CategoryBadge({
   linked?: boolean;
 }) {
   const color = CATEGORY_COLORS[category] || DEFAULT_ACCENT;
-  const cls = `inline-block rounded-sm font-bold uppercase tracking-wider ${
-    size === 'md' ? 'px-2.5 py-1 text-[11px]' : 'px-2 py-0.5 text-[10px]'
+  const cls = `inline-block font-condensed font-bold uppercase leading-none tracking-[0.12em] ${
+    size === 'md' ? 'px-2.5 py-[5px] text-[11px]' : 'px-2 py-1 text-[10px]'
   }`;
 
-  // Kitui's yellow accent needs dark text to stay legible (AA contrast).
-  const needsDarkText = color.toLowerCase() === '#f2c94c';
+  // The yellow/cyan accents need ink rather than white text to stay legible (AA).
+  const needsDarkText = LIGHT_ACCENTS.includes(color.toLowerCase());
   const style = needsDarkText
-    ? { backgroundColor: color, color: '#123563' }
-    : { backgroundColor: color };
+    ? { backgroundColor: color, color: 'var(--brand-navy)' }
+    : { backgroundColor: color, color: '#ffffff' };
 
   const href = linked ? categoryRoute(category) : null;
   if (!href) {
@@ -36,7 +38,7 @@ export default function CategoryBadge({
   }
 
   return (
-    <Link href={href} className={`${cls} hover:opacity-85`} style={style}>
+    <Link href={href} className={`${cls} transition-opacity hover:opacity-85`} style={style}>
       {category}
     </Link>
   );

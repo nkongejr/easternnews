@@ -24,16 +24,19 @@ export default function Pagination({
   const href = (p: number) => (p === 1 ? baseHref : `${baseHref}?page=${p}`);
 
   const base =
-    'inline-flex h-10 min-w-10 items-center justify-center rounded-sm border px-3 text-sm font-semibold transition-colors';
+    'en-btn inline-flex h-10 min-w-10 items-center justify-center border px-3 text-[13px] transition-colors';
 
   return (
-    <nav aria-label="Pagination" className="mt-10 flex items-center justify-center gap-1.5">
+    <nav
+      aria-label="Pagination"
+      className="mt-12 flex items-center justify-center gap-1.5 border-t border-border pt-8"
+    >
       {currentPage > 1 && (
         <Link
           href={href(currentPage - 1)}
           rel="prev"
           aria-label="Previous page"
-          className={`${base} border-border text-ink hover:border-brand-blue hover:text-brand-blue`}
+          className={`${base} border-border-strong text-brand-navy hover:border-brand-primary hover:bg-brand-primary hover:text-white`}
         >
           <FaChevronLeft size={11} />
         </Link>
@@ -51,8 +54,8 @@ export default function Pagination({
             aria-current={p === currentPage ? 'page' : undefined}
             className={`${base} ${
               p === currentPage
-                ? 'border-brand-blue bg-brand-blue text-white'
-                : 'border-border text-ink hover:border-brand-blue hover:text-brand-blue'
+                ? 'border-brand-navy bg-brand-navy text-brand-secondary'
+                : 'border-border-strong text-brand-navy hover:border-brand-primary hover:bg-brand-primary hover:text-white'
             }`}
           >
             {p}
@@ -65,7 +68,7 @@ export default function Pagination({
           href={href(currentPage + 1)}
           rel="next"
           aria-label="Next page"
-          className={`${base} border-border text-ink hover:border-brand-blue hover:text-brand-blue`}
+          className={`${base} border-border-strong text-brand-navy hover:border-brand-primary hover:bg-brand-primary hover:text-white`}
         >
           <FaChevronRight size={11} />
         </Link>

@@ -57,7 +57,7 @@ export default async function ArchivePage({
       <div className="en-container grid gap-10 py-8 md:py-10 lg:grid-cols-3 lg:gap-12">
         <div className="min-w-0 lg:col-span-2">
           {result.data.length === 0 ? (
-            <p className="border border-border bg-surface-alt p-8 text-center text-sm text-muted">
+            <p className="border border-border-strong bg-surface-alt p-8 text-center text-sm text-muted">
               No stories published here yet. Check back shortly, or browse the{' '}
               <a href="/latest" className="font-semibold text-brand-primary hover:underline">
                 latest news
@@ -68,7 +68,7 @@ export default async function ArchivePage({
             <>
               {/* Lead story, first page only */}
               {page === 1 && lead && (
-                <div className="mb-8 border-b border-border pb-8">
+                <div className="mb-9 border-b-2 border-brand-navy pb-9">
                   <ArticleCard article={lead} variant="featured" showComments priority />
                 </div>
               )}

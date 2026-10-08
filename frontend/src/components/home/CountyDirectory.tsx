@@ -27,13 +27,13 @@ export default function CountyDirectory({
             <li key={c.slug} className="border-b border-border">
               <Link
                 href={`/counties/${c.slug}`}
-                className="group flex items-center justify-between gap-2 py-2.5 text-[15px] font-semibold text-ink transition-colors hover:text-brand-blue"
+                className="group flex items-center justify-between gap-2 py-3 text-[15px] font-semibold text-text transition-colors hover:text-brand-primary"
               >
                 {c.name}
                 <FaArrowRight
                   size={10}
                   aria-hidden="true"
-                  className="shrink-0 text-border-strong transition-all group-hover:translate-x-0.5 group-hover:text-brand-gold"
+                  className="shrink-0 text-border-strong transition-all group-hover:translate-x-0.5 group-hover:text-brand-cyan-dark"
                 />
               </Link>
             </li>

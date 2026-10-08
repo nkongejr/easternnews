@@ -16,10 +16,10 @@ export default function HeroNews({
   const hasExtras = extras.length > 0;
 
   return (
-    <section className="en-container py-3 md:py-4" aria-label="Top stories">
+    <section className="en-container py-4 md:py-5" aria-label="Top stories">
       <div
-        className={`grid grid-cols-1 gap-1 ${
-          hasExtras ? 'lg:h-[520px] lg:grid-cols-5 lg:grid-rows-3' : ''
+        className={`en-plate grid grid-cols-1 gap-px ${
+          hasExtras ? 'lg:h-[540px] lg:grid-cols-5 lg:grid-rows-3' : ''
         }`}
       >
         <div

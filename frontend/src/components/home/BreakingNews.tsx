@@ -20,16 +20,18 @@ export default function BreakingNews({
   return (
     <section
       aria-label={breaking ? 'Breaking news' : 'Latest news'}
-      className="border-b border-border bg-white"
+      className="border-b border-border-strong bg-surface-alt"
     >
-      <div className="en-container flex items-center gap-3 py-2 md:gap-4">
+      <div className="en-container flex items-center gap-3 py-2.5 md:gap-4">
         <span
-          className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white ${
-            breaking ? 'bg-accent' : 'bg-brand-primary'
+          className={`en-btn inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1.5 text-[11px] text-white ${
+            breaking ? 'bg-accent' : 'bg-brand-navy'
           }`}
         >
           <span
-            className="h-1.5 w-1.5 rounded-full bg-white motion-safe:animate-pulse"
+            className={`h-1.5 w-1.5 rounded-full motion-safe:animate-pulse ${
+              breaking ? 'bg-white' : 'bg-brand-cyan'
+            }`}
             aria-hidden="true"
           />
           {breaking ? 'Breaking' : 'Latest'}
@@ -39,11 +41,11 @@ export default function BreakingNews({
           {articles.map((a, i) => (
             <li key={a._id} className="flex shrink-0 items-center">
               {i > 0 && (
-                <span aria-hidden="true" className="mx-3 h-3 w-px bg-border-strong md:mx-4" />
+                <span aria-hidden="true" className="mx-3 h-3.5 w-px bg-border-strong md:mx-4" />
               )}
               <Link
                 href={articleHref(a)}
-                className="line-clamp-1 max-w-[62vw] text-[13px] font-semibold text-ink/85 transition-colors hover:text-brand-primary sm:max-w-[380px]"
+                className="line-clamp-1 max-w-[62vw] text-[13.5px] font-semibold text-text transition-colors hover:text-brand-primary hover:underline sm:max-w-[380px]"
               >
                 {a.title}
               </Link>
@@ -53,7 +55,7 @@ export default function BreakingNews({
 
         <Link
           href="/latest"
-          className="hidden shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:text-brand-primary lg:block"
+          className="en-btn hidden shrink-0 border-l border-border-strong pl-4 text-[11px] text-brand-navy transition-colors hover:text-brand-primary lg:block"
         >
           All stories
         </Link>

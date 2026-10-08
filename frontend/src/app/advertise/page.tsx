@@ -28,14 +28,14 @@ export default function AdvertisePage() {
               { title: 'Banner', body: 'Full-width leaderboard across the front page.' },
               { title: 'Sponsored', body: 'Editorially labelled sponsored features.' },
             ].map((p) => (
-              <li key={p.title} className="border-t-2 border-brand-gold bg-surface-alt p-4">
-                <p className="font-headline text-base font-bold text-ink">{p.title}</p>
+              <li key={p.title} className="border-t-2 border-brand-navy bg-surface-alt p-4">
+                <p className="font-headline text-[17px] font-bold text-headline">{p.title}</p>
                 <p className="mt-1 text-sm">{p.body}</p>
               </li>
             ))}
           </ul>
 
-          <h2 className="mb-3 font-headline text-2xl font-bold text-ink">Get in touch</h2>
+          <h2 className="mb-3 font-headline text-[26px] font-bold text-headline">Get in touch</h2>
           <p>
             Contact us at{' '}
             <a href={`mailto:${SITE.email}`} className="text-brand-blue underline">

@@ -14,8 +14,10 @@ function isLightColour(value: string) {
 /**
  * Section heading used by homepage blocks, archives and sidebars.
  *
- *  - `bar`   : solid Eastern-blue strip with white title (digital-news IA)
- *  - `rule`  : serif title sitting on a coloured underline (print-style)
+ *  - `bar`   : the desk's own ink reversed out in white condensed capitals,
+ *              with the logo yellow bookending the block (digital-news IA)
+ *  - `rule`  : black display title sitting on the desk's coloured rule
+ *              (print-style)
  */
 export default function SectionHeader({
   title,
@@ -43,12 +45,12 @@ export default function SectionHeader({
         className={`en-section-bar ${className}`}
         style={{
           backgroundColor: lightBar ? 'var(--brand-primary)' : colour,
-          borderLeft: `4px solid ${lightBar ? colour : 'var(--brand-secondary)'}`,
+          borderLeftColor: lightBar ? colour : 'var(--brand-secondary)',
         }}
       >
         <div className="min-w-0">
           {kicker && (
-            <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white/70">
+            <p className="mb-0.5 font-condensed text-[10px] font-bold uppercase leading-none tracking-[0.22em] text-brand-cyan">
               {kicker}
             </p>
           )}
@@ -57,7 +59,7 @@ export default function SectionHeader({
         {href && (
           <Link
             href={href}
-            className="group flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-brand-secondary transition-colors hover:text-white"
+            className="group flex shrink-0 items-center gap-1.5 font-condensed text-[11px] font-bold uppercase tracking-[0.12em] text-brand-secondary transition-colors hover:text-white"
           >
             {linkLabel}
             <FaArrowRight
@@ -72,33 +74,38 @@ export default function SectionHeader({
   }
 
   return (
-    <div
-      className={`mb-5 flex items-end justify-between gap-4 border-b-2 pb-2 ${className}`}
-      style={{ borderColor: colour }}
-    >
-      <div className="min-w-0">
-        {kicker && <p className="en-kicker mb-1 text-muted">{kicker}</p>}
-        <h2
-          className="truncate font-headline text-xl font-black uppercase leading-none tracking-tight text-ink sm:text-2xl"
-          style={{ color: colour }}
-        >
-          {title}
-        </h2>
+    <div className={`mb-5 ${className}`}>
+      <div className="flex items-end justify-between gap-4 pb-2">
+        <div className="min-w-0">
+          {kicker && (
+            <p className="en-kicker mb-1.5" style={{ color: colour }}>
+              {kicker}
+            </p>
+          )}
+          <h2 className="truncate font-headline text-2xl font-black leading-none tracking-[-0.02em] text-headline sm:text-3xl">
+            {title}
+          </h2>
+        </div>
+
+        {href && (
+          <Link
+            href={href}
+            className="group flex shrink-0 items-center gap-1.5 pb-1 font-condensed text-[11px] font-bold uppercase tracking-[0.12em] text-muted transition-colors hover:text-brand-primary"
+          >
+            {linkLabel}
+            <FaArrowRight
+              size={10}
+              aria-hidden="true"
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </Link>
+        )}
       </div>
 
-      {href && (
-        <Link
-          href={href}
-          className="group flex shrink-0 items-center gap-1.5 pb-0.5 text-[11px] font-bold uppercase tracking-wider text-muted transition-colors hover:text-brand-blue"
-        >
-          {linkLabel}
-          <FaArrowRight
-            size={10}
-            aria-hidden="true"
-            className="transition-transform group-hover:translate-x-0.5"
-          />
-        </Link>
-      )}
+      {/* Desk rule: the accent colour, closed by a hairline. */}
+      <div className="border-b border-border">
+        <div className="h-[3px]" style={{ backgroundColor: colour }} />
+      </div>
     </div>
   );
 }

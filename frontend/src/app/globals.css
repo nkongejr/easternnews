@@ -1,41 +1,159 @@
 @import "tailwindcss";
 
 /* ============================================================
-   EASTERN NEWSPAPER — DESIGN TOKENS
+   THE EASTERN NEWSPAPER — DESIGN TOKENS
 
-   Brand palette is the EXISTING Eastern Newspaper palette
-   (blue #1a4d8f, gold #f2c94c). Nothing here is borrowed from
-   any other publication.
+   Palette taken from the Eastern Newspaper logo:
+     cyan   #45D8FE
+     blue   #3099F0
+     yellow #F5FF00
+     black  #000000
+     white  #FFFFFF
+     gray   #F5F5F5
 
-   The eight canonical tokens below are the single source of
+   Because cyan and yellow are far too light to carry white text,
+   each bright logo colour has a deepened "working" partner that
+   keeps every label at WCAG AA on its background:
+
+     blue   #3099F0  → working blue  #1573C4 (4.9:1 with white)
+     cyan   #45D8FE  → working cyan  #0A6E8F (5.8:1 with white)
+     yellow #F5FF00  → always paired with ink/navy text
+
+   The eight canonical tokens below remain the single source of
    truth; the Tailwind theme and every component read from them,
-   so a rebrand is a change to this one block.
+   so a rebrand is still a change to this one block.
    ============================================================ */
 
+/* ------------------------------------------------------------
+   SELF-HOSTED EDITORIAL WEBFONTS
+   Variable faces in /public/fonts (SIL Open Font License 1.1 —
+   see public/fonts/README.txt). One file per family covers the
+   whole weight range, so Playfair's 900 headline black and its
+   400 deck cost the same request.
+   ------------------------------------------------------------ */
+
+@font-face {
+  font-family: "Playfair Display Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url("/fonts/playfair-display-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Playfair Display Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url("/fonts/playfair-display-latin-wght-italic.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Source Serif 4 Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("/fonts/source-serif-4-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Source Serif 4 Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("/fonts/source-serif-4-latin-wght-italic.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Roboto Condensed Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/roboto-condensed-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
 :root {
+  /* ── Logo colours, verbatim ─────────────────────────────── */
+  --logo-cyan: #45d8fe;
+  --logo-blue: #3099f0;
+  --logo-yellow: #f5ff00;
+  --logo-black: #000000;
+  --logo-white: #ffffff;
+  --logo-gray: #f5f5f5;
+
   /* ── Canonical brand tokens ─────────────────────────────── */
-  --brand-primary: #1a4d8f;
-  --brand-primary-dark: #123563;
-  --brand-primary-darker: #0b2545;
-  --brand-secondary: #f2c94c;
-  --brand-secondary-dark: #d4a92e;
-  --brand-accent: #c0392b;
+  /* "Working" blue: same hue family as the logo, deep enough to
+     carry white type and to sit on white as a link colour. */
+  --brand-primary: #1573c4;
+  --brand-primary-dark: #0f5ca8;
+  --brand-primary-darker: #0a2e52;
+  --brand-primary-bright: #3099f0; /* the logo blue — rules, gradients, large fills */
+
+  --brand-secondary: #f5ff00; /* the logo yellow — small highlights only */
+  --brand-secondary-dark: #d9e300;
+  --brand-secondary-ink: #5f6600; /* yellow's readable text partner on white */
+
+  --brand-accent: #c8102e; /* reserved for "Breaking" + form errors */
+
+  /* ── Cyan ramp ──────────────────────────────────────────── */
+  --brand-cyan: #45d8fe;
+  --brand-cyan-dark: #12b7e8;
+  --brand-cyan-ink: #0a6e8f; /* cyan deep enough for white text / links on white */
+
+  /* ── Dark surfaces (nav bar, footer, photo scrims) ──────── */
+  --brand-navy: #0a2e52;
+  --brand-navy-soft: #12416f;
+  --brand-ink: #06121f; /* near-black utility strip */
 
   --background: #ffffff;
   --surface: #ffffff;
-  --surface-alt: #f5f6f8;
-  --surface-sunken: #eceff3;
+  --surface-alt: #f5f5f5; /* the logo's light gray */
+  --surface-sunken: #eaeff4;
+  --surface-tint: #eef6fd; /* palest blue wash — inset panels, tags */
 
-  --text: #16191f;
-  --muted: #5c6672;
+  --text: #0f1419;
+  --headline: #000000;
+  --muted: #55606c;
 
-  --border: #dfe3e8;
-  --border-strong: #c6ccd4;
+  --border: #e3e7ec;
+  --border-strong: #c2cad4;
+  --border-ink: #0a2e52; /* heavy editorial rule */
 
   /* ── Type ───────────────────────────────────────────────── */
-  --font-headline: Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-body: Arial, Helvetica, "Segoe UI", Roboto, sans-serif;
-  --font-read: Georgia, Cambria, "Times New Roman", Times, serif;
+  /* Playfair Display — didone display serif for headlines and
+     the masthead. Source Serif 4 — the reading face for article
+     bodies. Inter — interface sans. Roboto Condensed — the
+     paper's "furniture": kickers, nav, badges, buttons.
+
+     The stacks live once, under --stack-*, so the Tailwind theme
+     and the plain-CSS rules below can never drift apart. */
+  --stack-headline: "Playfair Display Variable", "Playfair Display", Georgia, Cambria,
+    "Times New Roman", Times, serif;
+  --stack-body: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --stack-read: "Source Serif 4 Variable", "Source Serif 4", Georgia, Cambria,
+    "Times New Roman", Times, serif;
+  --stack-condensed: "Roboto Condensed Variable", "Roboto Condensed", "Arial Narrow",
+    "Inter Variable", Arial, sans-serif;
+
+  --font-headline: var(--stack-headline);
+  --font-body: var(--stack-body);
+  --font-read: var(--stack-read);
+  --font-condensed: var(--stack-condensed);
 
   --page-max: 1280px;
 }
@@ -46,20 +164,33 @@
   --color-brand-primary: var(--brand-primary);
   --color-brand-primary-dark: var(--brand-primary-dark);
   --color-brand-primary-darker: var(--brand-primary-darker);
+  --color-brand-primary-bright: var(--brand-primary-bright);
   --color-brand-secondary: var(--brand-secondary);
   --color-brand-secondary-dark: var(--brand-secondary-dark);
+  --color-brand-secondary-ink: var(--brand-secondary-ink);
   --color-brand-accent: var(--brand-accent);
+
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-cyan-dark: var(--brand-cyan-dark);
+  --color-brand-cyan-ink: var(--brand-cyan-ink);
+
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-navy-soft: var(--brand-navy-soft);
+  --color-brand-ink: var(--brand-ink);
 
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-alt: var(--surface-alt);
   --color-surface-sunken: var(--surface-sunken);
+  --color-surface-tint: var(--surface-tint);
 
   --color-text: var(--text);
+  --color-headline: var(--headline);
   --color-muted: var(--muted);
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+  --color-border-ink: var(--border-ink);
 
   /* Legacy aliases (original project names) kept so nothing breaks */
   --color-brand-blue: var(--brand-primary);
@@ -70,8 +201,10 @@
   --color-ink: var(--text);
   --color-accent: var(--brand-accent);
 
-  --font-headline: Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-body: Arial, Helvetica, "Segoe UI", Roboto, sans-serif;
+  --font-headline: var(--stack-headline);
+  --font-body: var(--stack-body);
+  --font-read: var(--stack-read);
+  --font-condensed: var(--stack-condensed);
 }
 
 /* ============================================================
@@ -96,7 +229,10 @@
   body {
     @apply bg-white text-text;
     font-family: var(--font-body);
+    font-optical-sizing: auto;
+    font-feature-settings: "kern" 1, "liga" 1;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
@@ -105,12 +241,20 @@
   h3,
   h4 {
     font-family: var(--font-headline);
-    color: var(--text);
+    color: var(--headline);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
 
-  /* One consistent, highly visible focus ring everywhere. */
+  /* Display serif needs a touch more air than the old Georgia did. */
+  h1 {
+    line-height: 1.1;
+  }
+
+  /* One consistent, highly visible focus ring everywhere.
+     #3099F0 clears the 3:1 non-text contrast floor on white. */
   :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
-    outline: 2px solid var(--brand-primary);
+    outline: 2px solid var(--brand-primary-bright);
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -124,12 +268,13 @@
   .skip-link:focus {
     left: 0.5rem;
     top: 0.5rem;
-    @apply bg-brand-primary px-4 py-2 text-sm font-bold text-white;
+    @apply bg-brand-navy px-4 py-2 text-sm font-bold text-brand-secondary;
   }
 
+  /* Yellow highlighter selection — the logo's accent, navy text on top. */
   ::selection {
     background: var(--brand-secondary);
-    color: var(--text);
+    color: var(--brand-navy);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -184,6 +329,41 @@
 }
 
 /* ============================================================
+   NEWSPAPER RULES & PLATES
+   Thin, confident dividing lines are what make a page read as
+   print rather than as a stack of cards.
+   ============================================================ */
+
+/* Masthead: white field closed by the logo's own colour sequence —
+   cyan → blue → yellow — so the nameplate reads as a printed
+   nameplate sitting on top of the desk bar. */
+.en-masthead {
+  position: relative;
+}
+
+.en-masthead::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--brand-cyan) 0%,
+    var(--brand-primary-bright) 38%,
+    var(--brand-primary) 72%,
+    var(--brand-secondary) 100%
+  );
+}
+
+/* A framed editorial plate — used around the front-page mosaic. */
+.en-plate {
+  border: 1px solid var(--border-strong);
+  background: var(--border-strong); /* shows through the 1px grid gaps as hairlines */
+}
+
+/* ============================================================
    EDITORIAL TYPOGRAPHY
    ============================================================ */
 
@@ -195,14 +375,28 @@
   font-family: var(--font-body);
 }
 
+.font-read {
+  font-family: var(--font-read);
+}
+
+.font-condensed {
+  font-family: var(--font-condensed);
+}
+
+/* The paper's "furniture" face: condensed, uppercase, wide-tracked.
+   Applied to kickers, section bars, badges and buttons so the display
+   serif is never competing with interface labels. */
+
 /* Small uppercase label above a section / article title. */
 .en-kicker {
-  @apply text-[11px] font-bold uppercase tracking-[0.14em];
+  font-family: var(--font-condensed);
+  @apply text-[11px] font-bold uppercase tracking-[0.16em];
 }
 
 /* Masthead dateline — matches the utility-strip dateline used on desktop. */
 .en-dateline {
-  @apply text-[11px] font-semibold tracking-wide;
+  font-family: var(--font-condensed);
+  @apply text-[11px] font-semibold uppercase tracking-[0.08em];
 }
 
 /* Article body — comfortable reading measure + line height. */
@@ -218,29 +412,40 @@
   @apply mb-5;
 }
 
+/* Blue drop cap — the signature of a feature opening. */
 .prose-article p:first-of-type::first-letter {
   float: left;
   font-family: var(--font-headline);
-  font-size: 3.4rem;
-  line-height: 0.82;
-  font-weight: 700;
-  padding-right: 0.5rem;
-  padding-top: 0.28rem;
+  font-size: 3.9rem;
+  line-height: 0.8;
+  font-weight: 800;
+  padding-right: 0.55rem;
+  padding-top: 0.32rem;
   color: var(--brand-primary);
 }
 
 .prose-article a {
   color: var(--brand-primary);
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration-color: var(--brand-cyan);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: color 150ms ease, text-decoration-color 150ms ease;
 }
 
+.prose-article a:hover {
+  color: var(--brand-primary-dark);
+  text-decoration-color: var(--brand-primary);
+}
+
+/* Pull quote: ink serif on a yellow rule — comment, not reporting. */
 .pull-quote {
   @apply my-8 pl-5 text-xl italic md:text-2xl;
   font-family: var(--font-headline);
+  font-weight: 600;
   border-left: 4px solid var(--brand-secondary);
-  color: #374151;
-  line-height: 1.45;
+  color: var(--brand-navy);
+  line-height: 1.4;
 }
 
 /* Static pages (About / Advertise / Contact / legal) */
@@ -256,7 +461,7 @@
 }
 
 .prose-page h2 {
-  @apply mb-3 mt-8 font-headline text-2xl font-bold text-text;
+  @apply mb-3 mt-8 font-headline text-2xl font-bold text-headline;
 }
 
 .prose-page ul {
@@ -282,6 +487,11 @@
   transform: scale(1.04);
 }
 
+/* Photographs sit in a hairline frame, like a printed halftone block. */
+.en-imgframe--framed {
+  box-shadow: inset 0 0 0 1px rgba(6, 18, 31, 0.12);
+}
+
 /* Branded placeholder shown when a story has no usable image.
    Editorial monogram on a paper tint — never a broken tile. */
 .en-imgfallback {
@@ -290,8 +500,7 @@
   justify-content: center;
   height: 100%;
   width: 100%;
-  background:
-    linear-gradient(180deg, #f3f5f8 0%, #e8ecf1 100%);
+  background: linear-gradient(180deg, #f2f7fc 0%, #e4edf6 100%);
 }
 
 .en-imgfallback::after {
@@ -300,49 +509,146 @@
   inset: 0;
   background-image: repeating-linear-gradient(
     180deg,
-    rgba(26, 77, 143, 0.05) 0 1px,
+    rgba(21, 115, 196, 0.06) 0 1px,
     transparent 1px 7px
   );
   pointer-events: none;
 }
 
 /* ============================================================
-   OVERLAY CARDS — digital-news mosaic (Kenyanews-style layout,
-   Eastern Newspaper palette).
+   OVERLAY CARDS — digital-news mosaic on the logo's navy.
    ============================================================ */
 
 .en-overlay-grad {
   background: linear-gradient(
     to top,
-    rgba(11, 37, 69, 0.94) 0%,
-    rgba(11, 37, 69, 0.58) 42%,
-    rgba(11, 37, 69, 0.12) 72%,
+    rgba(6, 18, 31, 0.95) 0%,
+    rgba(10, 46, 82, 0.72) 40%,
+    rgba(10, 46, 82, 0.22) 72%,
     transparent 100%
   );
 }
 
+/* Section bar — the paper's desk heading. A solid block reversed out in
+   white condensed capitals, closed by a yellow bookend at the left edge.
+   The block colour comes from the desk/county accent (see
+   SectionHeader), so every section on the front page carries its own
+   ink while the treatment stays identical. */
 .en-section-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: var(--brand-primary);
+  background: var(--brand-navy);
   color: #fff;
-  padding: 0.65rem 0.9rem;
+  padding: 0.65rem 0.95rem;
+  border-left: 5px solid var(--brand-secondary);
+  /* One printed edge along the foot of the block. */
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.22);
 }
 
 .en-section-bar h2 {
   color: #fff;
-  font-family: var(--font-headline);
-  font-size: 0.95rem;
-  font-weight: 900;
-  letter-spacing: 0.04em;
+  font-family: var(--font-condensed);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  line-height: 1;
+  line-height: 1.15;
 }
 
 @media (min-width: 640px) {
   .en-section-bar h2 {
-    font-size: 1.05rem;
+    font-size: 1.1875rem;
   }
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
+/* Primary desk bar: condensed capitals with a yellow "you are here"
+   underline that grows on hover. */
+.en-navlink {
+  position: relative;
+  font-family: var(--font-condensed);
+}
+
+.en-navlink::after {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0;
+  height: 3px;
+  background: var(--brand-secondary);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.en-navlink:hover::after,
+.en-navlink:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* The desk you are reading locks onto the bar's yellow rule, so the
+   active item reads as a tab attached to it. */
+.en-navlink[aria-current="page"]::after,
+.en-navlink.en-navlink--active::after {
+  transform: scaleX(1);
+  background: var(--brand-secondary);
+}
+
+/* ============================================================
+   MASTHEAD LOGO
+   The real logo artwork is dropped into /public/brand. The frame
+   below locks its height so the masthead never jumps, while the
+   image itself keeps its native aspect ratio (never stretched).
+   ------------------------------------------------------------ */
+.en-logo {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.en-logo-frame {
+  display: block;
+  overflow: hidden;
+}
+
+.en-logo-frame--lg {
+  height: 60px;
+}
+.en-logo-frame--md {
+  height: 44px;
+}
+.en-logo-frame--sm {
+  height: 32px;
+}
+
+@media (min-width: 640px) {
+  .en-logo-frame--lg {
+    height: 72px;
+  }
+  .en-logo-frame--md {
+    height: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .en-logo-frame--lg {
+    height: 84px;
+  }
+}
+
+/* Buttons — squared, condensed, uppercase: newsroom furniture. */
+.en-btn {
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }

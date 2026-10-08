@@ -5,14 +5,18 @@ import SidebarWidget from './SidebarWidget';
 
 export default function SocialFollowWidget() {
   return (
-    <SidebarWidget title="Follow Us" subtitle="Join the conversation">
+    <SidebarWidget
+      title="Follow Us"
+      subtitle="Join the conversation"
+      accent="var(--color-brand-cyan)"
+    >
       <div className="flex items-center gap-2">
         <Link
           href={SITE.social.facebook}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Eastern Newspaper on Facebook"
-          className="flex h-10 w-10 items-center justify-center bg-brand-primary text-white transition-colors hover:bg-brand-primary-dark"
+          className="flex h-11 w-11 items-center justify-center bg-brand-primary text-white transition-colors hover:bg-brand-primary-dark"
         >
           <FaFacebookF size={14} />
         </Link>
@@ -21,7 +25,7 @@ export default function SocialFollowWidget() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Eastern Newspaper on X"
-          className="flex h-10 w-10 items-center justify-center bg-ink text-white transition-colors hover:bg-black"
+          className="flex h-11 w-11 items-center justify-center bg-brand-navy text-white transition-colors hover:bg-brand-ink"
         >
           <FaXTwitter size={14} />
         </Link>
@@ -30,7 +34,7 @@ export default function SocialFollowWidget() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Share on WhatsApp"
-          className="flex h-10 w-10 items-center justify-center bg-[#25D366] text-white transition-colors hover:brightness-95"
+          className="flex h-11 w-11 items-center justify-center bg-[#25D366] text-white transition-colors hover:brightness-95"
         >
           <FaWhatsapp size={16} />
         </Link>

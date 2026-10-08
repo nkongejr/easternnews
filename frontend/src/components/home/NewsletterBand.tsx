@@ -27,18 +27,18 @@ export default function NewsletterBand() {
   return (
     <section
       aria-labelledby="newsletter-band"
-      className="border-y border-border bg-brand-primary text-white"
+      className="border-y-2 border-brand-navy bg-brand-navy text-white"
     >
       <div className="en-container grid items-center gap-6 py-10 md:grid-cols-2 md:gap-10 md:py-12">
         <div>
-          <p className="en-kicker mb-2 text-brand-secondary">Newsletter</p>
+          <p className="en-kicker mb-2.5 text-brand-cyan">Newsletter</p>
           <h2
             id="newsletter-band"
-            className="font-headline text-2xl font-black leading-tight tracking-tight md:text-3xl"
+            className="font-headline text-[26px] font-black leading-[1.15] tracking-[-0.02em] text-white md:text-[34px]"
           >
             Stay informed. Get the latest Eastern Kenya news delivered to your inbox.
           </h2>
-          <p className="mt-2 max-w-lg text-[13px] leading-relaxed text-white/70">
+          <p className="mt-3 max-w-lg font-read text-[14px] leading-relaxed text-white/75">
             The month’s most important reporting from {SITE.name}, across all eleven
             county desks. No spam, and you can unsubscribe at any time.
           </p>
@@ -56,19 +56,19 @@ export default function NewsletterBand() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="h-12 w-full flex-1 rounded-sm border-0 px-4 text-sm text-text placeholder:text-muted focus:outline-none focus-visible:outline-2 focus-visible:outline-brand-secondary"
+              className="h-12 w-full flex-1 border-0 px-4 text-sm text-text placeholder:text-muted focus:outline-none focus-visible:outline-2 focus-visible:outline-brand-cyan"
             />
             <button
               type="submit"
               disabled={status === 'sending'}
-              className="h-12 shrink-0 rounded-sm bg-brand-secondary px-7 text-xs font-bold uppercase tracking-wider text-brand-primary-darker transition-colors hover:bg-brand-secondary-dark disabled:opacity-60"
+              className="en-btn h-12 shrink-0 bg-brand-secondary px-7 text-[13px] text-brand-navy transition-colors hover:bg-brand-secondary-dark disabled:opacity-60"
             >
               {status === 'sending' ? 'Subscribing…' : 'Subscribe'}
             </button>
           </form>
           <p aria-live="polite" className="mt-3 min-h-5 text-[12px]">
             {status === 'sent' && (
-              <span className="text-brand-secondary">Thank you — you’re subscribed.</span>
+              <span className="font-semibold text-brand-cyan">Thank you — you’re subscribed.</span>
             )}
             {status === 'error' && (
               <span className="text-white/80">Something went wrong. Please try again.</span>

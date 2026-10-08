@@ -5,22 +5,30 @@ export type Crumb = { label: string; href?: string };
 
 export default function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
-    <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="en-scrollbar-none flex items-center gap-1.5 overflow-x-auto text-[11px] font-semibold uppercase tracking-wider text-muted">
+    <nav aria-label="Breadcrumb" className="mb-5">
+      <ol className="en-scrollbar-none flex items-center gap-1.5 overflow-x-auto font-condensed text-[11px] font-bold uppercase tracking-[0.12em] text-muted">
         {items.map((item, i) => {
           const last = i === items.length - 1;
           return (
             <li key={`${item.label}-${i}`} className="flex shrink-0 items-center gap-1.5">
               {item.href && !last ? (
-                <Link href={item.href} className="hover:text-brand-blue hover:underline">
+                <Link
+                  href={item.href}
+                  className="transition-colors hover:text-brand-primary hover:underline"
+                >
                   {item.label}
                 </Link>
               ) : (
-                <span aria-current={last ? 'page' : undefined} className={last ? 'text-ink' : ''}>
+                <span
+                  aria-current={last ? 'page' : undefined}
+                  className={last ? 'max-w-[52vw] truncate text-brand-navy sm:max-w-none' : ''}
+                >
                   {item.label}
                 </span>
               )}
-              {!last && <FaChevronRight size={8} aria-hidden="true" className="text-border-strong" />}
+              {!last && (
+                <FaChevronRight size={8} aria-hidden="true" className="text-brand-cyan-dark" />
+              )}
             </li>
           );
         })}

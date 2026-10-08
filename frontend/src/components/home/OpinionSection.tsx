@@ -31,7 +31,10 @@ export default function OpinionSection({
   if (!articles?.length) return null;
 
   return (
-    <section aria-labelledby="opinion-section" className="bg-surface-alt py-10 md:py-12">
+    <section
+      aria-labelledby="opinion-section"
+      className="border-y border-border bg-surface-alt py-10 md:py-12"
+    >
       <div className="en-container">
         <div id="opinion-section">
           <SectionHeader
@@ -47,9 +50,9 @@ export default function OpinionSection({
           {articles.map((a) => {
             const author = byline(a);
             return (
-              <li key={a._id} className="group flex gap-4">
+              <li key={a._id} className="group flex gap-4 border-t border-border-strong pt-4 md:border-t-0 md:pt-0">
                 <div
-                  className="en-imgframe mt-0.5 h-12 w-12 shrink-0 overflow-hidden rounded-full border border-border-strong"
+                  className="en-imgframe mt-0.5 h-12 w-12 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm"
                   aria-hidden="true"
                 >
                   {a.author?.photo ? (
@@ -60,24 +63,27 @@ export default function OpinionSection({
                       imgClassName="object-cover"
                     />
                   ) : (
-                    <span className="flex h-full w-full items-center justify-center bg-brand-blue font-headline text-sm font-bold text-brand-gold">
+                    <span className="flex h-full w-full items-center justify-center bg-brand-navy font-headline text-sm font-bold text-brand-cyan">
                       {initials(author)}
                     </span>
                   )}
                 </div>
 
                 <div className="min-w-0">
-                  <p className="en-kicker text-brand-blue">{author}</p>
-                  <h3 className="mt-1 font-headline text-lg font-bold leading-snug tracking-tight text-ink">
-                    <Link href={articleHref(a)} className="line-clamp-3 hover:text-brand-blue">
+                  <p className="en-kicker text-brand-primary">{author}</p>
+                  <h3 className="mt-1.5 font-headline text-[19px] font-bold leading-snug tracking-[-0.015em] text-headline">
+                    <Link href={articleHref(a)} className="line-clamp-3 transition-colors hover:text-brand-primary">
                       {a.title}
                     </Link>
                   </h3>
-                  <p className="mt-1.5 line-clamp-3 font-headline text-[15px] italic leading-relaxed text-muted">
+                  <p className="mt-2 line-clamp-3 font-headline text-[15px] italic leading-relaxed text-muted">
                     {excerpt(a, 160)}
                   </p>
                   {a.publishDate && (
-                    <time dateTime={a.publishDate} className="mt-2 block text-[11px] text-muted">
+                    <time
+                      dateTime={a.publishDate}
+                      className="mt-2 block font-condensed text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted"
+                    >
                       {formatDate(a.publishDate)}
                     </time>
                   )}

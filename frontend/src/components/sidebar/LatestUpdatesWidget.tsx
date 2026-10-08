@@ -13,13 +13,13 @@ export default async function LatestUpdatesWidget({ limit = 6 }: { limit?: numbe
       <ul>
         {result.data.map((a) => (
           <li key={a._id} className="border-b border-border py-3 first:pt-0 last:border-0 last:pb-0">
-            <h3 className="font-headline text-[15px] font-bold leading-snug text-ink">
-              <Link href={articleHref(a)} className="line-clamp-2 hover:text-brand-primary">
+            <h3 className="font-headline text-[15px] font-bold leading-snug tracking-[-0.01em] text-headline">
+              <Link href={articleHref(a)} className="line-clamp-2 transition-colors hover:text-brand-primary">
                 {a.title}
               </Link>
             </h3>
-            <p className="mt-1 text-[11px] text-muted">
-              <span className="font-semibold text-brand-primary">{a.category}</span>
+            <p className="mt-1.5 font-condensed text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted">
+              <span className="font-bold text-brand-primary">{a.category}</span>
               {a.publishDate && (
                 <>
                   <span aria-hidden="true"> · </span>

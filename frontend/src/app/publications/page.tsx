@@ -41,16 +41,16 @@ export default async function PublicationsPage() {
 
       <div className="en-container py-8 md:py-10">
         {editions.length === 0 ? (
-          <p className="rounded-sm border border-border bg-surface-alt p-8 text-center text-sm text-muted">
+          <p className="border border-border-strong bg-surface-alt p-8 text-center text-sm text-muted">
             No publications have been published yet.
           </p>
         ) : (
           <>
             <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-3">
-              <h2 className="font-headline text-lg font-black uppercase tracking-tight text-ink">
+              <h2 className="font-headline text-2xl font-black uppercase tracking-[-0.01em] text-headline">
                 All editions
               </h2>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+              <p className="font-condensed text-[11px] font-bold uppercase tracking-[0.12em] text-muted">
                 {editions.length} {editions.length === 1 ? 'edition' : 'editions'}
                 {currentIssue ? ` · Current: Issue ${currentIssue.issueNumber}` : ''}
               </p>
@@ -85,7 +85,9 @@ function IssueCard({ issue }: { issue: Issue }) {
   return (
     <article
       className={`group flex h-full flex-col border bg-white transition-colors ${
-        issue.isCurrent ? 'border-brand-secondary shadow-sm' : 'border-border hover:border-brand-blue'
+        issue.isCurrent
+          ? 'border-brand-cyan-dark shadow-md'
+          : 'border-border-strong hover:border-brand-primary'
       }`}
     >
       <div className="en-imgframe relative aspect-[3/4] w-full bg-surface-sunken">
@@ -95,17 +97,17 @@ function IssueCard({ issue }: { issue: Issue }) {
           sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 380px"
         />
         {issue.isCurrent && (
-          <span className="absolute left-0 top-3 bg-brand-secondary px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-brand-primary-darker">
+          <span className="absolute left-0 top-3 bg-brand-secondary px-2.5 py-1.5 font-condensed text-[10px] font-black uppercase tracking-[0.14em] text-brand-navy">
             Current issue
           </span>
         )}
       </div>
 
       <div className="flex flex-1 flex-col p-4">
-        <p className="en-kicker text-brand-blue">
+        <p className="en-kicker text-brand-primary">
           Issue {issue.issueNumber} · {issue.month} {issue.year}
         </p>
-        <h3 className="mt-1.5 font-headline text-lg font-bold leading-snug text-ink">
+        <h3 className="mt-1.5 font-headline text-[19px] font-bold leading-snug tracking-[-0.015em] text-headline">
           {issue.title}
         </h3>
 
@@ -116,7 +118,7 @@ function IssueCard({ issue }: { issue: Issue }) {
         )}
 
         {added && (
-          <p className="mt-3 text-[11px] uppercase tracking-wider text-muted">
+          <p className="mt-3 font-condensed text-[10.5px] font-semibold uppercase tracking-[0.12em] text-muted">
             Added {added}
           </p>
         )}
@@ -128,7 +130,7 @@ function IssueCard({ issue }: { issue: Issue }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Download Issue ${issue.issueNumber} PDF (opens in a new tab)`}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-brand-secondary px-4 py-2.5 text-[12px] font-black uppercase tracking-wide text-brand-primary-darker transition-colors hover:bg-brand-secondary-dark"
+              className="en-btn inline-flex w-full items-center justify-center gap-2 bg-brand-secondary px-4 py-3 text-[12px] text-brand-navy transition-colors hover:bg-brand-secondary-dark"
             >
               Download PDF
               <span aria-hidden="true">↓</span>

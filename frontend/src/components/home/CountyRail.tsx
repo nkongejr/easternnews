@@ -18,8 +18,10 @@ export default function CountyRail({
   return (
     <nav aria-label="County desks" className="border-y border-border bg-white">
       <div className="en-container flex items-center gap-3">
-        <p className="en-kicker hidden shrink-0 text-muted lg:block">{label}</p>
-        <ul className="en-scrollbar-none flex min-w-0 flex-1 gap-1 overflow-x-auto py-2">
+        <p className="en-kicker hidden shrink-0 border-r border-border pr-3 text-muted lg:block">
+          {label}
+        </p>
+        <ul className="en-scrollbar-none flex min-w-0 flex-1 gap-0.5 overflow-x-auto py-2">
           {COUNTIES.map((c) => {
             const isActive = active === c.slug;
             return (
@@ -27,10 +29,10 @@ export default function CountyRail({
                 <Link
                   href={`/counties/${c.slug}`}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`inline-block whitespace-nowrap rounded-sm px-3 py-1.5 text-[13px] font-semibold transition-colors ${
+                  className={`inline-block whitespace-nowrap px-3 py-1.5 font-condensed text-[12.5px] font-bold uppercase tracking-[0.08em] transition-colors ${
                     isActive
-                      ? 'bg-brand-primary text-white'
-                      : 'text-ink hover:bg-surface-alt hover:text-brand-primary'
+                      ? 'bg-brand-navy text-brand-secondary'
+                      : 'text-text hover:bg-surface-tint hover:text-brand-primary'
                   }`}
                 >
                   {c.name}

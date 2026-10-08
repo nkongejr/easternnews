@@ -48,7 +48,11 @@ export default async function AuthorPage({ params }: Props) {
 
       <div className="en-container grid gap-10 py-8 md:py-10 lg:grid-cols-3 lg:gap-12">
         <div className="min-w-0 lg:col-span-2">
-          {author.bio && <p className="mb-8 max-w-2xl text-[15px] leading-relaxed text-muted">{author.bio}</p>}
+          {author.bio && (
+            <p className="mb-9 max-w-2xl font-read text-[16px] leading-relaxed text-muted">
+              {author.bio}
+            </p>
+          )}
 
           {result.data.length > 0 ? (
             <NewsGrid articles={result.data} columns={2} />

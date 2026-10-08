@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { sendContactMessage, subscribeNewsletter } from '@/lib/api';
 
 const inputCls =
-  'w-full rounded-sm border border-border bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted focus:border-brand-blue';
-const labelCls = 'mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-muted';
+  'w-full border border-border-strong bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted transition-colors focus:border-brand-primary focus:outline-none';
+const labelCls = 'mb-1.5 block font-condensed text-[11px] font-bold uppercase tracking-[0.12em] text-muted';
 
 export default function ContactForm() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -97,7 +97,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="rounded-sm bg-brand-blue px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-brand-blue-dark disabled:opacity-60"
+          className="en-btn bg-brand-navy px-6 py-3 text-[12.5px] text-white transition-colors hover:bg-brand-primary disabled:opacity-60"
         >
           {status === 'sending' ? 'Sending…' : 'Send Message'}
         </button>
@@ -108,8 +108,8 @@ export default function ContactForm() {
         </p>
       </form>
 
-      <div id="newsletter" className="mt-10 scroll-mt-24 border-t-2 border-brand-secondary pt-6">
-        <h2 className="font-headline text-lg font-bold text-ink">Subscribe to our Newsletter</h2>
+      <div id="newsletter" className="mt-10 scroll-mt-24 border-t-2 border-brand-navy pt-6">
+        <h2 className="font-headline text-xl font-bold text-headline">Subscribe to our Newsletter</h2>
         <p className="mt-1 mb-3 text-sm text-muted">
           The month’s best reporting from the Eastern region, in your inbox.
         </p>
@@ -129,7 +129,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={subStatus === 'sending'}
-            className="rounded-sm bg-brand-secondary px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-brand-blue-darker transition-colors hover:bg-brand-gold-dark disabled:opacity-60"
+            className="en-btn bg-brand-secondary px-5 py-3 text-[12.5px] text-brand-navy transition-colors hover:bg-brand-secondary-dark disabled:opacity-60"
           >
             {subStatus === 'sending' ? 'Subscribing…' : 'Subscribe'}
           </button>
