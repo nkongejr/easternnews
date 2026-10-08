@@ -57,7 +57,7 @@ const categoryDocs = categories.map((c, i) => ({
   slug: slug(c.name),
 }));
 
-const advertiserDocs = advertisers.map((a, i) => ({
+let advertiserDocs = advertisers.map((a, i) => ({
   _id: `ad-${i}`,
   slug: slug(a.businessName),
   isActive: true,
@@ -342,6 +342,88 @@ app.get('/api/advertisers', (req, res) => {
   let list = advertiserDocs.filter((a) => a.isActive);
   if (placement) list = list.filter((a) => a.adPlacement === placement);
   res.json(list);
+});
+
+/* Advertiser admin (demo, in-memory) — lets the newsroom book the article-page
+   placements from the preview dashboard without touching MongoDB. */
+
+const AD_PLACEMENTS = ['sidebar', 'banner', 'sponsored-post', 'article-inline', 'article-overlay'];
+
+const buildAdvertiserPayload = (body = {}, res, existingId) => {
+  const updates = {};
+  ['businessName', 'category', 'logo', 'description', 'contact', 'adPlacement', 'linkURL', 'isActive']
+    .forEach((field) => {
+      if (body[field] !== undefined) updates[field] = body[field];
+    });
+
+  if (updates.businessName !== undefined && !String(updates.businessName).trim()) {
+    res.status(400);
+    throw new Error('A business name is required');
+  }
+  if (updates.adPlacement !== undefined && !AD_PLACEMENTS.includes(updates.adPlacement)) {
+    res.status(400);
+    throw new Error(`Placement must be one of: ${AD_PLACEMENTS.join(', ')}`);
+  }
+  if (updates.businessName !== undefined && !existingId) {
+    updates.slug = slug(updates.businessName);
+  }
+
+  return updates;
+};
+
+app.get('/api/advertisers/id/:id', requireAuth, (req, res) => {
+  const advertiser = advertiserDocs.find((a) => a._id === req.params.id);
+  if (!advertiser) return res.status(404).json({ message: 'Advertiser not found' });
+  res.json(advertiser);
+});
+
+app.post('/api/advertisers', requireAuth, (req, res) => {
+  let payload;
+  try {
+    payload = buildAdvertiserPayload(req.body, res);
+  } catch (err) {
+    return res.status(res.statusCode).json({ success: false, message: err.message });
+  }
+  if (!payload.businessName) return res.status(400).json({ message: 'A business name is required' });
+
+  const now = new Date().toISOString();
+  const advertiser = {
+    _id: `ad-${advertiserDocs.length + 1}-${Date.now()}`,
+    category: 'Other',
+    logo: '',
+    description: '',
+    contact: {},
+    adPlacement: 'sidebar',
+    linkURL: '',
+    isActive: true,
+    ...payload,
+    createdAt: now,
+    updatedAt: now,
+  };
+  advertiserDocs.push(advertiser);
+  res.status(201).json(advertiser);
+});
+
+app.put('/api/advertisers/:id', requireAuth, (req, res) => {
+  const advertiser = advertiserDocs.find((a) => a._id === req.params.id);
+  if (!advertiser) return res.status(404).json({ message: 'Advertiser not found' });
+
+  let updates;
+  try {
+    updates = buildAdvertiserPayload(req.body, res, advertiser._id);
+  } catch (err) {
+    return res.status(res.statusCode).json({ success: false, message: err.message });
+  }
+
+  Object.assign(advertiser, updates, { updatedAt: new Date().toISOString() });
+  res.json(advertiser);
+});
+
+app.delete('/api/advertisers/:id', requireAuth, (req, res) => {
+  const index = advertiserDocs.findIndex((a) => a._id === req.params.id);
+  if (index === -1) return res.status(404).json({ message: 'Advertiser not found' });
+  advertiserDocs.splice(index, 1);
+  res.json({ message: 'Advertiser removed' });
 });
 
 /* ---------------- Publications ---------------- */

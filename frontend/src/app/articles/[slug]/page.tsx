@@ -103,8 +103,17 @@ export default async function ArticlePage({ params }: Props) {
   const moreStories = more.data.filter((a) => a._id !== article._id && a.slug !== slug).slice(0, 3);
 
   // Reader comments. Non-critical: an unreachable/older API leaves the section
-  // in its empty state instead of taking the article down.
-  const comments = await safe(api.getArticleComments(article._id, { limit: '10' }), EMPTY_COMMENTS);
+  // in its empty state instead of taking the article down — but say so in the
+  // server log, where whoever deploys can see that the API is behind.
+  let comments = EMPTY_COMMENTS;
+  try {
+    comments = await api.getArticleComments(article._id, { limit: '10' });
+  } catch (error) {
+    console.warn(
+      `[article] comments unavailable for /articles/${slug}:`,
+      error instanceof Error ? error.message : error,
+    );
+  }
 
   const crumbs: Crumb[] = [
     { label: 'Home', href: '/' },

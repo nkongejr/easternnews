@@ -38,6 +38,9 @@ function unavailable() {
   );
 }
 
+const NOT_ENABLED_MESSAGE =
+  'Comments are still being switched on for this site. Please try again a little later.';
+
 async function forward(path: string, init: RequestInit) {
   let upstream: Response;
   try {
@@ -51,6 +54,18 @@ async function forward(path: string, init: RequestInit) {
   }
 
   const body = await upstream.text();
+
+  // A 404 for the comment path itself (rather than for an article) means the
+  // API build in front of this site predates the comment routes. Say so in
+  // plain language for the reader, and loudly in the server log for whoever
+  // deploys the API, instead of showing the raw Express "Not Found - …" text.
+  if (upstream.status === 404) {
+    console.warn(
+      `[reader-comments] ${API_BASE}${path} answered 404 — the API deployment looks older than this website (the comment routes ship with the frontend release), so comments cannot be saved yet.`,
+    );
+    return json({ message: NOT_ENABLED_MESSAGE }, 503);
+  }
+
   try {
     // A JSON response is passed through untouched, including validation errors.
     return json(JSON.parse(body), upstream.status);

@@ -68,7 +68,28 @@ Full endpoint list is in the Postman collection (`postman/Eastern-Newspaper-API.
    - `POST {{baseUrl}}/upload/pdf` (form-data, key `file`, type File) to upload an issue PDF
    - `GET {{baseUrl}}/issues` then `POST {{baseUrl}}/issues` to publish a new edition
 
-## 7. Deployment
+## 7. Turning on the article-page adverts
+
+The two slots that run on article pages are booked per advertiser (Admin →
+Advertisers → **Where this advert runs**), or from the terminal:
+
+```bash
+npm run ad:placement -- --list
+npm run ad:placement -- --advertiser=kenya-methodist-university-kemu --placement=article-overlay
+npm run ad:placement -- --advertiser=<slug> --placement=article-inline
+```
+
+| Slot | Where it runs |
+|---|---|
+| `article-inline` | Boxed advert between the paragraphs of a story. |
+| `article-overlay` | Dismissible bar that closes over the bottom of a story while it is being read. |
+
+An empty slot renders nothing, so an advert only appears once an advertiser is
+booked into it. **Do not run `npm run seed` on production** to get the new
+slots — the seed clears the content collections. The `ad:placement` script
+updates a single advertiser and is safe to run against the live database.
+
+## 8. Deployment
 
 - **Database:** MongoDB Atlas — create a cluster, whitelist `0.0.0.0/0` (or Render's IPs), copy connection string into `MONGO_URI`.
 - **API:** Render — create a new Web Service pointing at this repo, build command `npm install`, start command `npm start`, add all `.env` variables in Render's dashboard.
@@ -78,7 +99,7 @@ Full endpoint list is in the Postman collection (`postman/Eastern-Newspaper-API.
 - **Comments:** `GET/POST /api/articles/:articleId/comments` accepts an article **id or slug**, so the website can post straight from the story URL. Comments publish immediately; set `COMMENTS_REQUIRE_APPROVAL=true` in the API environment to hold new comments as `pending` until an editor clears them in the newsroom (**Comments** in the admin sidebar). The public list only ever returns `approved` comments, and reader emails are never returned by the public endpoint.
   - The website's browser calls go through its own same-origin route, `GET/POST /api/reader-comments?articleId=…` (see `frontend/src/app/api/reader-comments/route.ts`), which forwards here and always answers in JSON — so a restarting API produces a readable "try again in a moment" for the reader instead of a broken form.
 
-## 8. Content Model Summary
+## 9. Content Model Summary
 
 - **Article** — title, slug, deck, body, category, author, bylineCredit, featuredImage {url, caption, credit}, gallery, publishDate, issue, isFeatured, isHero, tags, relatedArticles, status, viewCount, commentCount.
 - **Category** — name (county or section), slug, description, heroImage, colorAccent, type.

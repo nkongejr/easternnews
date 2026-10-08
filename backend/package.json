@@ -9,6 +9,7 @@
     "dev": "nodemon server.js",
     "seed": "node src/seed/seed.js",
     "seed:destroy": "node src/seed/seed.js --destroy",
+    "ad:placement": "node scripts/set-ad-placement.js",
     "preview": "node preview-server.js"
   },
   "dependencies": {
