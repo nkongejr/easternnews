@@ -12,7 +12,6 @@ import {
 import { COUNTIES, MORE_NAV, PRIMARY_NAV } from '@/lib/constants';
 import SearchBar from '@/components/shared/SearchBar';
 import MobileNavigation from './MobileNavigation';
-import Wordmark from './Wordmark';
 
 type MenuId = 'counties' | 'more' | null;
 
@@ -24,6 +23,10 @@ function isActive(pathname: string, href: string) {
 /**
  * Primary navigation. Sticks once the masthead scrolls away so section and
  * county desks stay one tap away.
+ *
+ * On phones the bar is deliberately just the menu + search controls: the
+ * full-width masthead above already carries the wordmark, so repeating it
+ * here only crowded the sticky bar.
  */
 export default function MainNav() {
   const pathname = usePathname();
@@ -68,7 +71,7 @@ export default function MainNav() {
       <div className="sticky top-0 z-50 border-b-2 border-brand-secondary bg-brand-primary text-white shadow-sm">
         <div className="en-container">
           <div className="flex h-12 items-center justify-between gap-4 md:h-12">
-            <div className="flex items-center gap-2 lg:hidden">
+            <div className="flex items-center lg:hidden">
               <button
                 type="button"
                 onClick={() => setMobileOpen(true)}
@@ -78,9 +81,6 @@ export default function MainNav() {
               >
                 <FaBars size={18} />
               </button>
-              <Link href="/" aria-label="The Eastern Newspaper — home">
-                <Wordmark size="sm" inverse />
-              </Link>
             </div>
 
             <nav aria-label="Primary" className="hidden lg:block">
