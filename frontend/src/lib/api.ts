@@ -1,12 +1,31 @@
-import { Article, Author, Category, PaginatedArticles, Advertiser, Issue } from '@/types';
+import {
+  Article,
+  Author,
+  Category,
+  PaginatedArticles,
+  Advertiser,
+  Issue,
+  PaginatedComments,
+  CommentPostResult,
+} from '@/types';
 
 const API_URL =
   (typeof window === 'undefined' && process.env.API_INTERNAL_URL) ||
   process.env.NEXT_PUBLIC_API_URL ||
   'http://127.0.0.1:5000/api';
 
+/**
+ * Server components talk to the API directly; the browser always calls
+ * same-origin `/api`, which the Next rewrites proxy to the Express API. That
+ * keeps reader-facing calls (comments, contact form) working from any device,
+ * never from the reader's own localhost.
+ */
+export function apiUrl(path: string): string {
+  return typeof window === 'undefined' ? `${API_URL}${path}` : `/api${path}`;
+}
+
 async function fetchJSON<T>(path: string, revalidate = 60): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(apiUrl(path), {
     next: { revalidate },
     signal: AbortSignal.timeout(20000), // 20s timeout instead of default
   });
@@ -48,7 +67,47 @@ export const api = {
     const qs = new URLSearchParams(params).toString();
     return fetchJSON<Advertiser[]>(`/advertisers${qs ? `?${qs}` : ''}`);
   },
+
+  /** Approved reader comments for one article (id or slug), newest first. */
+  getArticleComments: (articleId: string, params: Record<string, string> = {}) => {
+    const qs = new URLSearchParams(params).toString();
+    return fetchJSON<PaginatedComments>(
+      `/articles/${encodeURIComponent(articleId)}/comments${qs ? `?${qs}` : ''}`,
+      0,
+    );
+  },
 };
+
+export const EMPTY_COMMENTS: PaginatedComments = {
+  data: [],
+  page: 1,
+  totalPages: 0,
+  totalResults: 0,
+};
+
+/**
+ * Post a reader comment. Called from the browser, so it goes through the
+ * same-origin proxy; the API's validation message is surfaced to the reader.
+ */
+export async function postArticleComment(
+  articleId: string,
+  payload: { name: string; email?: string; body: string; honeypot?: string },
+): Promise<CommentPostResult> {
+  const res = await fetch(apiUrl(`/articles/${encodeURIComponent(articleId)}/comments`), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(
+      (data as { message?: string } | null)?.message ||
+        'Your comment could not be posted. Please try again.',
+    );
+  }
+  return data as CommentPostResult;
+}
 
 /**
  * Resolve a request to a fallback instead of throwing. Used for non-critical
@@ -73,7 +132,7 @@ export const EMPTY_PAGE: PaginatedArticles = {
 export async function sendContactMessage(payload: {
   name: string; email: string; subject?: string; message: string;
 }) {
-  const res = await fetch(`${API_URL}/contact`, {
+  const res = await fetch(apiUrl('/contact'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -83,7 +142,7 @@ export async function sendContactMessage(payload: {
 }
 
 export async function subscribeNewsletter(email: string) {
-  const res = await fetch(`${API_URL}/contact/newsletter`, {
+  const res = await fetch(apiUrl('/contact/newsletter'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),

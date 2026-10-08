@@ -64,9 +64,23 @@ export default function TermsPage() {
 
           <h2>Comments and contributions</h2>
           <p>
-            Where you can submit material to us, you confirm it is your own work and that it
-            does not break any law or anyone else’s rights. We may edit or decline to publish
-            contributions, and we are not obliged to publish anything submitted.
+            Reader comments are open on our stories. By posting a comment you confirm it is
+            your own words, that it is not defamatory, abusive, hateful, misleading or
+            unlawful, and that you have the right to publish it. You keep ownership of your
+            comment and grant us a non-exclusive right to publish, edit for length or clarity,
+            and keep it available on the site and its archives.
+          </p>
+          <p>
+            Comments are moderated. We may hide or delete any comment that breaks these
+            rules, that we believe is spam or advertising, or that we cannot verify, and we
+            may close a discussion. Moderation is not pre-approval of everything published,
+            so if you see a comment that breaks these rules, please report it to the
+            newsroom. Do not post personal information about yourself or anyone else.
+          </p>
+          <p>
+            Where you can submit other material to us, you confirm it is your own work and
+            that it does not break any law or anyone else’s rights. We may edit or decline to
+            publish contributions, and we are not obliged to publish anything submitted.
           </p>
 
           <h2>Availability</h2>

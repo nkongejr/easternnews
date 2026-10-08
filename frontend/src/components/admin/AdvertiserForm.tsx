@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import adminApi from '@/lib/adminApi';
 import ImageUploader from './ImageUploader';
-import { Advertiser } from '@/types';
+import { AD_PLACEMENTS } from '@/lib/ads';
+import { Advertiser, AdPlacement } from '@/types';
 
 export default function AdvertiserForm({ initial }: { initial?: Advertiser }) {
   const router = useRouter();
@@ -55,9 +56,24 @@ export default function AdvertiserForm({ initial }: { initial?: Advertiser }) {
       <input placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="w-full border rounded px-3 py-2" />
       <input placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full border rounded px-3 py-2" />
       <input placeholder="Address" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="w-full border rounded px-3 py-2" />
-      <select value={form.adPlacement} onChange={(e) => setForm({ ...form, adPlacement: e.target.value as Advertiser['adPlacement'] })} className="w-full border rounded px-3 py-2">
-        {['sidebar', 'banner', 'sponsored-post'].map((p) => <option key={p}>{p}</option>)}
-      </select>
+      <div>
+        <label className="text-sm font-semibold block mb-1" htmlFor="ad-placement">Where this advert runs</label>
+        <select
+          id="ad-placement"
+          value={form.adPlacement}
+          onChange={(e) => setForm({ ...form, adPlacement: e.target.value as AdPlacement })}
+          className="w-full border rounded px-3 py-2"
+        >
+          {AD_PLACEMENTS.map((placement) => (
+            <option key={placement.value} value={placement.value}>
+              {placement.label}
+            </option>
+          ))}
+        </select>
+        <p className="mt-1 text-xs text-gray-500">
+          {AD_PLACEMENTS.find((p) => p.value === form.adPlacement)?.hint}
+        </p>
+      </div>
       <input placeholder="Website URL" value={form.linkURL} onChange={(e) => setForm({ ...form, linkURL: e.target.value })} className="w-full border rounded px-3 py-2" />
       <div>
         <label className="text-sm font-semibold block mb-1">Logo</label>

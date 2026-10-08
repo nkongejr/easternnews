@@ -43,6 +43,8 @@ After seeding, an admin user is created using `ADMIN_EMAIL` / `ADMIN_PASSWORD` f
 | Authors | `/api/authors` |
 | Articles | `/api/articles` |
 | Advertisers | `/api/advertisers` |
+| Reader comments | `/api/articles/:articleId/comments` (public) |
+| Comment moderation | `/api/comments` (admin/editor) |
 | Issues | `/api/issues` |
 | Contact / Newsletter | `/api/contact` |
 | Image upload | `/api/upload` (field `image`) |
@@ -73,12 +75,14 @@ Full endpoint list is in the Postman collection (`postman/Eastern-Newspaper-API.
   - Uploads (`/api/upload` for images, `/api/upload/pdf` for issue PDFs) stream straight to Cloudinary, so nothing is written to Render's ephemeral disk.
   - **PDF delivery:** Cloudinary accounts restrict delivery of PDF/ZIP files by default. Enable it under **Settings → Security** ("Allow delivery of PDF and ZIP files"), otherwise a stored issue PDF answers `401` and the reader-facing Download button will not open.
 - **Frontend:** Vercel (Next.js) — set `NEXT_PUBLIC_API_URL` to your Render API URL.
+- **Comments:** `GET/POST /api/articles/:articleId/comments` accepts an article **id or slug**, so the website can post straight from the story URL. Comments publish immediately; set `COMMENTS_REQUIRE_APPROVAL=true` in the API environment to hold new comments as `pending` until an editor clears them in the newsroom (**Comments** in the admin sidebar). The public list only ever returns `approved` comments, and reader emails are never returned by the public endpoint.
 
 ## 8. Content Model Summary
 
 - **Article** — title, slug, deck, body, category, author, bylineCredit, featuredImage {url, caption, credit}, gallery, publishDate, issue, isFeatured, isHero, tags, relatedArticles, status, viewCount, commentCount.
 - **Category** — name (county or section), slug, description, heroImage, colorAccent, type.
 - **Author** — name, slug, title, bio, photo.
-- **Advertiser** — businessName, slug, category, logo, description, contact, adPlacement, linkURL, isActive.
+- **Advertiser** — businessName, slug, category, logo, description, contact, adPlacement, linkURL, isActive. `adPlacement` is one of `sidebar`, `banner`, `sponsored-post`, `article-inline` (boxed advert inside the story body) or `article-overlay` (dismissible bar that floats over the story while it is being read).
+- **Comment** — article, name, email (private), body, status (`approved` / `pending` / `rejected`), timestamps. Approving, hiding or deleting a comment keeps the article's public `commentCount` in sync.
 - **Issue** — issueNumber, title, month, year, coverImage, coverHeadline, articles[], pdfUrl, isCurrent.
 - **User** — name, email, password (hashed), role (admin/editor).

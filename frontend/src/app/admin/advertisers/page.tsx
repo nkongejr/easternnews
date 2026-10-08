@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import adminApi from '@/lib/adminApi';
+import { adPlacementLabel } from '@/lib/ads';
 import { Advertiser } from '@/types';
 
 export default function AdminAdvertisersList() {
@@ -32,7 +33,7 @@ export default function AdminAdvertisersList() {
             <tr key={a._id} className="border-t">
               <td className="p-3">{a.businessName}</td>
               <td className="p-3">{a.category}</td>
-              <td className="p-3">{a.adPlacement}</td>
+              <td className="p-3">{adPlacementLabel(a.adPlacement)}</td>
               <td className="p-3 space-x-3">
                 <Link href={`/admin/advertisers/${a._id}/edit`} className="text-brand-blue hover:underline">Edit</Link>
                 <button onClick={() => remove(a._id)} className="text-red-600 hover:underline">Delete</button>

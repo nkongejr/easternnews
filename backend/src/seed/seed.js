@@ -6,6 +6,7 @@ const Category = require('../models/Category');
 const Author = require('../models/Author');
 const Article = require('../models/Article');
 const Advertiser = require('../models/Advertiser');
+const Comment = require('../models/Comment');
 const Issue = require('../models/Issue');
 const User = require('../models/User');
 
@@ -22,6 +23,7 @@ const run = async () => {
       Author.deleteMany(),
       Article.deleteMany(),
       Advertiser.deleteMany(),
+      Comment.deleteMany(),
       Issue.deleteMany(),
     ]);
     console.log('🗑  All content collections cleared.');
@@ -66,6 +68,42 @@ const run = async () => {
     await article.save();
   }
   console.log('🔗 Related articles linked');
+
+  // 3b. A few reader comments so no article opens with an empty comment section.
+  await Comment.deleteMany();
+  const chatter = [
+    {
+      name: 'Jane Wanjiru',
+      email: 'jane.wanjiru@example.com',
+      body: 'Good reporting. Let the auditors publish the full debt registers for each county — ratepayers deserve to see who was paid.',
+    },
+    {
+      name: 'Peter Mutuma',
+      email: '',
+      body: 'This is the story every county assembly should be debating instead of allowances. Thank you Eastern Newspaper.',
+    },
+    {
+      name: 'Halima Noor',
+      email: '',
+      body: 'Please follow this up county by county and give us the figures for each treasury.',
+    },
+  ];
+  const commentTargets = createdArticles.slice(0, 3);
+  const createdComments = await Comment.insertMany(
+    commentTargets.map((article, i) => ({
+      article: article._id,
+      name: chatter[i % chatter.length].name,
+      email: chatter[i % chatter.length].email,
+      body: chatter[i % chatter.length].body,
+      status: 'approved',
+    }))
+  );
+  for (const article of commentTargets) {
+    await Article.findByIdAndUpdate(article._id, {
+      commentCount: createdComments.filter((c) => String(c.article) === String(article._id)).length,
+    });
+  }
+  console.log(`✅ ${createdComments.length} reader comments created`);
 
   // 4. Advertisers
   await Advertiser.deleteMany();

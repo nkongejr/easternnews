@@ -17,9 +17,17 @@ const advertiserSchema = new mongoose.Schema(
       email: { type: String, default: '' },
       address: { type: String, default: '' },
     },
+    /**
+     * Where the advert runs on the website:
+     *   sidebar          — module in the right-hand rail
+     *   banner           — full-width strip on the homepage
+     *   sponsored-post   — sponsored card inside editorial grids
+     *   article-inline   — boxed advert inside the story body
+     *   article-overlay  — floating bar that sits over the article while reading
+     */
     adPlacement: {
       type: String,
-      enum: ['sidebar', 'banner', 'sponsored-post'],
+      enum: ['sidebar', 'banner', 'sponsored-post', 'article-inline', 'article-overlay'],
       default: 'sidebar',
     },
     linkURL: { type: String, default: '' },

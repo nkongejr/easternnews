@@ -247,11 +247,13 @@
   color: var(--text);
 }
 
-.prose-article p {
+.prose-article > p {
   @apply mb-5;
 }
 
-.prose-article p:first-of-type::first-letter {
+/* Direct children only: an advert slotted between paragraphs contains its own
+   <p> elements, which must never pick up the drop cap. */
+.prose-article > p:first-of-type::first-letter {
   float: left;
   font-family: var(--font-headline);
   font-size: 3.4rem;

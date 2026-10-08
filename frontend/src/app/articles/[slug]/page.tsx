@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { api, safe } from '@/lib/api';
+import { api, safe, EMPTY_COMMENTS } from '@/lib/api';
 import {
   absoluteUrl,
   articleAuthors,
@@ -15,6 +15,9 @@ import { SITE } from '@/lib/constants';
 import CategoryBadge from '@/components/articles/CategoryBadge';
 import { categoryRoute } from '@/lib/routes';
 import ArticleBody from '@/components/articles/ArticleBody';
+import ArticleInlineAd from '@/components/articles/ArticleInlineAd';
+import ArticleOverlayAd from '@/components/articles/ArticleOverlayAd';
+import CommentsSection from '@/components/articles/CommentsSection';
 import RelatedArticles from '@/components/articles/RelatedArticles';
 import NewsGrid from '@/components/articles/NewsGrid';
 import ShareButtons from '@/components/shared/ShareButtons';
@@ -99,6 +102,10 @@ export default async function ArticlePage({ params }: Props) {
   );
   const moreStories = more.data.filter((a) => a._id !== article._id && a.slug !== slug).slice(0, 3);
 
+  // Reader comments. Non-critical: an unreachable/older API leaves the section
+  // in its empty state instead of taking the article down.
+  const comments = await safe(api.getArticleComments(article._id, { limit: '10' }), EMPTY_COMMENTS);
+
   const crumbs: Crumb[] = [
     { label: 'Home', href: '/' },
     ...(categoryLink ? [{ label: article.category, href: categoryLink }] : []),
@@ -129,6 +136,7 @@ export default async function ArticlePage({ params }: Props) {
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     articleSection: article.category,
+    commentCount: comments.totalResults || undefined,
     keywords: article.tags?.join(', '),
     isAccessibleForFree: true,
     inLanguage: 'en-KE',
@@ -209,6 +217,12 @@ export default async function ArticlePage({ params }: Props) {
               )}
               <span className="mx-1.5">·</span>
               {mins} min read
+              <span className="mx-1.5">·</span>
+              <a href="#comments" className="font-semibold hover:text-brand-primary hover:underline">
+                {comments.totalResults > 0
+                  ? `${comments.totalResults} ${comments.totalResults === 1 ? 'comment' : 'comments'}`
+                  : 'Add a comment'}
+              </a>
             </p>
             {categoryLink && (
               <Link
@@ -252,10 +266,10 @@ export default async function ArticlePage({ params }: Props) {
           )}
         </figure>
 
-        {/* Body */}
+        {/* Body — with the in-article advert slotted between paragraphs */}
         <div className="mt-6">
           {article.body ? (
-            <ArticleBody body={article.body} />
+            <ArticleBody body={article.body} inlineAd={<ArticleInlineAd />} />
           ) : (
             <p className="text-muted">This story is still being written.</p>
           )}
@@ -279,6 +293,14 @@ export default async function ArticlePage({ params }: Props) {
 
         <ShareButtons title={article.title} url={url} />
 
+        {/* Below the story: the comment section for this article */}
+        <CommentsSection
+          articleId={article._id}
+          initialComments={comments.data}
+          total={comments.totalResults}
+          totalPages={comments.totalPages}
+        />
+
         <RelatedArticles articles={article.relatedArticles || []} />
 
         {moreStories.length > 0 && (
@@ -299,6 +321,9 @@ export default async function ArticlePage({ params }: Props) {
       </article>
 
       <Sidebar />
+
+      {/* Advert that closes over the story while it is being read. */}
+      <ArticleOverlayAd />
 
       <JsonLd data={articleLd} />
       <JsonLd data={breadcrumbLd} />
