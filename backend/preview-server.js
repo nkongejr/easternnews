@@ -57,7 +57,7 @@ const categoryDocs = categories.map((c, i) => ({
   slug: slug(c.name),
 }));
 
-const advertiserDocs = advertisers.map((a, i) => ({
+let advertiserDocs = advertisers.map((a, i) => ({
   _id: `ad-${i}`,
   slug: slug(a.businessName),
   isActive: true,
@@ -65,9 +65,120 @@ const advertiserDocs = advertisers.map((a, i) => ({
 }));
 
 /* ------------------------------------------------------------------
-   Publications (issues) — in-memory, so the admin section can be
-   previewed before the API is pointed at MongoDB.
+   Reader comments — in-memory, same shape as the Mongo-backed API.
    ------------------------------------------------------------------ */
+
+const hoursAgo = (h) => new Date(Date.now() - h * 3600 * 1000).toISOString();
+
+let commentCounter = 0;
+let commentDocs = [
+  {
+    article: 'article-0',
+    name: 'Jane Wanjiru',
+    email: 'jane.wanjiru@example.com',
+    body: 'Good reporting. Let the auditors publish the full debt registers for each county — ratepayers deserve to see who was paid.',
+    status: 'approved',
+    createdAt: hoursAgo(3),
+  },
+  {
+    article: 'article-0',
+    name: 'Peter Mutuma',
+    email: '',
+    body: 'This is the story every county assembly should be debating instead of allowances. Thank you Eastern Newspaper.',
+    status: 'approved',
+    createdAt: hoursAgo(26),
+  },
+  {
+    article: 'article-1',
+    name: 'Halima Noor',
+    email: '',
+    body: 'Please follow this up county by county and give us the figures for each treasury.',
+    status: 'approved',
+    createdAt: hoursAgo(9),
+  },
+].map((c) => {
+  commentCounter += 1;
+  return { _id: `comment-${commentCounter}`, ...c, updatedAt: c.createdAt };
+});
+
+/** Never hand a reader's email address to the website. */
+const publicComment = ({ email: _email, article: _article, ...rest }) => rest;
+
+const findCommentTarget = (idOrSlug) =>
+  articleDocs.find((a) => a._id === idOrSlug || a.slug === idOrSlug);
+
+const approvedComments = (articleId) =>
+  commentDocs
+    .filter((c) => c.article === articleId && c.status === 'approved')
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+
+const commentCountFor = (articleId) => approvedComments(articleId).length;
+
+const syncCommentCount = (articleId) => {
+  const article = articleDocs.find((a) => a._id === articleId);
+  if (article) article.commentCount = commentCountFor(articleId);
+};
+
+// The cards on the homepage read this denormalised counter.
+for (const article of articleDocs) syncCommentCount(article._id);
+
+app.get('/api/articles/:articleId/comments', (req, res) => {
+  const article = findCommentTarget(req.params.articleId);
+  if (!article) return res.status(404).json({ message: 'Article not found' });
+
+  const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+  const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), 50);
+  const list = approvedComments(article._id);
+
+  res.json({
+    data: list.slice((page - 1) * limit, page * limit).map(publicComment),
+    page,
+    totalPages: Math.ceil(list.length / limit) || 0,
+    totalResults: list.length,
+  });
+});
+
+app.post('/api/articles/:articleId/comments', (req, res) => {
+  const article = findCommentTarget(req.params.articleId);
+  if (!article) return res.status(404).json({ message: 'Article not found' });
+
+  const { name, email, body, honeypot } = req.body || {};
+  if (honeypot) return res.json({ ok: true, message: 'Thank you for your comment.' });
+
+  const cleanName = String(name || '').trim();
+  const cleanBody = String(body || '').trim();
+  if (cleanName.length < 2) {
+    return res.status(400).json({ message: 'Please give a name of at least 2 characters' });
+  }
+  if (cleanBody.length < 2) return res.status(400).json({ message: 'Please write a comment' });
+  if (cleanBody.length > 2000) {
+    return res.status(400).json({ message: 'Comments are limited to 2000 characters' });
+  }
+
+  commentCounter += 1;
+  const now = new Date().toISOString();
+  const comment = {
+    _id: `comment-${commentCounter}`,
+    article: article._id,
+    name: cleanName,
+    email: String(email || '').trim(),
+    body: cleanBody,
+    status: 'approved',
+    createdAt: now,
+    updatedAt: now,
+  };
+  commentDocs.push(comment);
+  syncCommentCount(article._id);
+
+  res.status(201).json({
+    comment: publicComment(comment),
+    commentCount: commentCountFor(article._id),
+    pending: false,
+    message: 'Thank you — your comment is now published.',
+  });
+});
+
+/* ---------------- Publications ---------------- */
 const stamp = '2026-07-18T08:00:00.000Z';
 let issueDocs = [
   { _id: 'issue-1', ...issueMeta, articles: [], createdAt: stamp, updatedAt: stamp },
@@ -233,6 +344,88 @@ app.get('/api/advertisers', (req, res) => {
   res.json(list);
 });
 
+/* Advertiser admin (demo, in-memory) — lets the newsroom book the article-page
+   placements from the preview dashboard without touching MongoDB. */
+
+const AD_PLACEMENTS = ['sidebar', 'banner', 'sponsored-post', 'article-inline', 'article-overlay'];
+
+const buildAdvertiserPayload = (body = {}, res, existingId) => {
+  const updates = {};
+  ['businessName', 'category', 'logo', 'description', 'contact', 'adPlacement', 'linkURL', 'isActive']
+    .forEach((field) => {
+      if (body[field] !== undefined) updates[field] = body[field];
+    });
+
+  if (updates.businessName !== undefined && !String(updates.businessName).trim()) {
+    res.status(400);
+    throw new Error('A business name is required');
+  }
+  if (updates.adPlacement !== undefined && !AD_PLACEMENTS.includes(updates.adPlacement)) {
+    res.status(400);
+    throw new Error(`Placement must be one of: ${AD_PLACEMENTS.join(', ')}`);
+  }
+  if (updates.businessName !== undefined && !existingId) {
+    updates.slug = slug(updates.businessName);
+  }
+
+  return updates;
+};
+
+app.get('/api/advertisers/id/:id', requireAuth, (req, res) => {
+  const advertiser = advertiserDocs.find((a) => a._id === req.params.id);
+  if (!advertiser) return res.status(404).json({ message: 'Advertiser not found' });
+  res.json(advertiser);
+});
+
+app.post('/api/advertisers', requireAuth, (req, res) => {
+  let payload;
+  try {
+    payload = buildAdvertiserPayload(req.body, res);
+  } catch (err) {
+    return res.status(res.statusCode).json({ success: false, message: err.message });
+  }
+  if (!payload.businessName) return res.status(400).json({ message: 'A business name is required' });
+
+  const now = new Date().toISOString();
+  const advertiser = {
+    _id: `ad-${advertiserDocs.length + 1}-${Date.now()}`,
+    category: 'Other',
+    logo: '',
+    description: '',
+    contact: {},
+    adPlacement: 'sidebar',
+    linkURL: '',
+    isActive: true,
+    ...payload,
+    createdAt: now,
+    updatedAt: now,
+  };
+  advertiserDocs.push(advertiser);
+  res.status(201).json(advertiser);
+});
+
+app.put('/api/advertisers/:id', requireAuth, (req, res) => {
+  const advertiser = advertiserDocs.find((a) => a._id === req.params.id);
+  if (!advertiser) return res.status(404).json({ message: 'Advertiser not found' });
+
+  let updates;
+  try {
+    updates = buildAdvertiserPayload(req.body, res, advertiser._id);
+  } catch (err) {
+    return res.status(res.statusCode).json({ success: false, message: err.message });
+  }
+
+  Object.assign(advertiser, updates, { updatedAt: new Date().toISOString() });
+  res.json(advertiser);
+});
+
+app.delete('/api/advertisers/:id', requireAuth, (req, res) => {
+  const index = advertiserDocs.findIndex((a) => a._id === req.params.id);
+  if (index === -1) return res.status(404).json({ message: 'Advertiser not found' });
+  advertiserDocs.splice(index, 1);
+  res.json({ message: 'Advertiser removed' });
+});
+
 /* ---------------- Publications ---------------- */
 
 app.get('/api/issues/current', (_req, res) => {
@@ -309,6 +502,54 @@ app.delete('/api/issues/:id', requireAuth, (req, res) => {
   if (!issue) return res.status(404).json({ message: 'Issue not found' });
   issueDocs = issueDocs.filter((i) => i._id !== issue._id);
   res.json({ message: 'Issue removed' });
+});
+
+/* ---------------- Comment moderation (newsroom) ---------------- */
+
+app.get('/api/comments', requireAuth, (req, res) => {
+  const { status, article } = req.query;
+  let list = [...commentDocs].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  if (status) list = list.filter((c) => c.status === status);
+  if (article) list = list.filter((c) => c.article === article);
+
+  res.json({
+    data: list.map((c) => {
+      const target = articleDocs.find((a) => a._id === c.article);
+      return {
+        ...publicComment(c),
+        email: c.email,
+        article: target ? { _id: target._id, title: target.title, slug: target.slug } : c.article,
+      };
+    }),
+    page: 1,
+    totalPages: 1,
+    totalResults: list.length,
+    pendingCount: commentDocs.filter((c) => c.status === 'pending').length,
+  });
+});
+
+app.put('/api/comments/:id/status', requireAuth, (req, res) => {
+  const comment = commentDocs.find((c) => c._id === req.params.id);
+  if (!comment) return res.status(404).json({ message: 'Comment not found' });
+
+  const { status } = req.body || {};
+  if (!['approved', 'pending', 'rejected'].includes(status)) {
+    return res.status(400).json({ message: 'Status must be approved, pending or rejected' });
+  }
+
+  comment.status = status;
+  comment.updatedAt = new Date().toISOString();
+  syncCommentCount(comment.article);
+  res.json({ comment: { ...publicComment(comment), email: comment.email }, commentCount: commentCountFor(comment.article) });
+});
+
+app.delete('/api/comments/:id', requireAuth, (req, res) => {
+  const comment = commentDocs.find((c) => c._id === req.params.id);
+  if (!comment) return res.status(404).json({ message: 'Comment not found' });
+
+  commentDocs = commentDocs.filter((c) => c._id !== comment._id);
+  syncCommentCount(comment.article);
+  res.json({ message: 'Comment removed' });
 });
 
 /* ---------------- Auth (demo) ---------------- */

@@ -216,6 +216,26 @@
   mask-image: linear-gradient(to right, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
 }
 
+/* Countdown line under the floating article advert: shows the reader how long
+   the advert will stay before it closes itself. Paused while hovered/focused. */
+@keyframes en-ad-countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.en-ad-countdown {
+  transform-origin: left center;
+  animation: en-ad-countdown var(--ad-duration, 8000ms) linear forwards;
+}
+
+.en-ad-countdown[data-paused='true'] {
+  animation-play-state: paused;
+}
+
 /* ============================================================
    EDITORIAL TYPOGRAPHY
    ============================================================ */
@@ -247,11 +267,13 @@
   color: var(--text);
 }
 
-.prose-article p {
+.prose-article > p {
   @apply mb-5;
 }
 
-.prose-article p:first-of-type::first-letter {
+/* Direct children only: an advert slotted between paragraphs contains its own
+   <p> elements, which must never pick up the drop cap. */
+.prose-article > p:first-of-type::first-letter {
   float: left;
   font-family: var(--font-headline);
   font-size: 3.4rem;

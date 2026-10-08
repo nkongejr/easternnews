@@ -638,6 +638,22 @@ const advertisers = [
     adPlacement: 'banner',
     linkURL: 'https://idealsecurity.co.ke',
   },
+  {
+    businessName: 'Mbeere Fresh Produce Ltd',
+    category: 'Other',
+    description: 'Aggregating mangoes, tomatoes and French beans from smallholder farms across Mbeere for county markets and export buyers.',
+    contact: { phone: '0712 000009', email: 'sales@mbeerefresh.co.ke', address: 'Siakago, Embu' },
+    adPlacement: 'article-inline',
+    linkURL: 'https://mbeerefresh.co.ke',
+  },
+  {
+    businessName: 'Embu Valley Hotel & Conference Centre',
+    category: 'Hotel',
+    description: 'Rooms from KSh 4,500, a 200-seat conference hall and secure parking in the heart of Embu town.',
+    contact: { phone: '0712 000010', email: 'bookings@embuvalleyhotel.co.ke', address: 'Embu Town, Embu' },
+    adPlacement: 'article-overlay',
+    linkURL: 'https://embuvalleyhotel.co.ke',
+  },
 ];
 
 const issueMeta = {

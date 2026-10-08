@@ -62,6 +62,17 @@ export interface PaginatedArticles {
   totalResults: number;
 }
 
+/**
+ * Where an advert runs. `article-inline` sits inside the story body and
+ * `article-overlay` floats over the article while the reader scrolls.
+ */
+export type AdPlacement =
+  | 'sidebar'
+  | 'banner'
+  | 'sponsored-post'
+  | 'article-inline'
+  | 'article-overlay';
+
 export interface Advertiser {
   _id: string;
   businessName: string;
@@ -70,9 +81,37 @@ export interface Advertiser {
   logo?: string;
   description?: string;
   contact: { phone?: string; email?: string; address?: string };
-  adPlacement: 'sidebar' | 'banner' | 'sponsored-post';
+  adPlacement: AdPlacement;
   linkURL?: string;
   isActive: boolean;
+}
+
+/** A reader comment. `email` is only ever returned to the newsroom. */
+export interface Comment {
+  _id: string;
+  name: string;
+  body: string;
+  createdAt: string;
+  status?: 'approved' | 'pending' | 'rejected';
+  /** Newsroom moderation list only. */
+  email?: string;
+  /** Populated in the moderation list, an id elsewhere. */
+  article?: { _id: string; title: string; slug: string } | string;
+}
+
+export interface PaginatedComments {
+  data: Comment[];
+  page: number;
+  totalPages: number;
+  totalResults: number;
+}
+
+/** Response from POST /api/articles/:id/comments. */
+export interface CommentPostResult {
+  comment: Comment;
+  commentCount: number;
+  pending: boolean;
+  message: string;
 }
 
 export interface Issue {

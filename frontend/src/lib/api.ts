@@ -1,12 +1,31 @@
-import { Article, Author, Category, PaginatedArticles, Advertiser, Issue } from '@/types';
+import {
+  Article,
+  Author,
+  Category,
+  PaginatedArticles,
+  Advertiser,
+  Issue,
+  PaginatedComments,
+  CommentPostResult,
+} from '@/types';
 
 const API_URL =
   (typeof window === 'undefined' && process.env.API_INTERNAL_URL) ||
   process.env.NEXT_PUBLIC_API_URL ||
   'http://127.0.0.1:5000/api';
 
+/**
+ * Server components talk to the API directly; the browser always calls
+ * same-origin `/api`, which the Next rewrites proxy to the Express API. That
+ * keeps reader-facing calls (comments, contact form) working from any device,
+ * never from the reader's own localhost.
+ */
+export function apiUrl(path: string): string {
+  return typeof window === 'undefined' ? `${API_URL}${path}` : `/api${path}`;
+}
+
 async function fetchJSON<T>(path: string, revalidate = 60): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(apiUrl(path), {
     next: { revalidate },
     signal: AbortSignal.timeout(20000), // 20s timeout instead of default
   });
@@ -48,7 +67,66 @@ export const api = {
     const qs = new URLSearchParams(params).toString();
     return fetchJSON<Advertiser[]>(`/advertisers${qs ? `?${qs}` : ''}`);
   },
+
+  /** Approved reader comments for one article (id or slug), newest first. */
+  getArticleComments: (articleId: string, params: Record<string, string> = {}) => {
+    const qs = new URLSearchParams(params).toString();
+    return fetchJSON<PaginatedComments>(
+      `/articles/${encodeURIComponent(articleId)}/comments${qs ? `?${qs}` : ''}`,
+      0,
+    );
+  },
 };
+
+/**
+ * Reader-facing comment endpoint (list + post). It is a same-origin Next route
+ * rather than the raw API rewrite so the browser always gets JSON, and a
+ * restarting API shows a readable message instead of a broken form.
+ */
+export function readerCommentsUrl(articleId: string): string {
+  return `/api/reader-comments?articleId=${encodeURIComponent(articleId)}`;
+}
+
+export const EMPTY_COMMENTS: PaginatedComments = {
+  data: [],
+  page: 1,
+  totalPages: 0,
+  totalResults: 0,
+};
+
+/**
+ * Post a reader comment. Called from the browser, so it goes through the
+ * same-origin `/api/reader-comments` route, which always answers in JSON — the
+ * API's own validation message is surfaced to the reader, and a brief API
+ * restart is retried once instead of being reported as a failure.
+ */
+export async function postArticleComment(
+  articleId: string,
+  payload: { name: string; email?: string; body: string; honeypot?: string },
+): Promise<CommentPostResult> {
+  const send = () =>
+    fetch(readerCommentsUrl(articleId), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+  let res = await send();
+  // A 5xx/503 means "try again in a moment", not "your comment is bad".
+  if (res.status >= 500) {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    res = await send();
+  }
+
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(
+      (data as { message?: string } | null)?.message ||
+        'Your comment could not be posted. Please try again.',
+    );
+  }
+  return data as CommentPostResult;
+}
 
 /**
  * Resolve a request to a fallback instead of throwing. Used for non-critical
@@ -73,7 +151,7 @@ export const EMPTY_PAGE: PaginatedArticles = {
 export async function sendContactMessage(payload: {
   name: string; email: string; subject?: string; message: string;
 }) {
-  const res = await fetch(`${API_URL}/contact`, {
+  const res = await fetch(apiUrl('/contact'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -83,7 +161,7 @@ export async function sendContactMessage(payload: {
 }
 
 export async function subscribeNewsletter(email: string) {
-  const res = await fetch(`${API_URL}/contact/newsletter`, {
+  const res = await fetch(apiUrl('/contact/newsletter'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),

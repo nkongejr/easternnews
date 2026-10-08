@@ -7,7 +7,7 @@ export const metadata = {
   description: 'How The Eastern Newspaper collects, uses and protects reader information.',
 };
 
-const UPDATED = '19 September 2026';
+const UPDATED = '8 October 2026';
 
 export default function PrivacyPage() {
   return (
@@ -33,6 +33,13 @@ export default function PrivacyPage() {
               submit a tip, subscribe to the newsletter or make an advertising enquiry, we
               receive the details you provide — typically your name, email address and the
               content of your message.
+            </li>
+            <li>
+              <strong>Comments.</strong> When you comment on a story we publish the display
+              name and the comment you submit. An email address is optional; if you give
+              one it is never published and is only used by the newsroom to follow up. We
+              also record the technical information needed to keep spam out of the
+              discussion.
             </li>
             <li>
               <strong>Automatic information.</strong> Like most publishers, our server logs
