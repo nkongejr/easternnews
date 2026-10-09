@@ -57,6 +57,9 @@ export const api = {
 
   getAuthorBySlug: (slug: string) => fetchJSON<Author>(`/authors/${slug}`),
 
+  /** All author profiles — used to list byline pages in the sitemap. */
+  getAuthors: () => fetchJSON<Author[]>('/authors'),
+
   getCurrentIssue: () => fetchJSON<Issue>('/issues/current'),
 
   // Editions are published from the newsroom dashboard, so the library always

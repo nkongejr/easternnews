@@ -1,5 +1,6 @@
-import { redirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
+/** Legacy /features path — permanently consolidated onto /editorial. */
 export default function FeaturesRedirect() {
-  redirect('/editorial');
+  permanentRedirect('/editorial');
 }

@@ -26,6 +26,20 @@ export const metadata: Metadata = {
   authors: [{ name: SITE.name, url: SITE.url }],
   publisher: SITE.name,
   alternates: { canonical: '/' },
+  /**
+   * Explicit icon declarations alongside the file-convention icons
+   * (app/favicon.ico → /favicon.ico, app/icon.png → /icon.png,
+   * app/apple-icon.png → /apple-icon.png, which Next links automatically).
+   * These two extra files are the Google-Search-friendly square PNG
+   * (multiple of 48px) and a scalable SVG, both rendered from the official
+   * "E" monogram. Google reads the home page's icon links for Search results.
+   */
+  icons: {
+    icon: [
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+  },
   openGraph: {
     siteName: SITE.name,
     type: 'website',
@@ -70,7 +84,10 @@ const organizationLd = {
   email: SITE.email,
   telephone: SITE.phoneLabel,
   areaServed: COUNTIES.map((c) => ({ '@type': 'AdministrativeArea', name: `${c.name} County` })),
-  sameAs: [SITE.social.facebook, SITE.social.x],
+  // sameAs should only ever list real, verified profiles. The X entry in
+  // SITE.social is still a placeholder, so it is deliberately excluded here
+  // — add it back (with the real profile URL) once the account is confirmed.
+  sameAs: [SITE.social.facebook],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
