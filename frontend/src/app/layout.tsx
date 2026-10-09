@@ -31,8 +31,10 @@ export const metadata: Metadata = {
    * (app/favicon.ico → /favicon.ico, app/icon.png → /icon.png,
    * app/apple-icon.png → /apple-icon.png, which Next links automatically).
    * These two extra files are the Google-Search-friendly square PNG
-   * (multiple of 48px) and a scalable SVG, both rendered from the official
-   * "E" monogram. Google reads the home page's icon links for Search results.
+   * (multiple of 48px) and a scalable SVG, both rendered from the homepage
+   * masthead wordmark (/eastern-newspaper-logo.jpg) — the same logo the
+   * masthead shows, so tabs, bookmarks and search results carry one brand.
+   * Google reads the home page's icon links for Search results.
    */
   icons: {
     icon: [
