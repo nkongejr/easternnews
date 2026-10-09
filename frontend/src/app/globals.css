@@ -236,6 +236,35 @@
   animation-play-state: paused;
 }
 
+/* Entrance for the rotating floating advert card + its backdrop. */
+@keyframes en-float-ad-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.en-float-ad-in {
+  animation: en-float-ad-in 220ms ease-out;
+}
+
+@keyframes en-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.en-fade-in {
+  animation: en-fade-in 200ms ease-out;
+}
+
 /* ============================================================
    EDITORIAL TYPOGRAPHY
    ============================================================ */
