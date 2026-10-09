@@ -241,8 +241,15 @@ export const SITE = {
   altEmail: CONTACT.altEmail,
   publisher:
     'The Mashariki Newspaper Ltd. Registered as a Newspaper at the GPO.',
-  /** Used for canonical URLs / structured data. */
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.easternnewspaper.co.ke',
+  /**
+   * Used for canonical URLs / structured data / sitemaps.
+   * MUST match the domain the site is actually served from — Google treats
+   * canonicals pointing at another host as duplicate-content signals and the
+   * sitemap/robots entries follow this value. Production runs on
+   * www.easternnewspaper.com; if a NEXT_PUBLIC_SITE_URL env var is set in the
+   * deployment it must be the same URL.
+   */
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.easternnewspaper.com',
   social: {
     facebook: 'https://www.facebook.com/people/The-Eastern-Newspaper/100063521515739/?locale=lv_LV#',
     x: 'https://x.com',

@@ -142,6 +142,12 @@ export default async function ArticlePage({ params }: Props) {
       '@type': 'Organization',
       name: SITE.name,
       url: SITE.url,
+      // Publisher logo is required for Article/Top Stories eligibility —
+      // the official masthead mark, served from the site itself.
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE.url}${SITE.logo}`,
+      },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     articleSection: article.category,

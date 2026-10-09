@@ -10,6 +10,10 @@ export const metadata = {
   alternates: { canonical: '/search' },
   title: 'Search',
   description: 'Search The Eastern Newspaper for stories, counties, sections and topics.',
+  // Site-internal search results are utility pages, not destinations — keep
+  // them out of Google's index (and out of the sitemap) to avoid thin,
+  // query-dependent duplicates of the archives.
+  robots: { index: false, follow: true },
 };
 
 type Props = { searchParams: Promise<{ q?: string }> };

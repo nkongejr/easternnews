@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!--
+    The Eastern Newspaper favicon — vector version of the official
+    app/icon.png monogram (traced from the same artwork):
+    brand ink #001b2e ground, cyan #44d8fe "E", lime #c4ee5f underline.
+  -->
+  <rect width="512" height="512" fill="#001b2e"/>
+  <path fill="#44d8fe" d="M160 80h200v56h-128v56h128v56h-128v72h128v56h-200z"/>
+  <rect x="112" y="424" width="288" height="24" fill="#c4ee5f"/>
+</svg>
